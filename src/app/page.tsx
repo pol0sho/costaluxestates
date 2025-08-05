@@ -100,7 +100,7 @@ export default function Home() {
     const fetchProperties = async () => {
       try {
         const realestate = window.location.hostname.split('.')[0];
-        const res = await fetch(`/api/public/properties?realestate=${realestate}`);
+        await fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}`)
         const data = await res.json();
         setProperties(data);
       } catch (err) {
