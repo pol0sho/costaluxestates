@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, VolumeX, Volume2 } from "lucide-react";
 import { motion } from "framer-motion";
-import { fetchProperties } from "@/lib/fetch-properties"; 
 
 type Property = {
   id: number;
@@ -22,6 +21,82 @@ type Property = {
   plotSize: number;
   aiHints?: string[];
   images: string[];
+};
+
+const AnimatedSection = ({
+  children,
+  className,
+  direction = 'up',
+}: {
+  children: React.ReactNode;
+  className?: string;
+  direction?: 'up' | 'left' | 'right';
+}) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, []);
+
+  const animationClasses = {
+    up: 'translate-y-10',
+    left: '-translate-x-10',
+    right: 'translate-x-10',
+  };
+
+  return (
+    <div
+      ref={ref}
+      className={`${className} transition-all duration-1000 ${
+        isVisible ? 'opacity-100 translate-x-0 translate-y-0' : `opacity-0 ${animationClasses[direction]}`
+      }`}
+    >
+      {children}
+    </div>
+  );
+};
+
+const Scroller = ({ children }: { children: React.ReactNode }) => {
+  const scrollerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (scroller) {
+      const childrenArray = Array.from(scroller.children);
+      childrenArray.forEach((child) => {
+        const clone = child.cloneNode(true);
+        (clone as HTMLElement).setAttribute('aria-hidden', 'true');
+        scroller.appendChild(clone);
+      });
+    }
+  }, []);
+
+  return (
+    <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]">
+      <div ref={scrollerRef} className="flex min-w-max flex-nowrap gap-4 scroller">
+        {children}
+      </div>
+    </div>
+  );
 };
 
 export default function Home() {
@@ -62,7 +137,7 @@ export default function Home() {
       transition={{ duration: 0.5 }}
       className="font-body overflow-x-hidden"
     >
-      {/* Hero */}
+      {/* Hero Section */}
       <section className="relative min-h-[60vh] md:min-h-[500px] flex flex-col items-center justify-center text-center overflow-hidden py-16 sm:py-24">
         <div className="absolute top-0 left-0 w-full h-full z-0">
           <video
@@ -108,44 +183,44 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Properties */}
-      <section className="pt-12 md:pt-16 bg-secondary">
+      {/* Featured Properties Section */}
+      <AnimatedSection className="pt-12 md:pt-16 bg-secondary">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-12">
             <h2 className="font-headline text-2xl md:text-3xl font-bold">Featured Properties</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredProperties.map((property, i) => (
-              <div
+              <AnimatedSection
                 key={property.id}
                 className="transition-all duration-500"
                 style={{ transitionDelay: `${i * 150}ms` } as React.CSSProperties}
               >
                 <FeaturedPropertyCard property={property} />
-              </div>
+              </AnimatedSection>
             ))}
           </div>
         </div>
-      </section>
+      </AnimatedSection>
 
-      {/* Latest Properties */}
-      <section className="py-12 md:py-16 bg-secondary">
+      {/* Latest Properties Section */}
+      <AnimatedSection direction="right" className="py-12 md:py-16 bg-secondary">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-12">
             <h2 className="font-headline text-2xl md:text-3xl font-bold">Latest Properties</h2>
           </div>
-          <div className="flex overflow-x-auto space-x-4">
+          <Scroller>
             {properties.map((property) => (
               <div key={property.id} className="w-[350px]">
                 <PropertyCard property={property} />
               </div>
             ))}
-          </div>
+          </Scroller>
         </div>
-      </section>
+      </AnimatedSection>
 
-      {/* New Builds */}
-      <section className="pb-12 md:pb-16 bg-secondary">
+      {/* New Build Projects Section */}
+      <AnimatedSection direction="left" className="pb-12 md:pb-16 bg-secondary">
         <div className="container mx-auto px-4 md:px-6">
           <div
             className="relative rounded-lg overflow-hidden bg-cover bg-center p-8 md:p-12 min-h-[400px] flex items-center"
@@ -164,7 +239,10 @@ export default function Home() {
                 Let us help you find your perfect, brand-new home in the sun.
               </p>
               <Link href="/new-builds">
-                <Button size="lg" className="text-base font-bold bg-accent hover:bg-accent/90 text-accent-foreground transition-all duration-300 transform hover:scale-105">
+                <Button
+                  size="lg"
+                  className="text-base font-bold bg-accent hover:bg-accent/90 text-accent-foreground transition-all duration-300 transform hover:scale-105"
+                >
                   See all New Builds
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
@@ -172,7 +250,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </AnimatedSection>
     </motion.div>
   );
 }
