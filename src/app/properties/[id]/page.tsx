@@ -1,7 +1,7 @@
 import { fetchProperties } from "@/lib/fetch-properties";
 import ClientPropertyWrapper from "./ClientPropertyWrapper";
 
-export const dynamic = "force"; // or remove this line
+export const dynamic = "force-dynamic";
 
 export default async function PropertyDetailPage({ params }: { params: { id: string } }) {
   const realestate = "costalux";
