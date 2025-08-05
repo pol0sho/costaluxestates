@@ -1,6 +1,8 @@
 import { PropertyCard } from "@/components/property-card";
 import { SearchModule } from "@/components/search-module";
 import { motion } from "framer-motion";
+console.log("PropertyCard:", PropertyCard);
+console.log("SearchModule:", SearchModule);
 
 export const dynamic = "force-dynamic";
 
