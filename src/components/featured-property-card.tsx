@@ -12,14 +12,14 @@ import { formatPrice } from "@/utils/formatPrice";
 type Property = {
   id: number;
   title: string;
-  price: number;
+  list_price: string;
   priceType?: 'from' | 'exact';
-  location: string;
+  town: string;
   bedrooms: number;
   bathrooms: number;
-  m2: number;
-  plotSize: number;
-  images: { url: string; order: number }[];
+  built_size: number;
+  plot_size: number;
+  images: { image_url: string; image_order: number }[];
   aiHints: string[];
 };
 
@@ -47,7 +47,7 @@ export function FeaturedPropertyCard({ property }: PropertyCardProps) {
               <CarouselItem key={index}>
                 <Link href={`/properties/${property.id}`}>
                   <Image
-                    src={src?.url || "/no-image.png"}
+                    src={src?.image_url || "/no-image.png"}
                     alt={property.title}
                     width={400}
                     height={250}
@@ -70,7 +70,7 @@ export function FeaturedPropertyCard({ property }: PropertyCardProps) {
         <Link href={`/properties/${property.id}`}>
           <Badge variant="secondary" className="absolute top-3 right-3 font-bold text-lg bg-background/80 backdrop-blur-sm cursor-pointer">
             {property.priceType === 'from' && 'From '}
-{formatPrice(property.price)}
+{formatPrice(property.list_price)}
           </Badge>
         </Link>
       </CardHeader>
@@ -80,7 +80,7 @@ export function FeaturedPropertyCard({ property }: PropertyCardProps) {
           <h3 className="font-headline text-xl font-semibold mb-1 truncate">{property.title}</h3>
           <div className="flex items-center text-muted-foreground text-sm mb-3">
             <Home className="h-4 w-4 mr-1 text-accent" />
-            <span>{property.location}</span>
+            <span>{property.town}</span>
           </div>
         </CardContent>
         <CardFooter className="p-4 bg-secondary/50 flex justify-between text-sm flex-wrap gap-y-2">
@@ -95,12 +95,12 @@ export function FeaturedPropertyCard({ property }: PropertyCardProps) {
             </div>
             <div className="flex items-center" title="Built Size">
               <Home className="h-5 w-5 mr-1.5 text-accent" />
-              <span className="font-medium">{property.m2}m²</span>
+              <span className="font-medium">{property.built_size}m²</span>
             </div>
-            {property.plotSize > 0 && (
+            {property.plot_size > 0 && (
               <div className="flex items-center" title="Plot Size">
                 <LandPlot className="h-5 w-5 mr-1.5 text-accent" />
-                <span className="font-medium">{property.plotSize}m²</span>
+                <span className="font-medium">{property.plot_size}m²</span>
               </div>
             )}
           </div>
