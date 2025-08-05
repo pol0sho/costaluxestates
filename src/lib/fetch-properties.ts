@@ -3,18 +3,12 @@ export async function fetchProperties(realestate: string) {
     cache: "no-store",
   });
 
-  if (!res.ok) {
-    const text = await res.text();
-    console.error("Non-OK response:", res.status, text);
-    throw new Error("Failed to fetch properties");
-  }
-
-  const text = await res.text();
+  const text = await res.text(); // <-- get raw response
 
   try {
     return JSON.parse(text);
   } catch (err) {
-    console.error("Invalid JSON response from API:", text);
+    console.error("Failed to parse JSON:", text);
     throw new Error("Invalid JSON response");
   }
 }
