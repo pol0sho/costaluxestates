@@ -1,7 +1,8 @@
-import nodeFetch from 'node-fetch';
-
 export async function fetchProperties(realestate: string) {
-  const res = await nodeFetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}`);
+  const res = await fetch(
+    `https://api.habigrid.com/api/public/properties?realestate=${realestate}`,
+    { cache: "no-store" } // force runtime fetch every request
+  );
 
   if (!res.ok) {
     const errorText = await res.text();
