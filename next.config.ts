@@ -14,43 +14,46 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
 
-  images: {
-    // ❌ REMOVE THIS if using SSR (only needed for static export)
-    // unoptimized: true,
-
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'placehold.co',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'i.postimg.cc',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'www.lawants.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'www.idiliqhotels.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'www.theolivepress.es',
-        port: '',
-        pathname: '/**',
-      },
-    ],
-  },
+images: {
+  remotePatterns: [
+    {
+      protocol: 'https',
+      hostname: 'placehold.co',
+      port: '',
+      pathname: '/**',
+    },
+    {
+      protocol: 'https',
+      hostname: 'i.postimg.cc',
+      port: '',
+      pathname: '/**',
+    },
+    {
+      protocol: 'https',
+      hostname: 'www.lawants.com',
+      port: '',
+      pathname: '/**',
+    },
+    {
+      protocol: 'https',
+      hostname: 'www.idiliqhotels.com',
+      port: '',
+      pathname: '/**',
+    },
+    {
+      protocol: 'https',
+      hostname: 'www.theolivepress.es',
+      port: '',
+      pathname: '/**',
+    },
+    {
+      protocol: 'https',
+      hostname: 'pub-92a3e730cf1d484e9d173f1d83f999f2.r2.dev',
+      port: '',
+      pathname: '/**',
+    },
+  ],
+},
 };
 
 export default nextConfig;
