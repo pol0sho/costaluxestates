@@ -27,7 +27,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
       <CardContent className="p-4 sm:p-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 items-end justify-center">
           <div className="lg:col-span-2">
-            <label htmlFor="location" className="block text-sm font-medium text-foreground mb-1 font-body">Location</label>
+            <label htmlFor="location" className="block text-sm font-medium text-white text-foreground mb-1 font-body">Location</label>
             <Select>
               <SelectTrigger id="location" className="font-body">
                 <SelectValue placeholder={
@@ -49,7 +49,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
           </div>
           {showListingType && (
             <div className="lg:col-span-2">
-              <label htmlFor="listing-type" className="block text-sm font-medium text-foreground mb-1 font-body">Listing Type</label>
+              <label htmlFor="listing-type" className="block text-sm font-medium text-white text-foreground mb-1 font-body">Listing Type</label>
                <Select defaultValue="properties">
                 <SelectTrigger id="listing-type" className="font-body">
                   <SelectValue placeholder={
@@ -67,7 +67,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
             </div>
           )}
           <div className="lg:col-span-2">
-            <label htmlFor="type" className="block text-sm font-medium text-foreground mb-1 font-body">Property Type</label>
+            <label htmlFor="type" className="block text-sm font-medium text-white text-foreground mb-1 font-body">Property Type</label>
              <Select>
               <SelectTrigger id="type" className="font-body">
                 <SelectValue placeholder={
@@ -87,7 +87,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
             </Select>
           </div>
            <div className="lg:col-span-1">
-            <label htmlFor="bedrooms" className="block text-sm font-medium text-foreground mb-1 font-body">Bedrooms</label>
+            <label htmlFor="bedrooms" className="block text-sm font-medium text-white text-foreground mb-1 font-body">Bedrooms</label>
             <Select>
               <SelectTrigger id="bedrooms" className="font-body">
                  <SelectValue placeholder={
@@ -108,7 +108,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
             </Select>
           </div>
            <div className="lg:col-span-1">
-            <label htmlFor="bathrooms" className="block text-sm font-medium text-foreground mb-1 font-body">Bathrooms</label>
+            <label htmlFor="bathrooms" className="block text-sm font-medium text-white text-foreground mb-1 font-body">Bathrooms</label>
             <Select>
               <SelectTrigger id="bathrooms" className="font-body">
                  <SelectValue placeholder={
@@ -129,7 +129,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
             </Select>
           </div>
           <div className="sm:col-span-2 lg:col-span-2 space-y-2 pb-1">
-             <label className="block text-sm font-medium text-foreground mb-1 font-body">Price Range</label>
+             <label className="block text-sm font-medium text-white text-foreground mb-1 font-body">Price Range</label>
              <div className="flex justify-between text-xs text-foreground font-body">
                 <span>{formatPrice(priceRange[0])}</span>
                 <span>{priceRange[1] === 3000000 ? `${formatPrice(priceRange[1])}+` : formatPrice(priceRange[1])}</span>

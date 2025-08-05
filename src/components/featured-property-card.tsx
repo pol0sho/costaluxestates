@@ -15,6 +15,7 @@ type Property = {
   list_price: string;
   priceType?: 'from' | 'exact';
   town: string;
+  province: string;
   bedrooms: number;
   bathrooms: number;
   built_size: number;

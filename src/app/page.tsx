@@ -13,12 +13,12 @@ type Property = {
   id: number;
   title: string;
   location: string;
-  price: number;
+  list_price: number;
   priceType?: string;
   bedrooms: number;
   bathrooms: number;
-  m2: number;
-  plotSize: number;
+  built_size: number;
+  plot_size: number;
   aiHints?: string[];
   images: string[];
 };
