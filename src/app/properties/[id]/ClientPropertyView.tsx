@@ -7,17 +7,8 @@ import { Separator } from "@/components/ui/separator";
 import { BedDouble, Bath, MapPin, Home, Ruler, LandPlot, Calendar, Sun } from "lucide-react";
 import { motion } from "framer-motion";
 import { ContactForm } from "@/components/contact-form";
+import { formatPrice } from "@/utils/formatPrice";
 
-console.log("ImageSlideshow:", ImageSlideshow);
-console.log("Badge:", Badge);
-console.log("Card:", Card);
-console.log("CardContent:", CardContent);
-console.log("CardHeader:", CardHeader);
-console.log("CardTitle:", CardTitle);
-console.log("Separator:", Separator);
-console.log("Icons - BedDouble:", BedDouble, "Bath:", Bath, "MapPin:", MapPin, "Home:", Home);
-console.log("motion:", motion);
-console.log("ContactForm:", ContactForm);
 
 type FeatureProps = {
   icon: React.ElementType;
@@ -60,15 +51,13 @@ export default function ClientPropertyView({ property }: { property: any }) {
                     <h1 className="font-headline text-2xl md:text-3xl font-bold">{property.title}</h1>
                     <div className="flex items-center text-muted-foreground mt-2">
                       <MapPin className="h-5 w-5 mr-2 text-accent" />
-                      <span>{property.location}</span>
+                      <span>{property.town}</span>
                     </div>
                   </div>
                   <div className="flex-shrink-0 mt-2 md:mt-0">
                     <Badge className="text-2xl font-bold bg-primary/10 text-primary hover:bg-primary/20 border-primary/20 border-2 py-2 px-4">
                       {property.priceType === 'from' && 'From '}
-{typeof property.price === 'number'
-  ? `€${property.price.toLocaleString('de-DE')}`
-  : 'Price not available'}
+{formatPrice(property.list_price)}
                     </Badge>
                   </div>
                 </div>
@@ -77,15 +66,15 @@ export default function ClientPropertyView({ property }: { property: any }) {
                 <div className="mt-6">
                   <h2 className="font-headline text-xl font-bold mb-4">Features</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2">
-                    <FeatureItem icon={Home} label="Property Type" value={property.propertyType} />
+                    <FeatureItem icon={Home} label="Property Type" value={property.property_type} />
                     <FeatureItem icon={BedDouble} label="Bedrooms" value={property.bedrooms} />
                     <FeatureItem icon={Bath} label="Bathrooms" value={property.bathrooms} />
-                    <FeatureItem icon={Ruler} label="Size (m²)" value={property.m2} />
-                    <FeatureItem icon={LandPlot} label="Plot Size (m²)" value={property.plotSize > 0 ? property.plotSize : 'N/A'} />
+                    <FeatureItem icon={Ruler} label="Size (m²)" value={property.built_size} />
+                    <FeatureItem icon={LandPlot} label="Plot Size (m²)" value={property.plot_size > 0 ? property.plot_size : 'N/A'} />
                     <FeatureItem icon={Calendar} label="Build Year" value={property.buildYear} />
                     <FeatureItem icon={Sun} label="Terrace" value={property.terrace ? 'Yes' : 'No'} />
                     <FeatureItem icon={MapPin} label="Town" value={property.town} />
-                    <FeatureItem icon={MapPin} label="Area" value={property.area} />
+                    <FeatureItem icon={MapPin} label="Area" value={property.province} />
                   </div>
                 </div>
                 <Separator className="my-8" />
@@ -105,7 +94,7 @@ export default function ClientPropertyView({ property }: { property: any }) {
             <div className="sticky top-24">
               <ContactForm
                 title="Interested in this property?"
-                description={`Contact us for more information about this property (Ref: ${property.refNumber})`}
+                description={`Contact us for more information about this property (Ref: ${property.ref})`}
                 buttonText="Send Inquiry"
               />
             </div>

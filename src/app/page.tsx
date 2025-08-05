@@ -55,10 +55,6 @@ export default function Home() {
 
   const featuredProperties = properties.slice(0, 3);
 
-  if (loading) {
-    return <div className="text-center py-16">Loading properties...</div>;
-  }
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
