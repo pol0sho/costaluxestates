@@ -2,6 +2,8 @@ import { PropertyCard } from "@/components/property-card";
 import { SearchModule } from "@/components/search-module";
 import { motion } from "framer-motion";
 
+export const dynamic = "force-dynamic";
+
 export default async function PropertiesPage({ params }: { params: { realestate: string } }) {
   const realestate = params?.realestate || "costalux";
 
