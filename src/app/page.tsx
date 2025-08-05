@@ -169,7 +169,12 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="max-w-6xl mx-auto"
           >
-            <h1 className="font-body text-2xl md:text-3xl font-bold mb-4">Welcome to CostaLux Estates</h1>
+            <h1 className="font-body text-2xl md:text-3xl font-bold mb-4">
+  Welcome to{" "}
+  <span className="bg-gradient-to-r from-yellow-400 via-yellow-300 to-white bg-clip-text text-transparent">
+    CostaLux Estates
+  </span>
+</h1>
             <p className="text-lg md:text-xl max-w-5xl mx-auto mb-8">
               Your trusted partner for exclusive real estate on the Costa del Sol.
             </p>
