@@ -1,4 +1,4 @@
-'use client';
+
 import { notFound } from "next/navigation";
 import { ImageSlideshow } from "@/components/image-slideshow";
 import { Badge } from "@/components/ui/badge";
