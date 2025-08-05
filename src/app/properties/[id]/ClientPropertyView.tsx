@@ -9,7 +9,6 @@ import { motion } from "framer-motion";
 import { ContactForm } from "@/components/contact-form";
 import { formatPrice } from "@/utils/formatPrice";
 
-
 type FeatureProps = {
   icon: React.ElementType;
   label: string;
@@ -31,15 +30,24 @@ export default function ClientPropertyView({ property }: { property: any }) {
     notFound();
   }
 
+  // Transform images: sort by order and map to URLs only
+  const imageUrls = Array.isArray(property.images)
+    ? property.images
+        .slice() // copy to avoid mutating original array
+        .sort((a, b) => a.order - b.order)
+        .map((img) => img.url)
+    : [];
+
   return (
     <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="bg-secondary font-body">
+      className="bg-secondary font-body"
+    >
       <div className="container mx-auto max-w-7xl px-4 md:px-6 py-8 md:py-12">
         <div className="mb-8">
-          <ImageSlideshow images={property.images} title={property.title} aiHints={property.aiHints} />
+          <ImageSlideshow images={imageUrls} title={property.title} aiHints={property.aiHints} />
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
@@ -57,7 +65,7 @@ export default function ClientPropertyView({ property }: { property: any }) {
                   <div className="flex-shrink-0 mt-2 md:mt-0">
                     <Badge className="text-2xl font-bold bg-primary/10 text-primary hover:bg-primary/20 border-primary/20 border-2 py-2 px-4">
                       {property.priceType === 'from' && 'From '}
-{formatPrice(property.list_price)}
+                      {formatPrice(property.list_price)}
                     </Badge>
                   </div>
                 </div>
@@ -81,10 +89,10 @@ export default function ClientPropertyView({ property }: { property: any }) {
                 <div className="mt-6 text-foreground/90 leading-relaxed">
                   <h2 className="font-headline text-xl font-bold mb-4">Description</h2>
                   <p>
-  {Array.isArray(property.description)
-    ? property.description.find((d: any) => d.lang === "en")?.description || "No description available"
-    : property.description || "No description available"}
-</p>
+                    {Array.isArray(property.description)
+                      ? property.description.find((d: any) => d.lang === "en")?.description || "No description available"
+                      : property.description || "No description available"}
+                  </p>
                 </div>
               </CardContent>
             </Card>
