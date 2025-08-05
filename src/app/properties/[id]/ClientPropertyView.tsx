@@ -79,10 +79,10 @@ export default function ClientPropertyView({ property }: { property: any }) {
                     <FeatureItem icon={Bath} label="Bathrooms" value={property.bathrooms} />
                     <FeatureItem icon={Ruler} label="Size (m²)" value={property.built_size} />
                     <FeatureItem icon={LandPlot} label="Plot Size (m²)" value={property.plot_size > 0 ? property.plot_size : 'N/A'} />
-                    <FeatureItem icon={Calendar} label="Build Year" value={property.buildYear} />
+                    <FeatureItem icon={Calendar} label="Build Year" value={property.buildyear} />
                     <FeatureItem icon={Sun} label="Terrace" value={property.terrace ? 'Yes' : 'No'} />
                     <FeatureItem icon={MapPin} label="Town" value={property.town} />
-                    <FeatureItem icon={MapPin} label="Area" value={property.province} />
+                    <FeatureItem icon={MapPin} label="Province" value={property.province} />
                   </div>
                 </div>
                 <Separator className="my-8" />
