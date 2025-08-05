@@ -81,7 +81,7 @@ export function FeaturedPropertyCard({ property }: PropertyCardProps) {
           <h3 className="font-headline text-xl font-semibold mb-1 truncate">{property.title}</h3>
           <div className="flex items-center text-muted-foreground text-sm mb-3">
             <Home className="h-4 w-4 mr-1 text-accent" />
-            <span>{property.town}</span>
+            <span>{property.town}, {property.province}</span>
           </div>
         </CardContent>
         <CardFooter className="p-4 bg-secondary/50 flex justify-between text-sm flex-wrap gap-y-2">
