@@ -1,6 +1,9 @@
 import { fetchProperties } from "@/lib/fetch-properties";
 import ClientPropertyWrapper from "./ClientPropertyWrapper";
 
+console.log("fetchProperties:", fetchProperties);
+console.log("ClientPropertyWrapper:", ClientPropertyWrapper);
+
 export const dynamic = "force-dynamic";
 
 export default async function PropertyDetailPage({ params }: { params: { id: string } }) {

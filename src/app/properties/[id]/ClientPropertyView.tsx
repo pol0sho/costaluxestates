@@ -8,6 +8,17 @@ import { BedDouble, Bath, MapPin, Home, Ruler, LandPlot, Calendar, Sun } from "l
 import { motion } from "framer-motion";
 import { ContactForm } from "@/components/contact-form";
 
+console.log("ImageSlideshow:", ImageSlideshow);
+console.log("Badge:", Badge);
+console.log("Card:", Card);
+console.log("CardContent:", CardContent);
+console.log("CardHeader:", CardHeader);
+console.log("CardTitle:", CardTitle);
+console.log("Separator:", Separator);
+console.log("Icons - BedDouble:", BedDouble, "Bath:", Bath, "MapPin:", MapPin, "Home:", Home);
+console.log("motion:", motion);
+console.log("ContactForm:", ContactForm);
+
 type FeatureProps = {
   icon: React.ElementType;
   label: string;
