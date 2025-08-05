@@ -19,7 +19,7 @@ type Property = {
   bathrooms: number;
   built_size: number;
   plot_size: number;
-  images: { image_url: string; image_order: number }[];
+  images: { url: string; order: number }[];
   aiHints: string[];
 };
 
@@ -47,7 +47,7 @@ export function FeaturedPropertyCard({ property }: PropertyCardProps) {
               <CarouselItem key={index}>
                 <Link href={`/properties/${property.id}`}>
                   <Image
-                    src={src?.image_url || "/no-image.png"}
+                    src={src?.url || "/no-image.png"}
                     alt={property.title}
                     width={400}
                     height={250}

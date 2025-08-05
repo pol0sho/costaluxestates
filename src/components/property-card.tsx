@@ -15,7 +15,7 @@ type Property = {
   bathrooms: number;
   built_size: number;
   plot_size: number;
-  images: { image_url: string; image_order: number }[];
+  images: { url: string; order: number }[];
   aiHints: string[];
 };
 
@@ -29,7 +29,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
       <Card className="overflow-hidden h-full flex flex-col group transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border-border/60">
         <CardHeader className="p-0 relative">
           <Image
-            src={property.images[0]?.image_url || "/no-image.png"}
+            src={property.images[0]?.url || "/no-image.png"}
             alt={property.title}
             width={400}
             height={250}
