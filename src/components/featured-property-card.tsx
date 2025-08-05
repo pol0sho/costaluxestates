@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { BedDouble, Bath, LandPlot, Home } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from './ui/carousel';
 import React from 'react';
+import { formatPrice } from "@/utils/formatPrice";
 
 type Property = {
   id: number;
@@ -69,7 +70,7 @@ export function FeaturedPropertyCard({ property }: PropertyCardProps) {
         <Link href={`/properties/${property.id}`}>
           <Badge variant="secondary" className="absolute top-3 right-3 font-bold text-lg bg-background/80 backdrop-blur-sm cursor-pointer">
             {property.priceType === 'from' && 'From '}
-            €{property.price.toLocaleString('de-DE')}
+{formatPrice(property.price)}
           </Badge>
         </Link>
       </CardHeader>

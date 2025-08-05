@@ -1,5 +1,4 @@
-'use client'
-
+'use client';
 import { notFound } from "next/navigation";
 import { ImageSlideshow } from "@/components/image-slideshow";
 import { Badge } from "@/components/ui/badge";
@@ -25,7 +24,7 @@ const FeatureItem = ({ icon: Icon, label, value }: FeatureProps) => (
   </div>
 );
 
-export default function PropertyDetailClient({ property }: { property: any }) {
+export default function ClientPropertyView({ property }: { property: any }) {
   if (!property) {
     notFound();
   }

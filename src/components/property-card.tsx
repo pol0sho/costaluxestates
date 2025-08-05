@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { BedDouble, Bath, LandPlot, Home } from 'lucide-react';
+import { formatPrice } from "@/utils/formatPrice";
 
 type Property = {
   id: number;
@@ -37,7 +38,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
           />
           <Badge variant="secondary" className="absolute top-3 right-3 font-bold text-lg bg-background/80 backdrop-blur-sm">
             {property.priceType === 'from' && 'From '}
-            €{property.price.toLocaleString('de-DE')}
+            {formatPrice(property.price)}
           </Badge>
         </CardHeader>
         <CardContent className="p-4 flex-grow">

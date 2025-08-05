@@ -1,8 +1,10 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  output: 'export',                // <-- Enables static HTML export
-  trailingSlash: true,            // <-- Required to support nested routes like /properties
+  // ❌ REMOVE THIS:
+  // output: 'export', // This is ONLY for static export. Remove it for SSR.
+
+  trailingSlash: true, // optional — keep if your routes depend on it
 
   typescript: {
     ignoreBuildErrors: true,
@@ -13,7 +15,9 @@ const nextConfig: NextConfig = {
   },
 
   images: {
-    unoptimized: true,            // <-- Required for static export with Next.js
+    // ❌ REMOVE THIS if using SSR (only needed for static export)
+    // unoptimized: true,
+
     remotePatterns: [
       {
         protocol: 'https',

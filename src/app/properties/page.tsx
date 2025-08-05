@@ -1,30 +1,27 @@
-'use client';
-
-import { useEffect, useState } from "react";
 import { PropertyCard } from "@/components/property-card";
 import { SearchModule } from "@/components/search-module";
 import { motion } from "framer-motion";
 
-export default function PropertiesPage() {
-  const [properties, setProperties] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+export default async function PropertiesPage({ params }: { params: { realestate: string } }) {
+  const realestate = params?.realestate || "costalux";
 
-  useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        const realestate = window.location.hostname.split('.')[0]; // e.g. costalux
-        await fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}`)
-        const data = await res.json();
-        setProperties(data);
-      } catch (err) {
-        console.error("Failed to load properties:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  let properties: any[] = [];
 
-    fetchProperties();
-  }, []);
+  try {
+    const res = await fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}`, {
+        cache: 'no-store' 
+    });
+
+    const data = await res.json();
+
+    if (Array.isArray(data)) {
+      properties = data;
+    } else {
+      console.error("Expected an array but got:", data);
+    }
+  } catch (err) {
+    console.error("Failed to fetch properties:", err);
+  }
 
   return (
     <motion.div
@@ -40,12 +37,14 @@ export default function PropertiesPage() {
 
         <div className="mb-8 text-center">
           <p className="text-muted-foreground">
-            {loading ? "Loading..." : `${properties.length} properties found`}
+            {properties.length > 0
+              ? `${properties.length} properties found`
+              : "No properties found"}
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {properties.map((property) => (
+          {properties.map((property: any) => (
             <PropertyCard key={property.id} property={property} />
           ))}
         </div>
