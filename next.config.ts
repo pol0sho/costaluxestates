@@ -1,8 +1,8 @@
 import type { NextConfig } from 'next';
 
-
 const nextConfig: NextConfig = {
-  output: 'export',
+  output: 'export',                // <-- Enables static HTML export
+  trailingSlash: true,            // <-- Required to support nested routes like /properties
 
   typescript: {
     ignoreBuildErrors: true,
@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
   },
 
   images: {
-    unoptimized: true, // <- this disables _next/image optimization
+    unoptimized: true,            // <-- Required for static export with Next.js
     remotePatterns: [
       {
         protocol: 'https',
@@ -39,7 +39,7 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
-{
+      {
         protocol: 'https',
         hostname: 'www.theolivepress.es',
         port: '',

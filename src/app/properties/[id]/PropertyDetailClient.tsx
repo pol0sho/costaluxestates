@@ -55,7 +55,10 @@ export default function PropertyDetailClient({ property }: { property: any }) {
                   </div>
                   <div className="flex-shrink-0 mt-2 md:mt-0">
                     <Badge className="text-2xl font-bold bg-primary/10 text-primary hover:bg-primary/20 border-primary/20 border-2 py-2 px-4">
-                      {property.priceType === 'from' && 'From '}€{property.price.toLocaleString('de-DE')}
+                      {property.priceType === 'from' && 'From '}
+{typeof property.price === 'number'
+  ? `€${property.price.toLocaleString('de-DE')}`
+  : 'Price not available'}
                     </Badge>
                   </div>
                 </div>
@@ -78,7 +81,11 @@ export default function PropertyDetailClient({ property }: { property: any }) {
                 <Separator className="my-8" />
                 <div className="mt-6 text-foreground/90 leading-relaxed">
                   <h2 className="font-headline text-xl font-bold mb-4">Description</h2>
-                  <p>{property.description}</p>
+                  <p>
+  {Array.isArray(property.description)
+    ? property.description.find((d: any) => d.lang === "en")?.description || "No description available"
+    : property.description || "No description available"}
+</p>
                 </div>
               </CardContent>
             </Card>
