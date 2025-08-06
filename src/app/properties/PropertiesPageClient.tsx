@@ -119,9 +119,11 @@ export default function PropertiesPageClient() {
       className="bg-background"
     >
       <div className="container mx-auto px-4 md:px-6 py-12">
-        <div className="mb-8 flex justify-center">
-          <SearchModule showListingType={false} />
-        </div>
+<div className="flex justify-center w-full">
+  <div className="w-full max-w-5xl">
+    <SearchModule showListingType={false} />
+  </div>
+</div>
 
         <div className="mb-8 text-center">
           {loading ? (

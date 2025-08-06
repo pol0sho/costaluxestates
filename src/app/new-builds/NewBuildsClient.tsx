@@ -77,9 +77,11 @@ export default function NewBuildsClient({ properties }: { properties: any[] }) {
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-12">
-      <div className="mb-12 flex justify-center">
-        <SearchModule showListingType={false} />
-      </div>
+<div className="flex justify-center w-full">
+  <div className="w-full max-w-5xl">
+    <SearchModule showListingType={false} />
+  </div>
+</div>
 
       <div className="mb-8 text-center">
         <p className="text-muted-foreground">{totalProperties} new build properties found</p>
