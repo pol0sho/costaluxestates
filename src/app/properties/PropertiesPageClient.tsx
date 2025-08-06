@@ -45,7 +45,7 @@ export default function PropertiesPageClient() {
         );
 
         const data = await res.json();
-        setProperties(Array.isArray(data) ? data : []);
+        setProperties(Array.isArray(data) ? data.filter(p => p.listingtype === "resale") : []);
       } catch (err) {
         console.error("Failed to fetch properties:", err);
         setProperties([]);

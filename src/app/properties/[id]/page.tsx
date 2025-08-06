@@ -65,8 +65,9 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
 
         const res = await fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}`);
         const data = await res.json();
-        const matched = Array.isArray(data) ? data.find((p: any) => p.id.toString() === params.id) : null;
-
+        const matched = Array.isArray(data)
+  ? data.find((p: any) => p.id.toString() === params.id && p.listingtype === 'resale')
+  : null;
         if (!matched) {
           notFound(); // will redirect to 404
         } else {
