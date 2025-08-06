@@ -117,7 +117,10 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                   </div>
                   <div className="flex-shrink-0 mt-2 md:mt-0">
                     <Badge className="text-2xl font-bold bg-primary/10 text-primary hover:bg-primary/20 border-primary/20 border-2 py-2 px-4">
-                      {property.priceType === 'from' && 'From '}€{property.price.toLocaleString('de-DE')}
+                      {property.priceType === 'from' && 'From '}
+{typeof property.price === 'number'
+  ? `€${property.price.toLocaleString('de-DE')}`
+  : 'Price not available'}
                     </Badge>
                   </div>
                 </div>
