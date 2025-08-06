@@ -1,17 +1,25 @@
-'use client'
+// app/new-builds/NewBuildsClient.tsx
+'use client';
 
 import { PropertyCard } from "@/components/property-card";
 import { SearchModule } from "@/components/search-module";
-import { properties } from "@/lib/placeholder-data";
 import { motion } from "framer-motion";
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { useSearchParams } from "next/navigation";
 
 const PROPERTIES_PER_PAGE = 16;
 
-export default function NewBuildsClient() {
+export default function NewBuildsClient({ properties }: { properties: any[] }) {
   const searchParams = useSearchParams();
-  const currentPage = Number(searchParams.get('page')) || 1;
+  const currentPage = Number(searchParams.get("page")) || 1;
 
   const totalProperties = properties.length;
   const totalPages = Math.ceil(totalProperties / PROPERTIES_PER_PAGE);
