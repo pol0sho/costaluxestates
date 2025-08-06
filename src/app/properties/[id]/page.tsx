@@ -66,8 +66,8 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
         const res = await fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}`);
         const data = await res.json();
         const matched = Array.isArray(data)
-  ? data.find((p: any) => p.id.toString() === params.id && p.listingtype === 'resale')
-  : null;
+          ? data.find((p: any) => p.id.toString() === params.id)
+          : null;
         if (!matched) {
           notFound(); // will redirect to 404
         } else {
@@ -122,8 +122,8 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                   <div className="flex-shrink-0 mt-2 md:mt-0">
 <Badge className="text-2xl font-bold bg-primary/10 text-primary hover:bg-primary/20 border-primary/20 border-2 py-2 px-4">
   {property.priceType === 'from' && 'From '}
-  {typeof property.list_price === 'number'
-    ? `€${property.list_price.toLocaleString('de-DE')}`
+  {property.list_price
+    ? `€${Number(property.list_price).toLocaleString('de-DE')}`
     : 'Price not available'}
 </Badge>
                   </div>
