@@ -17,17 +17,17 @@ type Property = {
   id: number;
   title: string;
   location: string;
-  price: number;
+  list_price: number;
   priceType?: string;
   bedrooms: number;
   bathrooms: number;
-  m2: number;
-  plotSize: number;
+  built_size: number;
+  plot_size: number;
   buildYear?: string;
   terrace?: boolean;
-  propertyType?: string;
+  property_type?: string;
   town?: string;
-  area?: string;
+  province?: string;
   description?: string;
   images: string[];
   aiHints?: string[];
@@ -100,7 +100,11 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
     >
       <div className="container mx-auto max-w-7xl px-4 md:px-6 py-8 md:py-12">
         <div className="mb-8">
-          <ImageSlideshow images={property.images} title={property.title} aiHints={property.aiHints} />
+          <ImageSlideshow
+  images={Array.isArray(property.images) ? property.images.map((img) => img.url) : []}
+  title={property.title}
+  aiHints={property.aiHints}
+/>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
@@ -118,8 +122,8 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                   <div className="flex-shrink-0 mt-2 md:mt-0">
                     <Badge className="text-2xl font-bold bg-primary/10 text-primary hover:bg-primary/20 border-primary/20 border-2 py-2 px-4">
                       {property.priceType === 'from' && 'From '}
-{typeof property.price === 'number'
-  ? `€${property.price.toLocaleString('de-DE')}`
+{typeof property.list_price === 'number'
+  ? `€${property.list_price.toLocaleString('de-DE')}`
   : 'Price not available'}
                     </Badge>
                   </div>
@@ -129,15 +133,15 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                 <div className="mt-6">
                   <h2 className="font-headline text-xl font-bold mb-4">Features</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2">
-                    <FeatureItem icon={Ruler} label="Size (m²)" value={property.m2} />
+                    <FeatureItem icon={Ruler} label="Size (m²)" value={property.built_size} />
                     <FeatureItem icon={BedDouble} label="Bedrooms" value={property.bedrooms} />
                     <FeatureItem icon={Bath} label="Bathrooms" value={property.bathrooms} />
-                    <FeatureItem icon={Home} label="Property Type" value={property.propertyType} />
-                    <FeatureItem icon={LandPlot} label="Plot Size (m²)" value={property.plotSize > 0 ? property.plotSize : 'N/A'} />
+                    <FeatureItem icon={Home} label="Property Type" value={property.property_type} />
+                    <FeatureItem icon={LandPlot} label="Plot Size (m²)" value={property.plot_size > 0 ? property.plot_size : 'N/A'} />
                     <FeatureItem icon={Calendar} label="Build Year" value={property.buildYear ?? 'N/A'} />
                     <FeatureItem icon={Sun} label="Terrace" value={property.terrace ? 'Yes' : 'No'} />
                     <FeatureItem icon={MapPin} label="Town" value={property.town} />
-                    <FeatureItem icon={MapPin} label="Area" value={property.area} />
+                    <FeatureItem icon={MapPin} label="Area" value={property.province} />
                   </div>
                 </div>
 
