@@ -30,7 +30,7 @@ export default function PropertiesPage() {
         const hostname = window.location.hostname;
         const realestate = hostname.includes("localhost")
           ? "costalux"
-          : hostname.split(".")[0]; // e.g. costalux.habigrid.com
+          : hostname.split(".")[0];
 
         const res = await fetch(
           `https://api.habigrid.com/api/public/properties?realestate=${realestate}`
