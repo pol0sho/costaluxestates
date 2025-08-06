@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { PropertyCard } from "@/components/property-card";
-import { SearchModule } from "@/components/search-module";
+import { SearchModule } from "@/components/search-module-pages";
 import { motion } from "framer-motion";
 import {
   Pagination,
