@@ -1,4 +1,4 @@
-'use client';
+export const dynamic = "force-dynamic";
 
 import { useEffect, useState } from "react";
 import { notFound } from "next/navigation";
@@ -9,6 +9,8 @@ import { Separator } from "@/components/ui/separator";
 import { BedDouble, Bath, MapPin, Home, Ruler, LandPlot, Calendar, Sun } from "lucide-react";
 import { motion } from "framer-motion";
 import { ContactForm } from "@/components/contact-form";
+
+
 
 type Property = {
   id: number;
