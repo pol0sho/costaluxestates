@@ -116,16 +116,16 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                     <h1 className="font-headline text-2xl md:text-3xl font-bold">{property.title}</h1>
                     <div className="flex items-center text-muted-foreground mt-2">
                       <MapPin className="h-5 w-5 mr-2 text-accent" />
-                      <span>{property.location}</span>
+                      <span>{property.town}</span>
                     </div>
                   </div>
                   <div className="flex-shrink-0 mt-2 md:mt-0">
-                    <Badge className="text-2xl font-bold bg-primary/10 text-primary hover:bg-primary/20 border-primary/20 border-2 py-2 px-4">
-                      {property.priceType === 'from' && 'From '}
-{typeof property.list_price === 'number'
-  ? `€${property.list_price.toLocaleString('de-DE')}`
-  : 'Price not available'}
-                    </Badge>
+<Badge className="text-2xl font-bold bg-primary/10 text-primary hover:bg-primary/20 border-primary/20 border-2 py-2 px-4">
+  {property.priceType === 'from' && 'From '}
+  {typeof property.list_price === 'number'
+    ? `€${property.list_price.toLocaleString('de-DE')}`
+    : 'Price not available'}
+</Badge>
                   </div>
                 </div>
               </CardHeader>
