@@ -31,7 +31,7 @@ type Property = {
   description?: string;
   images: string[];
   aiHints?: string[];
-  refNumber: string;
+  ref: string;
 };
 
 const FeatureItem = ({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: React.ReactNode }) => (
@@ -163,7 +163,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
             <div className="sticky top-24">
               <ContactForm
                 title="Interested in this property?"
-                description={`Contact us for more information about this property (Ref: ${property.refNumber})`}
+                description={`Contact us for more information about this property (Ref: ${property.ref})`}
                 buttonText="Send Inquiry"
               />
             </div>
