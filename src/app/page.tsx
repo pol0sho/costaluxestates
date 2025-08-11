@@ -108,7 +108,7 @@ export default function Home() {
   useEffect(() => {
     const load = async () => {
       try {
-        const realestate = "costalux"; // or detect from domain
+        const realestate = "abracasabra"; // or detect from domain
         const res = await fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}`);
         const data = await res.json();
         setProperties(data);

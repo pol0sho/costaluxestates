@@ -31,14 +31,14 @@ export default function PropertiesPageClient() {
             const hostname = window.location.hostname;
 
             const domainToRealestate: Record<string, string> = {
-            "localhost": "costalux",
-            "www.costaluxestatesweb.onrender.com": "costalux",
-            "costaluxestatesweb.onrender.com": "costalux",
-            "www.costaluxestates.com": "costalux",
+            "localhost": "abracasabra",
+            "www.abracasabraweb.onrender.com": "abracasabra",
+            "abracasabraweb.onrender.com": "abracasabra",
+            "www.costaluxestates.com": "abracasabra",
             "costaluxestates.com": "costalux",
             };
 
-            const realestate = domainToRealestate[hostname] || "costalux"; // fallback
+            const realestate = domainToRealestate[hostname] || "abracasabra"; // fallback
 
         const res = await fetch(
           `https://api.habigrid.com/api/public/properties?realestate=${realestate}`
@@ -119,11 +119,9 @@ export default function PropertiesPageClient() {
       className="bg-background"
     >
       <div className="container mx-auto px-4 md:px-6 py-12">
-<div className="flex justify-center w-full">
-  <div className="w-full max-w-5xl">
-    <SearchModule showListingType={false} />
-  </div>
-</div>
+        <div className="mb-8 flex justify-center">
+          <SearchModule showListingType={false} />
+        </div>
 
         <div className="mb-8 text-center">
           {loading ? (

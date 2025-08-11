@@ -55,13 +55,13 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
 
             const domainToRealestate: Record<string, string> = {
             "localhost": "costalux",
-            "www.costaluxestatesweb.onrender.com": "costalux",
-            "costaluxestatesweb.onrender.com": "costalux",
-            "www.costaluxestates.com": "costalux",
-            "costaluxestates.com": "costalux",
+            "www.abracasabraweb.onrender.com": "abracasabra",
+            "abracasabraweb.onrender.com": "abracasabra",
+            "www.costaluxestates.com": "abracasabra",
+            "costaluxestates.com": "abracasabra",
             };
 
-            const realestate = domainToRealestate[hostname] || "costalux"; 
+            const realestate = domainToRealestate[hostname] || "abracasabra"; 
 
         const res = await fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}`);
         const data = await res.json();
