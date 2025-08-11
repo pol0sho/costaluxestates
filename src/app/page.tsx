@@ -83,18 +83,38 @@ const Scroller = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const scroller = scrollerRef.current;
     if (scroller) {
+      // Duplicate children to enable looping
       const childrenArray = Array.from(scroller.children);
       childrenArray.forEach((child) => {
         const clone = child.cloneNode(true);
         (clone as HTMLElement).setAttribute('aria-hidden', 'true');
         scroller.appendChild(clone);
       });
+
+      // Smooth auto-scroll logic
+      let scrollAmount = 0;
+      const speed = 1; // px per frame, adjust to control speed
+
+      const animate = () => {
+        scrollAmount += speed;
+        if (scrollAmount >= scroller.scrollWidth / 2) {
+          scrollAmount = 0; // reset instantly when half scrolled (no gap)
+        }
+        scroller.style.transform = `translateX(-${scrollAmount}px)`;
+        requestAnimationFrame(animate);
+      };
+
+      animate();
     }
   }, []);
 
   return (
-    <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]">
-      <div ref={scrollerRef} className="flex min-w-max flex-nowrap gap-4 scroller">
+    <div className="relative w-full overflow-hidden">
+      <div
+        ref={scrollerRef}
+        className="flex min-w-max flex-nowrap gap-4"
+        style={{ willChange: 'transform' }}
+      >
         {children}
       </div>
     </div>
