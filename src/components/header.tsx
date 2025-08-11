@@ -77,7 +77,6 @@ export function Header() {
           <nav className="flex items-center space-x-8 text-sm">
             <NavLink href="/">Home</NavLink>
             <NavLink href="/properties">Properties</NavLink>
-            <NavLink href="/new-builds">New Builds</NavLink>
           </nav>
        
           
