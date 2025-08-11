@@ -75,6 +75,8 @@ const AnimatedSection = ({
   );
 };
 
+
+
 const Scroller = ({ children }: { children: React.ReactNode }) => {
   const scrollerRef = useRef<HTMLDivElement>(null);
 
@@ -129,6 +131,7 @@ export default function Home() {
   };
 
   const featuredProperties = properties.slice(0, 3);
+  const latestProperties = properties.slice(0, 10); // ✅ limit to 10
 
   return (
     <motion.div
@@ -186,20 +189,21 @@ export default function Home() {
       </AnimatedSection>
 
       {/* Latest Properties Section */}
-      <AnimatedSection direction="right" className="py-12 md:py-16 bg-secondary">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="text-center mb-12">
-            <h2 className="font-headline text-2xl md:text-3xl font-bold">Latest Properties</h2>
-          </div>
-          <Scroller>
-            {properties.map((property) => (
-              <div key={property.id} className="w-[350px]">
-                <PropertyCard property={property} />
-              </div>
-            ))}
-          </Scroller>
+  {/* Latest Properties Section */}
+<AnimatedSection direction="right" className="py-12 md:py-16 bg-secondary">
+  <div className="container mx-auto px-4 md:px-6">
+    <div className="text-center mb-12">
+      <h2 className="font-headline text-2xl md:text-3xl font-bold">Latest Properties</h2>
+    </div>
+    <Scroller>
+      {latestProperties.map((property) => (
+        <div key={property.id} className="w-[350px]">
+          <PropertyCard property={property} />
         </div>
-      </AnimatedSection>
+      ))}
+    </Scroller>
+  </div>
+</AnimatedSection>
 
       {/* New Build Projects Section */}
      
