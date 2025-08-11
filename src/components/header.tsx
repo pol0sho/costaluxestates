@@ -79,35 +79,8 @@ export function Header() {
             <NavLink href="/properties">Properties</NavLink>
             <NavLink href="/new-builds">New Builds</NavLink>
           </nav>
-           <div className="h-6 border-l border-border/70 mx-4"></div>
-          <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
-            <Link href="/contact">Contact</Link>
-          </Button>
-          <LanguageSwitcher />
-        </div>
-
-        <div className="md:hidden flex items-center gap-2">
-          <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Open menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-[240px]">
-              <div className="p-6 flex flex-col h-full">
-                <Link href="/" className="mb-8 flex items-center" onClick={() => setIsMenuOpen(false)}>
-                   <Logo />
-                </Link>
-                <nav className="flex flex-col space-y-4 flex-grow">
-                  <Link href="/" onClick={() => setIsMenuOpen(false)} className="font-body text-lg">Home</Link>
-                  <Link href="/properties" onClick={() => setIsMenuOpen(false)} className="font-body text-lg">Properties</Link>
-                  <Link href="/new-builds" onClick={() => setIsMenuOpen(false)} className="font-body text-lg">New Builds</Link>
-                </nav>
-
-              </div>
-            </SheetContent>
-          </Sheet>
+       
+          
         </div>
       </div>
     </header>

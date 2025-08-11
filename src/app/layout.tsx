@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type {Metadata} from 'next';
 import './globals.css';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
@@ -17,23 +17,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Google Fonts preconnect */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        {/* New font pairing: Poppins + Playfair Display */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap"
-          rel="stylesheet"
-        />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
         <div className="flex min-h-screen flex-col">
           <Header />
-          <main className="flex-grow">{children}</main>
+          <main className="flex-grow">
+            {children}
+          </main>
           <Footer />
         </div>
         <Toaster />
