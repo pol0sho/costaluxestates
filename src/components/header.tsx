@@ -21,8 +21,8 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
 
 const Logo = () => (
   <img
-    src="/logo.jpg"
-    alt="CostaLux Estates"
+    src="/logo.png"
+    alt="AbraCasaBra Real Estates"
     width={180}
     height={40}
   />
@@ -104,12 +104,7 @@ export function Header() {
                   <Link href="/properties" onClick={() => setIsMenuOpen(false)} className="font-body text-lg">Properties</Link>
                   <Link href="/new-builds" onClick={() => setIsMenuOpen(false)} className="font-body text-lg">New Builds</Link>
                 </nav>
-                 <div className="flex items-center justify-between">
-                    <Button asChild className="flex-grow bg-accent text-accent-foreground hover:bg-accent/90">
-                        <Link href="/contact" onClick={() => setIsMenuOpen(false)}>Contact</Link>
-                    </Button>
-                    <LanguageSwitcher />
-                 </div>
+
               </div>
             </SheetContent>
           </Sheet>
