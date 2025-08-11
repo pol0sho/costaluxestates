@@ -23,8 +23,8 @@ const Logo = () => (
   <img
     src="/logo.png"
     alt="AbraCasaBra Real Estates"
-    width={180}
-    height={40}
+    width={250}
+    height={55}
   />
 );
 const LanguageSwitcher = () => {
