@@ -171,7 +171,7 @@ export default function Home() {
       <AnimatedSection className="pt-12 md:pt-16 bg-secondary">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-12">
-            <h2 className="font-headline text-2xl md:text-3xl font-bold">Featured Properties</h2>
+            <h2 className="font-headline text-2xl md:text-2xl font-bold">Featured Properties</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredProperties.map((property, i) => (
@@ -191,7 +191,7 @@ export default function Home() {
       <AnimatedSection direction="right" className="py-12 md:py-16 bg-secondary">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-12">
-            <h2 className="font-headline text-2xl md:text-3xl font-bold">Latest Properties</h2>
+            <h2 className="font-headline text-2xl md:text-2xl font-bold">Latest Properties</h2>
           </div>
           <Scroller>
             {properties.map((property) => (
