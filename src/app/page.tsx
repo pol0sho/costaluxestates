@@ -194,7 +194,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredProperties.map((property, i) => (
               <AnimatedSection
-                key={property.id}
+                key={property.ref}
                 className="transition-all duration-500"
                 style={{ transitionDelay: `${i * 150}ms` } as React.CSSProperties}
               >
@@ -213,7 +213,7 @@ export default function Home() {
           </div>
           <Scroller>
             {properties.map((property) => (
-              <div key={property.id} className="w-[350px]">
+              <div key={property.ref} className="w-[350px]">
                 <PropertyCard property={property} />
               </div>
             ))}
