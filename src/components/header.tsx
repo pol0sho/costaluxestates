@@ -23,8 +23,8 @@ const Logo = () => (
   <img
     src="/logo.png"
     alt="CostaLux Estates"
-    width={250}
-    height={55}
+    width={180}
+    height={40}
   />
 );
 const LanguageSwitcher = () => {
