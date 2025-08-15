@@ -12,24 +12,23 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useSearchParams } from "next/navigation";
 
 const PROPERTIES_PER_PAGE = 16;
 
 export default function NewBuildsClient() {
-  const searchParams = useSearchParams();
-  const currentPage = Number(searchParams.get("page")) || 1;
-
-  // Read filters from query params
-  const locationFilter = searchParams.get("location") || "any";
-  const typeFilter = searchParams.get("type") || "any";
-  const bedroomsFilter = searchParams.get("bedrooms") || "any";
-  const bathroomsFilter = searchParams.get("bathrooms") || "any";
-  const priceMin = Number(searchParams.get("priceMin") || 0);
-  const priceMax = Number(searchParams.get("priceMax") || 3000000);
-
   const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [filters, setFilters] = useState({
+    location: "any",
+    type: "any",
+    bedrooms: "any",
+    bathrooms: "any",
+    priceMin: 0,
+    priceMax: 3000000,
+  });
+
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const fetchProperties = async () => {
@@ -50,38 +49,11 @@ export default function NewBuildsClient() {
         );
         const data = await res.json();
 
-        let filtered = Array.isArray(data)
-          ? data.filter((p) => p.listingtype === "newbuild")
-          : [];
-
-        // Apply filters from query params
-        if (locationFilter !== "any") {
-          filtered = filtered.filter(
-            (p) => p.town?.toLowerCase() === locationFilter.toLowerCase()
-          );
-        }
-        if (typeFilter !== "any") {
-          filtered = filtered.filter(
-            (p) => p.property_type?.toLowerCase() === typeFilter.toLowerCase()
-          );
-        }
-        if (bedroomsFilter !== "any") {
-          filtered = filtered.filter(
-            (p) => Number(p.bedrooms) >= Number(bedroomsFilter)
-          );
-        }
-        if (bathroomsFilter !== "any") {
-          filtered = filtered.filter(
-            (p) => Number(p.bathrooms) >= Number(bathroomsFilter)
-          );
-        }
-        filtered = filtered.filter(
-          (p) =>
-            Number(p.list_price) >= priceMin &&
-            Number(p.list_price) <= priceMax
+        setProperties(
+          Array.isArray(data)
+            ? data.filter((p) => p.listingtype?.toLowerCase() === "newbuild")
+            : []
         );
-
-        setProperties(filtered);
       } catch (err) {
         console.error("Failed to fetch properties:", err);
         setProperties([]);
@@ -91,19 +63,40 @@ export default function NewBuildsClient() {
     };
 
     fetchProperties();
-  }, [
-    locationFilter,
-    typeFilter,
-    bedroomsFilter,
-    bathroomsFilter,
-    priceMin,
-    priceMax,
-  ]);
+  }, []);
 
-  const totalProperties = properties.length;
+  // Filter in-memory
+  const filtered = properties
+    .filter(
+      (p) =>
+        filters.location === "any" ||
+        p.town?.toLowerCase() === filters.location.toLowerCase()
+    )
+    .filter(
+      (p) =>
+        filters.type === "any" ||
+        p.property_type?.toLowerCase() === filters.type.toLowerCase()
+    )
+    .filter(
+      (p) =>
+        filters.bedrooms === "any" ||
+        Number(p.bedrooms) >= Number(filters.bedrooms)
+    )
+    .filter(
+      (p) =>
+        filters.bathrooms === "any" ||
+        Number(p.bathrooms) >= Number(filters.bathrooms)
+    )
+    .filter(
+      (p) =>
+        Number(p.list_price) >= filters.priceMin &&
+        Number(p.list_price) <= filters.priceMax
+    );
+
+  const totalProperties = filtered.length;
   const totalPages = Math.ceil(totalProperties / PROPERTIES_PER_PAGE);
 
-  const paginatedProperties = properties.slice(
+  const paginatedProperties = filtered.slice(
     (currentPage - 1) * PROPERTIES_PER_PAGE,
     currentPage * PROPERTIES_PER_PAGE
   );
@@ -122,7 +115,7 @@ export default function NewBuildsClient() {
     if (startPage > 1) {
       pageNumbers.push(
         <PaginationItem key="1">
-          <PaginationLink href={`/new-builds?page=1`}>1</PaginationLink>
+          <PaginationLink onClick={() => setCurrentPage(1)}>1</PaginationLink>
         </PaginationItem>
       );
       if (startPage > 2) {
@@ -134,7 +127,7 @@ export default function NewBuildsClient() {
       pageNumbers.push(
         <PaginationItem key={i}>
           <PaginationLink
-            href={`/new-builds?page=${i}`}
+            onClick={() => setCurrentPage(i)}
             isActive={i === currentPage}
           >
             {i}
@@ -149,7 +142,7 @@ export default function NewBuildsClient() {
       }
       pageNumbers.push(
         <PaginationItem key={totalPages}>
-          <PaginationLink href={`/new-builds?page=${totalPages}`}>
+          <PaginationLink onClick={() => setCurrentPage(totalPages)}>
             {totalPages}
           </PaginationLink>
         </PaginationItem>
@@ -162,7 +155,13 @@ export default function NewBuildsClient() {
   return (
     <div className="container mx-auto px-4 md:px-6 py-12">
       <div className="mb-12 flex justify-center">
-        <SearchModule showListingType={false} />
+        <SearchModule
+          showListingType={false}
+          onFiltersChange={(newFilters) => {
+            setFilters(newFilters);
+            setCurrentPage(1); // reset to first page when filters change
+          }}
+        />
       </div>
 
       <div className="mb-8 text-center">
@@ -189,13 +188,17 @@ export default function NewBuildsClient() {
                 <PaginationContent>
                   {currentPage > 1 && (
                     <PaginationItem>
-                      <PaginationPrevious href={`/new-builds?page=${currentPage - 1}`} />
+                      <PaginationPrevious
+                        onClick={() => setCurrentPage((p) => p - 1)}
+                      />
                     </PaginationItem>
                   )}
                   {renderPaginationLinks()}
                   {currentPage < totalPages && (
                     <PaginationItem>
-                      <PaginationNext href={`/new-builds?page=${currentPage + 1}`} />
+                      <PaginationNext
+                        onClick={() => setCurrentPage((p) => p + 1)}
+                      />
                     </PaginationItem>
                   )}
                 </PaginationContent>
@@ -207,7 +210,9 @@ export default function NewBuildsClient() {
         !loading && (
           <div className="flex items-center justify-center py-24">
             <div className="text-center">
-              <h2 className="text-2xl font-bold tracking-tight">No New Builds Found</h2>
+              <h2 className="text-2xl font-bold tracking-tight">
+                No New Builds Found
+              </h2>
               <p className="text-muted-foreground">
                 Please check back later for new build projects.
               </p>

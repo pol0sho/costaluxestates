@@ -13,76 +13,48 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useSearchParams } from "next/navigation";
 
 const PROPERTIES_PER_PAGE = 20;
 
 export default function PropertiesPageClient() {
-  const searchParams = useSearchParams();
-  const currentPage = Number(searchParams.get("page")) || 1;
-
-  // Read filters from query string
-  const locationFilter = searchParams.get("location") || "any";
-  const typeFilter = searchParams.get("type") || "any";
-  const bedroomsFilter = searchParams.get("bedrooms") || "any";
-  const bathroomsFilter = searchParams.get("bathrooms") || "any";
-  const priceMin = Number(searchParams.get("priceMin") || 0);
-  const priceMax = Number(searchParams.get("priceMax") || 3000000);
-
   const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [filters, setFilters] = useState({
+    location: "any",
+    type: "any",
+    bedrooms: "any",
+    bathrooms: "any",
+    priceMin: 0,
+    priceMax: 3000000,
+  });
+
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const fetchProperties = async () => {
       try {
         const hostname = window.location.hostname;
         const domainToRealestate: Record<string, string> = {
-          "localhost": "abracasabra",
+          "localhost": "costalux",
           "www.costaluxestatesweb.onrender.com": "costalux",
           "costaluxestatesweb.onrender.com": "costalux",
           "www.costaluxestates.com": "costalux",
           "costaluxestates.com": "costalux",
         };
 
-        const realestate = domainToRealestate[hostname] || "abracasabra";
+        const realestate = domainToRealestate[hostname] || "costalux";
 
         const res = await fetch(
           `https://api.habigrid.com/api/public/properties?realestate=${realestate}`
         );
         const data = await res.json();
 
-        let filtered = Array.isArray(data)
-          ? data.filter((p) => p.listingtype === "resale")
-          : [];
-
-        // Apply filters from query params
-        if (locationFilter !== "any") {
-          filtered = filtered.filter(
-            (p) => p.town?.toLowerCase() === locationFilter.toLowerCase()
-          );
-        }
-        if (typeFilter !== "any") {
-          filtered = filtered.filter(
-            (p) => p.property_type?.toLowerCase() === typeFilter.toLowerCase()
-          );
-        }
-        if (bedroomsFilter !== "any") {
-          filtered = filtered.filter(
-            (p) => Number(p.bedrooms) >= Number(bedroomsFilter)
-          );
-        }
-        if (bathroomsFilter !== "any") {
-          filtered = filtered.filter(
-            (p) => Number(p.bathrooms) >= Number(bathroomsFilter)
-          );
-        }
-        filtered = filtered.filter(
-          (p) =>
-            Number(p.list_price) >= priceMin &&
-            Number(p.list_price) <= priceMax
+        setProperties(
+          Array.isArray(data)
+            ? data.filter((p) => p.listingtype?.toLowerCase() === "resale")
+            : []
         );
-
-        setProperties(filtered);
       } catch (err) {
         console.error("Failed to fetch properties:", err);
         setProperties([]);
@@ -92,19 +64,40 @@ export default function PropertiesPageClient() {
     };
 
     fetchProperties();
-  }, [
-    locationFilter,
-    typeFilter,
-    bedroomsFilter,
-    bathroomsFilter,
-    priceMin,
-    priceMax,
-  ]);
+  }, []);
 
-  const totalProperties = properties.length;
+  // Filter in-memory
+  const filtered = properties
+    .filter(
+      (p) =>
+        filters.location === "any" ||
+        p.town?.toLowerCase() === filters.location.toLowerCase()
+    )
+    .filter(
+      (p) =>
+        filters.type === "any" ||
+        p.property_type?.toLowerCase() === filters.type.toLowerCase()
+    )
+    .filter(
+      (p) =>
+        filters.bedrooms === "any" ||
+        Number(p.bedrooms) >= Number(filters.bedrooms)
+    )
+    .filter(
+      (p) =>
+        filters.bathrooms === "any" ||
+        Number(p.bathrooms) >= Number(filters.bathrooms)
+    )
+    .filter(
+      (p) =>
+        Number(p.list_price) >= filters.priceMin &&
+        Number(p.list_price) <= filters.priceMax
+    );
+
+  const totalProperties = filtered.length;
   const totalPages = Math.ceil(totalProperties / PROPERTIES_PER_PAGE);
 
-  const paginatedProperties = properties.slice(
+  const paginatedProperties = filtered.slice(
     (currentPage - 1) * PROPERTIES_PER_PAGE,
     currentPage * PROPERTIES_PER_PAGE
   );
@@ -123,7 +116,7 @@ export default function PropertiesPageClient() {
     if (startPage > 1) {
       pageNumbers.push(
         <PaginationItem key="1">
-          <PaginationLink href={`/properties?page=1`}>1</PaginationLink>
+          <PaginationLink onClick={() => setCurrentPage(1)}>1</PaginationLink>
         </PaginationItem>
       );
       if (startPage > 2) {
@@ -135,7 +128,7 @@ export default function PropertiesPageClient() {
       pageNumbers.push(
         <PaginationItem key={i}>
           <PaginationLink
-            href={`/properties?page=${i}`}
+            onClick={() => setCurrentPage(i)}
             isActive={i === currentPage}
           >
             {i}
@@ -150,7 +143,7 @@ export default function PropertiesPageClient() {
       }
       pageNumbers.push(
         <PaginationItem key={totalPages}>
-          <PaginationLink href={`/properties?page=${totalPages}`}>
+          <PaginationLink onClick={() => setCurrentPage(totalPages)}>
             {totalPages}
           </PaginationLink>
         </PaginationItem>
@@ -169,7 +162,13 @@ export default function PropertiesPageClient() {
     >
       <div className="container mx-auto px-4 md:px-6 py-12">
         <div className="mb-8 flex justify-center">
-          <SearchModule showListingType={false} />
+          <SearchModule
+            showListingType={false}
+            onFiltersChange={(newFilters) => {
+              setFilters(newFilters);
+              setCurrentPage(1);
+            }}
+          />
         </div>
 
         <div className="mb-8 text-center">
@@ -197,7 +196,7 @@ export default function PropertiesPageClient() {
                     {currentPage > 1 && (
                       <PaginationItem>
                         <PaginationPrevious
-                          href={`/properties?page=${currentPage - 1}`}
+                          onClick={() => setCurrentPage((p) => p - 1)}
                         />
                       </PaginationItem>
                     )}
@@ -205,7 +204,7 @@ export default function PropertiesPageClient() {
                     {currentPage < totalPages && (
                       <PaginationItem>
                         <PaginationNext
-                          href={`/properties?page=${currentPage + 1}`}
+                          onClick={() => setCurrentPage((p) => p + 1)}
                         />
                       </PaginationItem>
                     )}
