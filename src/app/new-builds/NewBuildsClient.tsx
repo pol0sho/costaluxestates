@@ -36,14 +36,14 @@ export default function NewBuildsClient() {
       try {
         const hostname = window.location.hostname;
         const domainToRealestate: Record<string, string> = {
-          "localhost": "abracasabra",
+          "localhost": "costalux",
           "www.costaluxestatesweb.onrender.com": "costalux",
           "costaluxestatesweb.onrender.com": "costalux",
           "www.costaluxestates.com": "costalux",
           "costaluxestates.com": "costalux",
         };
 
-        const realestate = domainToRealestate[hostname] || "abracasabra";
+        const realestate = domainToRealestate[hostname] || "costalux";
 
         const res = await fetch(
           `https://api.habigrid.com/api/public/properties?realestate=${realestate}`
