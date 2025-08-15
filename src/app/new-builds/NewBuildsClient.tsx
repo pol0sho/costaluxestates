@@ -34,7 +34,7 @@ export default function NewBuildsClient() {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  // 1️⃣ Initialize filters from URL on first load
+  // 1️⃣ Initialize filters from URL on first load or when query changes
   useEffect(() => {
     const initialFilters = {
       location: searchParams.get("location") || "any",
@@ -45,9 +45,9 @@ export default function NewBuildsClient() {
       priceMax: Number(searchParams.get("priceMax") || 3000000),
     };
     setFilters(initialFilters);
-  }, []); // only run once
+  }, [searchParams]);
 
-  // 2️⃣ Fetch data
+  // 2️⃣ Fetch properties once
   useEffect(() => {
     const fetchProperties = async () => {
       try {
@@ -118,6 +118,7 @@ export default function NewBuildsClient() {
     currentPage * PROPERTIES_PER_PAGE
   );
 
+  // 4️⃣ Pagination rendering
   const renderPaginationLinks = () => {
     const pageNumbers = [];
     const visiblePages = 5;
@@ -168,12 +169,11 @@ export default function NewBuildsClient() {
     return pageNumbers;
   };
 
-  // 4️⃣ Handle live filter changes and update URL
+  // 5️⃣ Handle live filter changes and update URL
   const handleFiltersChange = (newFilters: typeof filters) => {
     setFilters(newFilters);
     setCurrentPage(1);
 
-    // Update URL without full reload
     const params = new URLSearchParams();
     if (newFilters.location !== "any") params.set("location", newFilters.location);
     if (newFilters.type !== "any") params.set("type", newFilters.type);
@@ -187,13 +187,16 @@ export default function NewBuildsClient() {
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-12">
+      {/* Search Bar */}
       <div className="mb-12 flex justify-center">
         <SearchModule
           showListingType={false}
-          onFiltersChange={handleFiltersChange} // ✅ live update
+          onFiltersChange={handleFiltersChange}
+          initialFilters={filters} // ✅ pass URL filters to SearchModule
         />
       </div>
 
+      {/* Property Count */}
       <div className="mb-8 text-center">
         {loading ? (
           <p className="text-muted-foreground">Loading properties...</p>
@@ -204,6 +207,7 @@ export default function NewBuildsClient() {
         )}
       </div>
 
+      {/* Properties Grid */}
       {!loading && totalProperties > 0 ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
@@ -212,6 +216,7 @@ export default function NewBuildsClient() {
             ))}
           </div>
 
+          {/* Pagination */}
           {totalPages > 1 && (
             <div className="mt-16">
               <Pagination>

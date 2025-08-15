@@ -35,7 +35,7 @@ export default function PropertiesPageClient() {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  // 1️⃣ Initialize filters from URL
+  // 1️⃣ Initialize filters from URL on load or when URL changes
   useEffect(() => {
     const initialFilters = {
       location: searchParams.get("location") || "any",
@@ -46,7 +46,7 @@ export default function PropertiesPageClient() {
       priceMax: Number(searchParams.get("priceMax") || 3000000),
     };
     setFilters(initialFilters);
-  }, []); // run once
+  }, [searchParams]);
 
   // 2️⃣ Fetch properties
   useEffect(() => {
@@ -169,7 +169,7 @@ export default function PropertiesPageClient() {
     return pageNumbers;
   };
 
-  // 4️⃣ Update filters live + push to URL
+  // 4️⃣ Live filter changes + URL sync
   const handleFiltersChange = (newFilters: typeof filters) => {
     setFilters(newFilters);
     setCurrentPage(1);
@@ -196,7 +196,8 @@ export default function PropertiesPageClient() {
         <div className="mb-8 flex justify-center">
           <SearchModule
             showListingType={false}
-            onFiltersChange={handleFiltersChange} // ✅ live updates
+            onFiltersChange={handleFiltersChange}
+            initialFilters={filters} // ✅ pre-fill from URL
           />
         </div>
 
