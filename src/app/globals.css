@@ -85,14 +85,14 @@
 
 @layer utilities {
 
-  @keyframes scroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(var(--scroll-distance)); }
-  }
+@keyframes scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
 
-  .scroller {
-    animation: scroll 60s linear infinite;
-  }
+.scroller {
+  animation: scroll 20s linear infinite;
+}
 
   .scroller:hover {
     animation-play-state: paused;

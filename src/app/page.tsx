@@ -80,23 +80,17 @@ const AnimatedSection = ({
 const Scroller = ({ children }: { children: React.ReactNode }) => {
   const scrollerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const scroller = scrollerRef.current;
-    if (scroller) {
-      const childrenArray = Array.from(scroller.children);
-
-   
-      childrenArray.forEach((child) => {
-        const clone = child.cloneNode(true);
-        (clone as HTMLElement).setAttribute("aria-hidden", "true");
-        scroller.appendChild(clone);
-      });
-
-      
-      const totalWidth = scroller.scrollWidth / 2; 
-      scroller.style.setProperty("--scroll-distance", `-${totalWidth}px`);
-    }
-  }, []);
+useEffect(() => {
+  const scroller = scrollerRef.current;
+  if (scroller) {
+    const childrenArray = Array.from(scroller.children);
+    childrenArray.forEach((child) => {
+      const clone = child.cloneNode(true);
+      (clone as HTMLElement).setAttribute("aria-hidden", "true");
+      scroller.appendChild(clone);
+    });
+  }
+}, []);
 
   return (
     <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]">
