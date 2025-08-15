@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { BedDouble, Bath, Home, Search, MapPin, LayoutGrid } from "lucide-react"
 import { Slider } from "./ui/slider"
 import React, { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 
 const formatPrice = (value: number) => {
   if (value >= 1000000) return `€${(value / 1000000).toFixed(1)}M`;
@@ -14,8 +15,15 @@ const formatPrice = (value: number) => {
 };
 
 export function SearchModule({ showListingType = true }: { showListingType?: boolean }) {
+  const router = useRouter()
+
   const [priceRange, setPriceRange] = useState([0, 3000000])
   const [locations, setLocations] = useState<string[]>([])
+  const [location, setLocation] = useState("any")
+  const [listingType, setListingType] = useState("properties")
+  const [propertyType, setPropertyType] = useState("any")
+  const [bedrooms, setBedrooms] = useState("any")
+  const [bathrooms, setBathrooms] = useState("any")
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -33,7 +41,6 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
         const res = await fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}`)
         const data = await res.json()
 
-        // Extract and deduplicate towns (or locations)
         const uniqueLocations = Array.from(
           new Set(
             data
@@ -51,26 +58,40 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
     fetchLocations()
   }, [])
 
+  const handleSearch = () => {
+    const params = new URLSearchParams()
+
+    if (location !== "any") params.set("location", location)
+    if (propertyType !== "any") params.set("type", propertyType)
+    if (bedrooms !== "any") params.set("bedrooms", bedrooms)
+    if (bathrooms !== "any") params.set("bathrooms", bathrooms)
+
+    params.set("priceMin", priceRange[0].toString())
+    params.set("priceMax", priceRange[1].toString())
+
+    if (listingType === "new-builds") {
+      router.push(`/new-builds?${params.toString()}`)
+    } else {
+      router.push(`/properties?${params.toString()}`)
+    }
+  }
+
   return (
     <Card className="shadow-lg border-none bg-background/20 backdrop-blur-sm w-full max-w-7xl mx-auto">
       <CardContent className="p-4 sm:p-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 items-end justify-center">
+
           {/* Location dropdown */}
           <div className="lg:col-span-2">
             <label htmlFor="location" className="block text-sm font-medium text-white text-foreground mb-1 font-body">Location</label>
-            <Select>
+            <Select value={location} onValueChange={setLocation}>
               <SelectTrigger id="location" className="font-body">
-                <SelectValue placeholder={
-                  <div className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-muted-foreground" />
-                    <span>Any</span>
-                  </div>
-                } />
+                <SelectValue placeholder="Any" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="any">Any Location</SelectItem>
                 {locations.map((loc) => (
-                  <SelectItem key={loc} value={loc.toLowerCase().replace(/\s+/g, "-")}>
+                  <SelectItem key={loc} value={loc}>
                     {loc}
                   </SelectItem>
                 ))}
@@ -82,14 +103,9 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
           {showListingType && (
             <div className="lg:col-span-2">
               <label htmlFor="listing-type" className="block text-sm font-medium text-white text-foreground mb-1 font-body">Listing Type</label>
-              <Select defaultValue="properties">
+              <Select value={listingType} onValueChange={setListingType}>
                 <SelectTrigger id="listing-type" className="font-body">
-                  <SelectValue placeholder={
-                    <div className="flex items-center gap-2">
-                      <LayoutGrid className="h-4 w-4 text-muted-foreground" />
-                      <span>Properties</span>
-                    </div>
-                  } />
+                  <SelectValue placeholder="Properties" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="properties">Properties</SelectItem>
@@ -102,14 +118,9 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
           {/* Property Type */}
           <div className="lg:col-span-2">
             <label htmlFor="type" className="block text-sm font-medium text-white text-foreground mb-1 font-body">Property Type</label>
-            <Select>
+            <Select value={propertyType} onValueChange={setPropertyType}>
               <SelectTrigger id="type" className="font-body">
-                <SelectValue placeholder={
-                  <div className="flex items-center gap-2">
-                    <Home className="h-4 w-4 text-muted-foreground" />
-                    <span>Any</span>
-                  </div>
-                } />
+                <SelectValue placeholder="Any" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="any">Any</SelectItem>
@@ -124,14 +135,9 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
           {/* Bedrooms */}
           <div className="lg:col-span-1">
             <label htmlFor="bedrooms" className="block text-sm font-medium text-white text-foreground mb-1 font-body">Bedrooms</label>
-            <Select>
+            <Select value={bedrooms} onValueChange={setBedrooms}>
               <SelectTrigger id="bedrooms" className="font-body">
-                <SelectValue placeholder={
-                  <div className="flex items-center gap-2">
-                    <BedDouble className="h-4 w-4 text-muted-foreground" />
-                    <span>Any</span>
-                  </div>
-                } />
+                <SelectValue placeholder="Any" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="any">Any</SelectItem>
@@ -145,14 +151,9 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
           {/* Bathrooms */}
           <div className="lg:col-span-1">
             <label htmlFor="bathrooms" className="block text-sm font-medium text-white text-foreground mb-1 font-body">Bathrooms</label>
-            <Select>
+            <Select value={bathrooms} onValueChange={setBathrooms}>
               <SelectTrigger id="bathrooms" className="font-body">
-                <SelectValue placeholder={
-                  <div className="flex items-center gap-2">
-                    <Bath className="h-4 w-4 text-muted-foreground" />
-                    <span>Any</span>
-                  </div>
-                } />
+                <SelectValue placeholder="Any" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="any">Any</SelectItem>
@@ -182,7 +183,11 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
 
           {/* Search Button */}
           <div className="sm:col-span-2 lg:col-span-2">
-            <Button size="lg" className="w-full text-base font-bold bg-accent text-accent-foreground hover:bg-accent/90 transition-all duration-300 transform hover:scale-105">
+            <Button
+              onClick={handleSearch}
+              size="lg"
+              className="w-full text-base font-bold bg-accent text-accent-foreground hover:bg-accent/90 transition-all duration-300 transform hover:scale-105"
+            >
               <Search className="mr-2 h-5 w-5" />
               Search properties
             </Button>

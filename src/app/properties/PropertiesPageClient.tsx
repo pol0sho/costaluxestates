@@ -1,4 +1,3 @@
-// src/app/properties/PropertiesPageClient.tsx
 'use client';
 
 import { useEffect, useState } from "react";
@@ -22,30 +21,68 @@ export default function PropertiesPageClient() {
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
 
+  // Read filters from query string
+  const locationFilter = searchParams.get("location") || "any";
+  const typeFilter = searchParams.get("type") || "any";
+  const bedroomsFilter = searchParams.get("bedrooms") || "any";
+  const bathroomsFilter = searchParams.get("bathrooms") || "any";
+  const priceMin = Number(searchParams.get("priceMin") || 0);
+  const priceMax = Number(searchParams.get("priceMax") || 3000000);
+
   const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-            const hostname = window.location.hostname;
+        const hostname = window.location.hostname;
+        const domainToRealestate: Record<string, string> = {
+          "localhost": "abracasabra",
+          "www.costaluxestatesweb.onrender.com": "costalux",
+          "costaluxestatesweb.onrender.com": "costalux",
+          "www.costaluxestates.com": "costalux",
+          "costaluxestates.com": "costalux",
+        };
 
-            const domainToRealestate: Record<string, string> = {
-            "localhost": "abracasabra",
-            "www.costaluxestatesweb.onrender.com": "costalux",
-            "costaluxestatesweb.onrender.com": "costalux",
-            "www.costaluxestates.com": "costalux",
-            "costaluxestates.com": "costalux",
-            };
-
-            const realestate = domainToRealestate[hostname] || "abracasabra"; // fallback
+        const realestate = domainToRealestate[hostname] || "abracasabra";
 
         const res = await fetch(
           `https://api.habigrid.com/api/public/properties?realestate=${realestate}`
         );
-
         const data = await res.json();
-        setProperties(Array.isArray(data) ? data.filter(p => p.listingtype === "resale") : []);
+
+        let filtered = Array.isArray(data)
+          ? data.filter((p) => p.listingtype === "resale")
+          : [];
+
+        // Apply filters from query params
+        if (locationFilter !== "any") {
+          filtered = filtered.filter(
+            (p) => p.town?.toLowerCase() === locationFilter.toLowerCase()
+          );
+        }
+        if (typeFilter !== "any") {
+          filtered = filtered.filter(
+            (p) => p.property_type?.toLowerCase() === typeFilter.toLowerCase()
+          );
+        }
+        if (bedroomsFilter !== "any") {
+          filtered = filtered.filter(
+            (p) => Number(p.bedrooms) >= Number(bedroomsFilter)
+          );
+        }
+        if (bathroomsFilter !== "any") {
+          filtered = filtered.filter(
+            (p) => Number(p.bathrooms) >= Number(bathroomsFilter)
+          );
+        }
+        filtered = filtered.filter(
+          (p) =>
+            Number(p.list_price) >= priceMin &&
+            Number(p.list_price) <= priceMax
+        );
+
+        setProperties(filtered);
       } catch (err) {
         console.error("Failed to fetch properties:", err);
         setProperties([]);
@@ -55,7 +92,14 @@ export default function PropertiesPageClient() {
     };
 
     fetchProperties();
-  }, []);
+  }, [
+    locationFilter,
+    typeFilter,
+    bedroomsFilter,
+    bathroomsFilter,
+    priceMin,
+    priceMax,
+  ]);
 
   const totalProperties = properties.length;
   const totalPages = Math.ceil(totalProperties / PROPERTIES_PER_PAGE);
@@ -90,7 +134,10 @@ export default function PropertiesPageClient() {
     for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(
         <PaginationItem key={i}>
-          <PaginationLink href={`/properties?page=${i}`} isActive={i === currentPage}>
+          <PaginationLink
+            href={`/properties?page=${i}`}
+            isActive={i === currentPage}
+          >
             {i}
           </PaginationLink>
         </PaginationItem>
@@ -103,7 +150,9 @@ export default function PropertiesPageClient() {
       }
       pageNumbers.push(
         <PaginationItem key={totalPages}>
-          <PaginationLink href={`/properties?page=${totalPages}`}>{totalPages}</PaginationLink>
+          <PaginationLink href={`/properties?page=${totalPages}`}>
+            {totalPages}
+          </PaginationLink>
         </PaginationItem>
       );
     }
@@ -127,7 +176,9 @@ export default function PropertiesPageClient() {
           {loading ? (
             <p className="text-muted-foreground">Loading properties...</p>
           ) : (
-            <p className="text-muted-foreground">{totalProperties} properties found</p>
+            <p className="text-muted-foreground">
+              {totalProperties} properties found
+            </p>
           )}
         </div>
 
@@ -145,13 +196,17 @@ export default function PropertiesPageClient() {
                   <PaginationContent>
                     {currentPage > 1 && (
                       <PaginationItem>
-                        <PaginationPrevious href={`/properties?page=${currentPage - 1}`} />
+                        <PaginationPrevious
+                          href={`/properties?page=${currentPage - 1}`}
+                        />
                       </PaginationItem>
                     )}
                     {renderPaginationLinks()}
                     {currentPage < totalPages && (
                       <PaginationItem>
-                        <PaginationNext href={`/properties?page=${currentPage + 1}`} />
+                        <PaginationNext
+                          href={`/properties?page=${currentPage + 1}`}
+                        />
                       </PaginationItem>
                     )}
                   </PaginationContent>
