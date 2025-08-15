@@ -159,7 +159,7 @@ export default function NewBuildsClient() {
           showListingType={false}
           onFiltersChange={(newFilters) => {
             setFilters(newFilters);
-            setCurrentPage(1); // reset to first page when filters change
+            setCurrentPage(1); 
           }}
         />
       </div>

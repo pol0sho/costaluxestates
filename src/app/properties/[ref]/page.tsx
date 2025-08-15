@@ -43,7 +43,7 @@ const FeatureItem = ({ icon: Icon, label, value }: { icon: React.ElementType; la
   </div>
 );
 
-export default function PropertyDetailPage({ params }: { params: { id: string } }) {
+export default function PropertyDetailPage({ params }: { params: { ref: string } }) {
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -63,7 +63,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
         const res = await fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}`);
         const data = await res.json();
         const matched = Array.isArray(data)
-          ? data.find((p: any) => p.id.toString() === params.id)
+          ? data.find((p: any) => p.ref?.toString() === params.ref)
           : null;
 
         if (!matched) {
