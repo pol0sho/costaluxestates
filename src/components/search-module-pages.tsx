@@ -1,30 +1,34 @@
-'use client'
+'use client';
 
-import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { BedDouble, Bath, Home, MapPin, LayoutGrid } from "lucide-react"
 import { Slider } from "./ui/slider"
-import React from "react"
+import React, { useEffect, useState } from "react"
 
 const formatPrice = (value: number) => {
-  if (value >= 1000000) {
-    return `€${(value / 1000000).toFixed(1)}M`
-  }
-  if (value >= 1000) {
-    return `€${(value / 1000)}k`
-  }
+  if (value >= 1000000) return `€${(value / 1000000).toFixed(1)}M`
+  if (value >= 1000) return `€${(value / 1000)}k`
   return `€${value}`
 }
 
 export function SearchModule({
   showListingType = true,
   onFiltersChange,
+  initialFilters
 }: {
   showListingType?: boolean
   onFiltersChange?: (filters: any) => void
+  initialFilters?: {
+    location: string
+    type: string
+    bedrooms: string
+    bathrooms: string
+    priceMin: number
+    priceMax: number
+  }
 }) {
-  const [filters, setFilters] = React.useState({
+  const [filters, setFilters] = useState({
     location: "any",
     type: "any",
     bedrooms: "any",
@@ -32,10 +36,47 @@ export function SearchModule({
     priceMin: 0,
     priceMax: 3000000,
   })
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 3000000])
+  const [locations, setLocations] = useState<string[]>([])
 
-  const [priceRange, setPriceRange] = React.useState<[number, number]>([0, 3000000])
+  // ✅ Load initial filters from props (URL state)
+  useEffect(() => {
+    if (initialFilters) {
+      setFilters(initialFilters)
+      setPriceRange([initialFilters.priceMin, initialFilters.priceMax])
+    }
+  }, [initialFilters])
 
-  // Whenever price slider changes, update state + notify parent
+  // ✅ Fetch distinct towns from DB
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const hostname = window.location.hostname
+        const domainToRealestate: Record<string, string> = {
+          localhost: "costalux",
+          "www.costaluxestatesweb.onrender.com": "costalux",
+          "costaluxestatesweb.onrender.com": "costalux",
+          "www.costaluxestates.com": "costalux",
+          "costaluxestates.com": "costalux",
+        }
+        const realestate = domainToRealestate[hostname] || "costalux"
+
+        const res = await fetch(
+          `https://api.habigrid.com/api/public/properties/locations?realestate=${realestate}`
+        )
+        const data = await res.json()
+        if (Array.isArray(data)) {
+          setLocations(data.sort((a, b) => a.localeCompare(b))) // alphabetical
+        }
+      } catch (err) {
+        console.error("Failed to fetch locations:", err)
+      }
+    }
+
+    fetchLocations()
+  }, [])
+
+  // ✅ Price slider change
   const handlePriceChange = (range: [number, number]) => {
     setPriceRange(range)
     const updated = { ...filters, priceMin: range[0], priceMax: range[1] }
@@ -43,7 +84,7 @@ export function SearchModule({
     onFiltersChange?.(updated)
   }
 
-  // For dropdown changes
+  // ✅ Dropdown changes
   const handleChange = (key: keyof typeof filters, value: string) => {
     const updated = { ...filters, [key]: value }
     setFilters(updated)
@@ -54,32 +95,31 @@ export function SearchModule({
     <Card className="shadow-lg border-none bg-background/20 backdrop-blur-sm w-full max-w-7xl mx-auto">
       <CardContent className="p-4 sm:p-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 items-end justify-center">
+          
+          {/* Location Dropdown */}
           <div className="lg:col-span-2">
             <label htmlFor="location" className="block text-sm font-medium text-foreground mb-1 font-body">
               Location
             </label>
-            <Select onValueChange={(val) => handleChange("location", val)} defaultValue="any">
+            <Select
+              value={filters.location}
+              onValueChange={(val) => handleChange("location", val)}
+            >
               <SelectTrigger id="location" className="font-body">
-                <SelectValue
-                  placeholder={
-                    <div className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4 text-muted-foreground" />
-                      <span>Any</span>
-                    </div>
-                  }
-                />
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="any">Any Location</SelectItem>
-                <SelectItem value="estepona">Estepona</SelectItem>
-                <SelectItem value="san pedro">San Pedro</SelectItem>
-                <SelectItem value="marbella">Marbella</SelectItem>
-                <SelectItem value="fuengirola">Fuengirola</SelectItem>
-                <SelectItem value="benalmadena">Benalmadena</SelectItem>
+                {locations.map((loc) => (
+                  <SelectItem key={loc} value={loc.toLowerCase()}>
+                    {loc}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
 
+          {/* Listing Type */}
           {showListingType && (
             <div className="lg:col-span-2">
               <label htmlFor="listing-type" className="block text-sm font-medium text-foreground mb-1 font-body">
@@ -87,14 +127,7 @@ export function SearchModule({
               </label>
               <Select defaultValue="properties">
                 <SelectTrigger id="listing-type" className="font-body">
-                  <SelectValue
-                    placeholder={
-                      <div className="flex items-center gap-2">
-                        <LayoutGrid className="h-4 w-4 text-muted-foreground" />
-                        <span>Properties</span>
-                      </div>
-                    }
-                  />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="properties">Properties</SelectItem>
@@ -104,20 +137,17 @@ export function SearchModule({
             </div>
           )}
 
+          {/* Property Type */}
           <div className="lg:col-span-2">
             <label htmlFor="type" className="block text-sm font-medium text-foreground mb-1 font-body">
               Property Type
             </label>
-            <Select onValueChange={(val) => handleChange("type", val)} defaultValue="any">
+            <Select
+              value={filters.type}
+              onValueChange={(val) => handleChange("type", val)}
+            >
               <SelectTrigger id="type" className="font-body">
-                <SelectValue
-                  placeholder={
-                    <div className="flex items-center gap-2">
-                      <Home className="h-4 w-4 text-muted-foreground" />
-                      <span>Any</span>
-                    </div>
-                  }
-                />
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="any">Any</SelectItem>
@@ -129,20 +159,17 @@ export function SearchModule({
             </Select>
           </div>
 
+          {/* Bedrooms */}
           <div className="lg:col-span-1">
             <label htmlFor="bedrooms" className="block text-sm font-medium text-foreground mb-1 font-body">
               Bedrooms
             </label>
-            <Select onValueChange={(val) => handleChange("bedrooms", val)} defaultValue="any">
+            <Select
+              value={filters.bedrooms}
+              onValueChange={(val) => handleChange("bedrooms", val)}
+            >
               <SelectTrigger id="bedrooms" className="font-body">
-                <SelectValue
-                  placeholder={
-                    <div className="flex items-center gap-2">
-                      <BedDouble className="h-4 w-4 text-muted-foreground" />
-                      <span>Any</span>
-                    </div>
-                  }
-                />
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="any">Any</SelectItem>
@@ -155,20 +182,17 @@ export function SearchModule({
             </Select>
           </div>
 
+          {/* Bathrooms */}
           <div className="lg:col-span-1">
             <label htmlFor="bathrooms" className="block text-sm font-medium text-foreground mb-1 font-body">
               Bathrooms
             </label>
-            <Select onValueChange={(val) => handleChange("bathrooms", val)} defaultValue="any">
+            <Select
+              value={filters.bathrooms}
+              onValueChange={(val) => handleChange("bathrooms", val)}
+            >
               <SelectTrigger id="bathrooms" className="font-body">
-                <SelectValue
-                  placeholder={
-                    <div className="flex items-center gap-2">
-                      <Bath className="h-4 w-4 text-muted-foreground" />
-                      <span>Any</span>
-                    </div>
-                  }
-                />
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="any">Any</SelectItem>
@@ -181,6 +205,7 @@ export function SearchModule({
             </Select>
           </div>
 
+          {/* Price Range */}
           <div className="sm:col-span-2 lg:col-span-2 space-y-2 pb-1">
             <label className="block text-sm font-medium text-foreground mb-1 font-body">Price Range</label>
             <div className="flex justify-between text-xs text-foreground font-body">
