@@ -1,8 +1,9 @@
-export const dynamic = 'force-dynamic';
-export const runtime = 'nodejs';
+export const runtime = "nodejs"; // Force Node.js runtime so nodemailer works
+export const dynamic = "force-dynamic"; // Avoid static optimization
 
 export async function POST(request) {
-  const nodemailer = require("nodemailer"); // load inside so Webpack doesn't bundle it
+  // Require here so Webpack doesn't bundle it
+  const nodemailer = require("nodemailer");
 
   try {
     const body = await request.json();
@@ -18,7 +19,7 @@ export async function POST(request) {
       secure: true, // SSL
       auth: {
         user: "info@costaluxestates.com",
-        pass: process.env.EMAIL_PASS, // set in .env.local
+        pass: process.env.EMAIL_PASS,
       },
     });
 
