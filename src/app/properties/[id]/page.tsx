@@ -11,8 +11,6 @@ import { BedDouble, Bath, MapPin, Home, Ruler, LandPlot, Calendar, Sun } from "l
 import { motion } from "framer-motion";
 import { ContactForm } from "@/components/contact-form";
 
-
-
 type Property = {
   id: number;
   title: string;
@@ -29,9 +27,13 @@ type Property = {
   town?: string;
   province?: string;
   description?: string;
-  images: string[];
+  images: { url: string }[];
   aiHints?: string[];
   ref: string;
+};
+
+type PropertyVideo = {
+  promotion_video: string | null;
 };
 
 const FeatureItem = ({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: React.ReactNode }) => (
@@ -46,35 +48,45 @@ const FeatureItem = ({ icon: Icon, label, value }: { icon: React.ElementType; la
 
 export default function PropertyDetailPage({ params }: { params: { id: string } }) {
   const [property, setProperty] = useState<Property | null>(null);
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProperty = async () => {
       try {
-            const hostname = window.location.hostname;
+        const hostname = window.location.hostname;
+        const domainToRealestate: Record<string, string> = {
+          "localhost": "costalux",
+          "www.costaluxestatesweb.onrender.com": "costalux",
+          "costaluxestatesweb.onrender.com": "costalux",
+          "www.costaluxestates.com": "costalux",
+          "costaluxestates.com": "costalux",
+        };
+        const realestate = domainToRealestate[hostname] || "costalux";
 
-            const domainToRealestate: Record<string, string> = {
-            "localhost": "costalux",
-            "www.costaluxestatesweb.onrender.com": "costalux",
-            "costaluxestatesweb.onrender.com": "costalux",
-            "www.costaluxestates.com": "costalux",
-            "costaluxestates.com": "costalux",
-            };
-
-            const realestate = domainToRealestate[hostname] || "costalux"; 
-
+        // Fetch property details
         const res = await fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}`);
         const data = await res.json();
         const matched = Array.isArray(data)
           ? data.find((p: any) => p.id.toString() === params.id)
           : null;
+
         if (!matched) {
-          notFound(); // will redirect to 404
+          notFound();
         } else {
           setProperty(matched);
         }
+
+        // Fetch video separately
+        const videoRes = await fetch(`https://api.habigrid.com/api/public/property-videos/${params.id}`);
+        if (videoRes.ok) {
+          const videoData: PropertyVideo = await videoRes.json();
+          if (videoData?.promotion_video) {
+            setVideoUrl(videoData.promotion_video);
+          }
+        }
       } catch (err) {
-        console.error("Failed to load property:", err);
+        console.error("Failed to load property or video:", err);
       } finally {
         setLoading(false);
       }
@@ -99,14 +111,33 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
       className="bg-secondary font-body"
     >
       <div className="container mx-auto max-w-7xl px-4 md:px-6 py-8 md:py-12">
+        
+        {/* Promotion Video if exists */}
+        {videoUrl && (
+          <div className="mb-8 aspect-video">
+            <iframe
+              className="w-full h-full rounded-lg shadow-lg"
+              src={videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be")
+                ? videoUrl.replace("watch?v=", "embed/")
+                : videoUrl}
+              title="Promotion Video"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
+        )}
+
+        {/* Image Slideshow */}
         <div className="mb-8">
           <ImageSlideshow
-  images={Array.isArray(property.images) ? property.images.map((img) => img.url) : []}
-  title={property.title}
-  aiHints={property.aiHints}
-/>
+            images={Array.isArray(property.images) ? property.images.map((img) => img.url) : []}
+            title={property.title}
+            aiHints={property.aiHints}
+          />
         </div>
 
+        {/* Property Info */}
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <Card className="border-none shadow-sm">
@@ -120,12 +151,12 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                     </div>
                   </div>
                   <div className="flex-shrink-0 mt-2 md:mt-0">
-<Badge className="text-2xl font-bold bg-primary/10 text-primary hover:bg-primary/20 border-primary/20 border-2 py-2 px-4">
-  {property.priceType === 'from' && 'From '}
-  {property.list_price
-    ? `€${Number(property.list_price).toLocaleString('de-DE')}`
-    : 'Price not available'}
-</Badge>
+                    <Badge className="text-2xl font-bold bg-primary/10 text-primary hover:bg-primary/20 border-primary/20 border-2 py-2 px-4">
+                      {property.priceType === 'from' && 'From '}
+                      {property.list_price
+                        ? `€${Number(property.list_price).toLocaleString('de-DE')}`
+                        : 'Price not available'}
+                    </Badge>
                   </div>
                 </div>
               </CardHeader>
@@ -149,16 +180,17 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
 
                 <div className="mt-6 text-foreground/90 leading-relaxed">
                   <h2 className="font-headline text-xl font-bold mb-4">Description</h2>
-                 <p>
-  {Array.isArray(property.description)
-    ? property.description.find((d) => d.lang === "en")?.description || "No English description."
-    : "No description available."}
-</p>
+                  <p>
+                    {Array.isArray(property.description)
+                      ? property.description.find((d) => d.lang === "en")?.description || "No English description."
+                      : "No description available."}
+                  </p>
                 </div>
               </CardContent>
             </Card>
           </div>
 
+          {/* Contact Form */}
           <div className="lg:col-span-1">
             <div className="sticky top-24">
               <ContactForm
