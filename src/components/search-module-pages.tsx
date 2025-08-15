@@ -40,12 +40,15 @@ export function SearchModule({
   const [locations, setLocations] = useState<string[]>([])
 
   // ✅ Load initial filters from props (URL state)
-  useEffect(() => {
-    if (initialFilters) {
-      setFilters(initialFilters)
-      setPriceRange([initialFilters.priceMin, initialFilters.priceMax])
-    }
-  }, [initialFilters])
+useEffect(() => {
+  if (initialFilters) {
+    setFilters((prev) => ({
+      ...prev,
+      ...initialFilters
+    }))
+    setPriceRange([initialFilters.priceMin, initialFilters.priceMax])
+  }
+}, [initialFilters])
 
   // ✅ Fetch distinct towns from DB
   useEffect(() => {
