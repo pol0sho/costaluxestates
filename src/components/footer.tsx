@@ -23,16 +23,26 @@ export function Footer() {
                 Contact
               </Link>
             </nav>
-            <div className="flex space-x-4">
-               <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                <Facebook className="h-5 w-5" />
-                <span className="sr-only">Facebook</span>
-              </Link>
-              <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                <Instagram className="h-5 w-5" />
-                <span className="sr-only">Instagram</span>
-              </Link>
-            </div>
+<div className="flex space-x-4">
+  <Link
+    href="https://www.facebook.com/share/1JGZSqMG5o/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-muted-foreground hover:text-foreground transition-colors"
+  >
+    <Facebook className="h-5 w-5" />
+    <span className="sr-only">Facebook</span>
+  </Link>
+  <Link
+    href="https://www.instagram.com/costalux_estates"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-muted-foreground hover:text-foreground transition-colors"
+  >
+    <Instagram className="h-5 w-5" />
+    <span className="sr-only">Instagram</span>
+  </Link>
+</div>
           </div>
         </div>
       </div>

@@ -30,19 +30,30 @@ const ContactInfo = () => (
         </div>
       </div>
        <div className="flex items-center gap-4 pt-4">
-          <div className="bg-accent/20 p-3 rounded-full">
-            <h3 className="font-semibold text-lg text-accent">Socials</h3>
-          </div>
-          <div className="flex space-x-4">
-            <Link href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
-              <Facebook className="h-6 w-6" />
-              <span className="sr-only">Facebook</span>
-            </Link>
-            <Link href="#" className="text-primary-foreground/80 hover:text-accent transition-colors">
-              <Instagram className="h-6 w-6" />
-              <span className="sr-only">Instagram</span>
-            </Link>
-          </div>
+  <div className="bg-accent/20 p-3 rounded-full">
+    <h3 className="font-semibold text-lg text-accent">Socials</h3>
+  </div>
+  <div className="flex space-x-4">
+    <Link
+      href="https://www.facebook.com/share/1JGZSqMG5o/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-primary-foreground/80 hover:text-accent transition-colors"
+    >
+      <Facebook className="h-6 w-6" />
+      <span className="sr-only">Facebook</span>
+    </Link>
+    <Link
+      href="https://www.instagram.com/costalux_estates"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-primary-foreground/80 hover:text-accent transition-colors"
+    >
+      <Instagram className="h-6 w-6" />
+      <span className="sr-only">Instagram</span>
+    </Link>
+  </div>
+
         </div>
     </div>
   </div>
