@@ -106,7 +106,9 @@ export function SearchModule({
     onValueChange={(val) => handleChange("location", val)}
   >
     <SelectTrigger id="location" className="font-body">
-      <SelectValue placeholder="Any Location" />
+      <SelectValue>
+        {filters.location === "any" ? "Any Location" : filters.location}
+      </SelectValue>
     </SelectTrigger>
     <SelectContent>
       <SelectItem value="any">Any Location</SelectItem>
@@ -118,7 +120,6 @@ export function SearchModule({
     </SelectContent>
   </Select>
 </div>
-
           {/* Listing Type */}
           {showListingType && (
             <div className="lg:col-span-2">
