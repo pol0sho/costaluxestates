@@ -28,7 +28,6 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
   const [allProperties, setAllProperties] = useState<any[]>([])
   const [filteredCount, setFilteredCount] = useState(0)
 
-
   useEffect(() => {
     const fetchProperties = async () => {
       try {
@@ -63,7 +62,6 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
 
     fetchProperties()
   }, [])
-
 
   useEffect(() => {
     const count = allProperties
@@ -204,7 +202,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
             />
           </div>
 
-          {/* Search Button with live count */}
+          {/* Search Button */}
           <div className="sm:col-span-2 lg:col-span-2">
             <Button
               onClick={handleSearch}
@@ -212,7 +210,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
               className="w-full text-base font-bold bg-accent text-accent-foreground hover:bg-accent/90 transition-all duration-300 transform hover:scale-105"
             >
               <Search className="mr-2 h-5 w-5" />
-              Search {filteredCount} {filteredCount === 1 ? "property" : "properties"}
+              Search
             </Button>
           </div>
         </div>
