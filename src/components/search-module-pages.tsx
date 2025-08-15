@@ -96,28 +96,28 @@ export function SearchModule({
       <CardContent className="p-4 sm:p-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 items-end justify-center">
           
-          {/* Location Dropdown */}
-          <div className="lg:col-span-2">
-            <label htmlFor="location" className="block text-sm font-medium text-foreground mb-1 font-body">
-              Location
-            </label>
-            <Select
-              value={filters.location}
-              onValueChange={(val) => handleChange("location", val)}
-            >
-              <SelectTrigger id="location" className="font-body">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="any">Any Location</SelectItem>
-                {locations.map((loc) => (
-                  <SelectItem key={loc} value={loc.toLowerCase()}>
-                    {loc}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+{/* Location Dropdown */}
+<div className="lg:col-span-2">
+  <label htmlFor="location" className="block text-sm font-medium text-foreground mb-1 font-body">
+    Location
+  </label>
+  <Select
+    value={filters.location}
+    onValueChange={(val) => handleChange("location", val)}
+  >
+    <SelectTrigger id="location" className="font-body">
+      <SelectValue placeholder="Any Location" />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectItem value="any">Any Location</SelectItem>
+      {locations.map((loc) => (
+        <SelectItem key={loc} value={loc}>
+          {loc}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+</div>
 
           {/* Listing Type */}
           {showListingType && (
