@@ -1,32 +1,31 @@
-import nodemailer from "nodemailer";
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 export async function POST(request) {
+  const nodemailer = require("nodemailer"); // load inside so Webpack doesn't bundle it
+
   try {
     const body = await request.json();
     const { name, email, phone, subject, message, contactMethod } = body;
 
     if (!name || !email || !subject || !message) {
-      return new Response(JSON.stringify({ error: "Missing required fields" }), {
-        status: 400,
-      });
+      return new Response(JSON.stringify({ error: "Missing required fields" }), { status: 400 });
     }
 
-    // Hostinger SMTP setup
     const transporter = nodemailer.createTransport({
       host: "smtp.hostinger.com",
       port: 465,
       secure: true, // SSL
       auth: {
         user: "info@costaluxestates.com",
-        pass: process.env.EMAIL_PASS, // store password in .env.local
+        pass: process.env.EMAIL_PASS, // set in .env.local
       },
     });
 
-    // Send the email
     await transporter.sendMail({
       from: `"${name}" <info@costaluxestates.com>`,
       to: "info@costaluxestates.com",
-      replyTo: email, // allows replying to the sender directly
+      replyTo: email,
       subject,
       text: `
 Name: ${name}
