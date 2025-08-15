@@ -40,44 +40,56 @@ export function SearchModule({
   const [locations, setLocations] = useState<string[]>([])
 
   // ✅ Load initial filters from props (URL state)
-useEffect(() => {
-  if (initialFilters) {
-    setFilters((prev) => ({
-      ...prev,
-      ...initialFilters
-    }))
-    setPriceRange([initialFilters.priceMin, initialFilters.priceMax])
-  }
-}, [])
+  useEffect(() => {
+    if (initialFilters) {
+      setFilters(initialFilters)
+      setPriceRange([initialFilters.priceMin, initialFilters.priceMax])
+    }
+  }, [initialFilters])
 
   // ✅ Fetch distinct towns from DB
   useEffect(() => {
-    const fetchLocations = async () => {
-      try {
-        const hostname = window.location.hostname
-        const domainToRealestate: Record<string, string> = {
-          localhost: "costalux",
-          "www.costaluxestatesweb.onrender.com": "costalux",
-          "costaluxestatesweb.onrender.com": "costalux",
-          "www.costaluxestates.com": "costalux",
-          "costaluxestates.com": "costalux",
-        }
-        const realestate = domainToRealestate[hostname] || "costalux"
-
-        const res = await fetch(
-          `https://api.habigrid.com/api/public/properties/locations?realestate=${realestate}`
-        )
-        const data = await res.json()
-        if (Array.isArray(data)) {
-          setLocations(data.sort((a, b) => a.localeCompare(b))) // alphabetical
-        }
-      } catch (err) {
-        console.error("Failed to fetch locations:", err)
+  const fetchLocations = async () => {
+    try {
+      const hostname = window.location.hostname
+      const domainToRealestate: Record<string, string> = {
+        localhost: "costalux",
+        "www.costaluxestatesweb.onrender.com": "costalux",
+        "costaluxestatesweb.onrender.com": "costalux",
+        "www.costaluxestates.com": "costalux",
+        "costaluxestates.com": "costalux",
       }
-    }
+      const realestate = domainToRealestate[hostname] || "costalux"
 
-    fetchLocations()
-  }, [])
+      const res = await fetch(
+        `https://api.habigrid.com/api/public/properties?realestate=${realestate}`
+      )
+
+      if (!res.ok) {
+        console.error("Failed to fetch properties:", res.status, await res.text())
+        return
+      }
+
+      const data = await res.json()
+      const towns: string[] = Array.isArray(data)
+        ? data
+            .map((p: any) => (p.town ?? "").trim())
+            .filter((t: string) => t.length > 0)
+        : []
+
+      // case-insensitive unique + alphabetical
+      const unique = Array.from(
+        new Map(towns.map(t => [t.toLowerCase(), t])).values()
+      ).sort((a, b) => a.localeCompare(b))
+
+      setLocations(unique)
+    } catch (err) {
+      console.error("Failed to fetch locations:", err)
+    }
+  }
+
+  fetchLocations()
+}, [])
 
   // ✅ Price slider change
   const handlePriceChange = (range: [number, number]) => {
