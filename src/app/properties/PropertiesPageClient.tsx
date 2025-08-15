@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation"; // ✅ Add this
+import { useSearchParams, useRouter } from "next/navigation";
 import { PropertyCard } from "@/components/property-card";
 import { SearchModule } from "@/components/search-module-pages";
 import { motion } from "framer-motion";
@@ -18,7 +18,9 @@ import {
 const PROPERTIES_PER_PAGE = 20;
 
 export default function PropertiesPageClient() {
-  const searchParams = useSearchParams(); // ✅
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,9 +35,9 @@ export default function PropertiesPageClient() {
 
   const [currentPage, setCurrentPage] = useState(1);
 
+  // 1️⃣ Initialize filters from URL
   useEffect(() => {
-    // ✅ When URL changes, update filters from params
-    const newFilters = {
+    const initialFilters = {
       location: searchParams.get("location") || "any",
       type: searchParams.get("type") || "any",
       bedrooms: searchParams.get("bedrooms") || "any",
@@ -43,10 +45,10 @@ export default function PropertiesPageClient() {
       priceMin: Number(searchParams.get("priceMin") || 0),
       priceMax: Number(searchParams.get("priceMax") || 3000000),
     };
-    setFilters(newFilters);
-    setCurrentPage(1);
-  }, [searchParams]);
+    setFilters(initialFilters);
+  }, []); // run once
 
+  // 2️⃣ Fetch properties
   useEffect(() => {
     const fetchProperties = async () => {
       try {
@@ -81,7 +83,7 @@ export default function PropertiesPageClient() {
     fetchProperties();
   }, []);
 
-  // ✅ Apply filters in-memory
+  // 3️⃣ Filter in memory
   const filtered = properties
     .filter(
       (p) =>
@@ -122,9 +124,11 @@ export default function PropertiesPageClient() {
     const visiblePages = 5;
     let startPage = Math.max(1, currentPage - Math.floor(visiblePages / 2));
     let endPage = Math.min(totalPages, startPage + visiblePages - 1);
+
     if (endPage - startPage + 1 < visiblePages) {
       startPage = Math.max(1, endPage - visiblePages + 1);
     }
+
     if (startPage > 1) {
       pageNumbers.push(
         <PaginationItem key="1">
@@ -135,6 +139,7 @@ export default function PropertiesPageClient() {
         pageNumbers.push(<PaginationEllipsis key="start-ellipsis" />);
       }
     }
+
     for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(
         <PaginationItem key={i}>
@@ -147,6 +152,7 @@ export default function PropertiesPageClient() {
         </PaginationItem>
       );
     }
+
     if (endPage < totalPages) {
       if (endPage < totalPages - 1) {
         pageNumbers.push(<PaginationEllipsis key="end-ellipsis" />);
@@ -159,7 +165,24 @@ export default function PropertiesPageClient() {
         </PaginationItem>
       );
     }
+
     return pageNumbers;
+  };
+
+  // 4️⃣ Update filters live + push to URL
+  const handleFiltersChange = (newFilters: typeof filters) => {
+    setFilters(newFilters);
+    setCurrentPage(1);
+
+    const params = new URLSearchParams();
+    if (newFilters.location !== "any") params.set("location", newFilters.location);
+    if (newFilters.type !== "any") params.set("type", newFilters.type);
+    if (newFilters.bedrooms !== "any") params.set("bedrooms", newFilters.bedrooms);
+    if (newFilters.bathrooms !== "any") params.set("bathrooms", newFilters.bathrooms);
+    if (newFilters.priceMin !== 0) params.set("priceMin", String(newFilters.priceMin));
+    if (newFilters.priceMax !== 3000000) params.set("priceMax", String(newFilters.priceMax));
+
+    router.replace(`/properties?${params.toString()}`);
   };
 
   return (
@@ -171,7 +194,10 @@ export default function PropertiesPageClient() {
     >
       <div className="container mx-auto px-4 md:px-6 py-12">
         <div className="mb-8 flex justify-center">
-          <SearchModule showListingType={false} />
+          <SearchModule
+            showListingType={false}
+            onFiltersChange={handleFiltersChange} // ✅ live updates
+          />
         </div>
 
         <div className="mb-8 text-center">

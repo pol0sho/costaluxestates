@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation"; // ✅ import
+import { useSearchParams, useRouter } from "next/navigation";
 import { PropertyCard } from "@/components/property-card";
 import { SearchModule } from "@/components/search-module-pages";
 import {
@@ -17,7 +17,9 @@ import {
 const PROPERTIES_PER_PAGE = 16;
 
 export default function NewBuildsClient() {
-  const searchParams = useSearchParams(); // ✅
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -32,9 +34,9 @@ export default function NewBuildsClient() {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  // ✅ Sync filters from URL whenever search params change
+  // 1️⃣ Initialize filters from URL on first load
   useEffect(() => {
-    const newFilters = {
+    const initialFilters = {
       location: searchParams.get("location") || "any",
       type: searchParams.get("type") || "any",
       bedrooms: searchParams.get("bedrooms") || "any",
@@ -42,11 +44,10 @@ export default function NewBuildsClient() {
       priceMin: Number(searchParams.get("priceMin") || 0),
       priceMax: Number(searchParams.get("priceMax") || 3000000),
     };
-    setFilters(newFilters);
-    setCurrentPage(1);
-  }, [searchParams]);
+    setFilters(initialFilters);
+  }, []); // only run once
 
-  // Fetch all newbuild properties for this domain
+  // 2️⃣ Fetch data
   useEffect(() => {
     const fetchProperties = async () => {
       try {
@@ -58,7 +59,6 @@ export default function NewBuildsClient() {
           "www.costaluxestates.com": "costalux",
           "costaluxestates.com": "costalux",
         };
-
         const realestate = domainToRealestate[hostname] || "costalux";
 
         const res = await fetch(
@@ -82,7 +82,7 @@ export default function NewBuildsClient() {
     fetchProperties();
   }, []);
 
-  // Apply filters in-memory
+  // 3️⃣ Apply filters in memory
   const filtered = properties
     .filter(
       (p) =>
@@ -168,10 +168,30 @@ export default function NewBuildsClient() {
     return pageNumbers;
   };
 
+  // 4️⃣ Handle live filter changes and update URL
+  const handleFiltersChange = (newFilters: typeof filters) => {
+    setFilters(newFilters);
+    setCurrentPage(1);
+
+    // Update URL without full reload
+    const params = new URLSearchParams();
+    if (newFilters.location !== "any") params.set("location", newFilters.location);
+    if (newFilters.type !== "any") params.set("type", newFilters.type);
+    if (newFilters.bedrooms !== "any") params.set("bedrooms", newFilters.bedrooms);
+    if (newFilters.bathrooms !== "any") params.set("bathrooms", newFilters.bathrooms);
+    if (newFilters.priceMin !== 0) params.set("priceMin", String(newFilters.priceMin));
+    if (newFilters.priceMax !== 3000000) params.set("priceMax", String(newFilters.priceMax));
+
+    router.replace(`/newbuilds?${params.toString()}`);
+  };
+
   return (
     <div className="container mx-auto px-4 md:px-6 py-12">
       <div className="mb-12 flex justify-center">
-        <SearchModule showListingType={false} />
+        <SearchModule
+          showListingType={false}
+          onFiltersChange={handleFiltersChange} // ✅ live update
+        />
       </div>
 
       <div className="mb-8 text-center">
