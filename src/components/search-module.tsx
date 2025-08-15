@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -25,9 +25,6 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
   const [bedrooms, setBedrooms] = useState("any")
   const [bathrooms, setBathrooms] = useState("any")
 
-  const [allProperties, setAllProperties] = useState<any[]>([])
-  const [filteredCount, setFilteredCount] = useState(0)
-
   // Fetch all properties + locations
   useEffect(() => {
     const fetchProperties = async () => {
@@ -45,8 +42,6 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
         const res = await fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}`)
         const data = await res.json()
 
-        setAllProperties(Array.isArray(data) ? data : [])
-
         const uniqueLocations = Array.from(
           new Set(
             data
@@ -63,23 +58,6 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
 
     fetchProperties()
   }, [])
-
-  // Update filtered count when filters change
-  useEffect(() => {
-    const count = allProperties
-      .filter(p => {
-        if (location !== "any" && p.town?.toLowerCase() !== location.toLowerCase()) return false
-        if (propertyType !== "any" && p.property_type?.toLowerCase() !== propertyType.toLowerCase()) return false
-        if (bedrooms !== "any" && Number(p.bedrooms) < Number(bedrooms)) return false
-        if (bathrooms !== "any" && Number(p.bathrooms) < Number(bathrooms)) return false
-        if (Number(p.list_price) < priceRange[0] || Number(p.list_price) > priceRange[1]) return false
-        if (showListingType && listingType === "new-builds" && p.listingtype?.toLowerCase() !== "newbuild") return false
-        if (showListingType && listingType === "properties" && p.listingtype?.toLowerCase() !== "resale") return false
-        return true
-      }).length
-
-    setFilteredCount(count)
-  }, [allProperties, location, propertyType, bedrooms, bathrooms, priceRange, listingType, showListingType])
 
   const handleSearch = () => {
     const params = new URLSearchParams()
@@ -204,7 +182,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
             />
           </div>
 
-          {/* Search Button with live count */}
+          {/* Search Button */}
           <div className="sm:col-span-2 lg:col-span-2">
             <Button
               onClick={handleSearch}
@@ -212,7 +190,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
               className="w-full text-base font-bold bg-accent text-accent-foreground hover:bg-accent/90 transition-all duration-300 transform hover:scale-105"
             >
               <Search className="mr-2 h-5 w-5" />
-              Search {filteredCount} {filteredCount === 1 ? "property" : "properties"}
+              Search
             </Button>
           </div>
         </div>
