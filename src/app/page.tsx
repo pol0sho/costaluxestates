@@ -173,7 +173,7 @@ export default function Home() {
             <h1 className="font-body text-2xl md:text-3xl font-bold mb-4">Welcome to CostaLux Estates</h1>
             <p className="text-lg md:text-xl max-w-5xl mx-auto mb-8">
                 Your trusted partner for exclusive real estate on the Costa del Sol. <br/>
-                Whether you're looking for a luxury villa, a charming apartment, or an investment opportunity, we guide you every step of the way -- with integrity, dedication, and local expertise. <br/>
+                Whether you're looking for a luxury villa, a charming apartment, or an investment opportunity, we guide you every step of the way -- with integrity, dedication, and local expertise. <br/> <br/>
                 We speak 5 languages (English, Spanish, Dutch, French and German) to make sure you feel at home from the very first conversation.
             </p>
           </motion.div>

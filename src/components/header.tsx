@@ -78,7 +78,6 @@ export function Header() {
             <NavLink href="/">Home</NavLink>
             <NavLink href="/properties">Properties</NavLink>
             <NavLink href="/new-builds">New Builds</NavLink>
-            <NavLink href="/cost-of-buying-in-spain">Cost of buying in Spain</NavLink>
             <NavLink href="/buy-in-dubai">Buy in Dubai</NavLink>
           </nav>
            <div className="h-6 border-l border-border/70 mx-4"></div>
@@ -105,7 +104,6 @@ export function Header() {
                   <Link href="/" onClick={() => setIsMenuOpen(false)} className="font-body text-lg">Home</Link>
                   <Link href="/properties" onClick={() => setIsMenuOpen(false)} className="font-body text-lg">Properties</Link>
                   <Link href="/new-builds" onClick={() => setIsMenuOpen(false)} className="font-body text-lg">New Builds</Link>
-                  <Link href="/cost-of-buying-in-spain" onClick={() => setIsMenuOpen(false)} className="font-body text-lg">Cost of buying in Spain</Link>
                   <Link href="/buy-in-dubai" onClick={() => setIsMenuOpen(false)} className="font-body text-lg">Buy in Dubai</Link>
                 </nav>
                  <div className="flex items-center justify-between">
