@@ -51,7 +51,7 @@ export default function NewBuildsClient() {
         const data = await res.json();
 
         let filtered = Array.isArray(data)
-          ? data.filter((p) => p.listingtype === "newdevelopment")
+          ? data.filter((p) => p.listingtype === "newbuild")
           : [];
 
         // Apply filters from query params

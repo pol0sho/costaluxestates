@@ -15,7 +15,7 @@ export default function NewBuildsPage() {
       try {
         const res = await fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}`);
         const data = await res.json();
-        const newBuilds = data.filter((p: any) => p.listingtype?.toLowerCase() === "newdevelopment");
+        const newBuilds = data.filter((p: any) => p.listingtype?.toLowerCase() === "newbuild");
         setProperties(newBuilds);
       } catch (err) {
         console.error("Failed to load new builds:", err);
