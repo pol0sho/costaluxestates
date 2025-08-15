@@ -46,7 +46,7 @@ export function FeaturedPropertyCard({ property }: PropertyCardProps) {
           <CarouselContent>
             {property.images.map((src, index) => (
               <CarouselItem key={index}>
-                <Link href={`/properties/${property.id}`}>
+                <Link href={`/properties/${property.ref}`}>
                   <Image
                     src={src?.url || "/no-image.png"}
                     alt={property.title}
@@ -68,7 +68,7 @@ export function FeaturedPropertyCard({ property }: PropertyCardProps) {
             <CarouselNext className="static -translate-x-0 -translate-y-0 bg-background/50 hover:bg-background/80" />
           </div>
         </Carousel>
-        <Link href={`/properties/${property.id}`}>
+        <Link href={`/properties/${property.ref}`}>
           <Badge variant="secondary" className="absolute top-3 right-3 font-bold text-lg bg-background/80 backdrop-blur-sm cursor-pointer">
             {property.priceType === 'from' && 'From '}
 {formatPrice(property.list_price)}
@@ -76,7 +76,7 @@ export function FeaturedPropertyCard({ property }: PropertyCardProps) {
         </Link>
       </CardHeader>
 
-      <Link href={`/properties/${property.id}`} className="flex flex-col flex-grow">
+      <Link href={`/properties/${property.ref}`} className="flex flex-col flex-grow">
         <CardContent className="p-4 flex-grow">
           <h3 className="font-headline text-xl font-semibold mb-1 truncate">{property.title}</h3>
           <div className="flex items-center text-muted-foreground text-sm mb-3">
