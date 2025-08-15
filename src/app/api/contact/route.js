@@ -1,8 +1,8 @@
-export const runtime = "nodejs"; // Force Node.js runtime so nodemailer works
-export const dynamic = "force-dynamic"; // Avoid static optimization
+export const runtime = "nodejs"; 
+export const dynamic = "force-dynamic"; 
 
 export async function POST(request) {
-  // Require here so Webpack doesn't bundle it
+
   const nodemailer = require("nodemailer");
 
   try {
@@ -16,7 +16,7 @@ export async function POST(request) {
     const transporter = nodemailer.createTransport({
       host: "smtp.hostinger.com",
       port: 465,
-      secure: true, // SSL
+      secure: true, 
       auth: {
         user: "info@costaluxestates.com",
         pass: process.env.EMAIL_PASS,
