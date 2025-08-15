@@ -48,7 +48,7 @@ useEffect(() => {
     }))
     setPriceRange([initialFilters.priceMin, initialFilters.priceMax])
   }
-}, [initialFilters])
+}, [])
 
   // ✅ Fetch distinct towns from DB
   useEffect(() => {
