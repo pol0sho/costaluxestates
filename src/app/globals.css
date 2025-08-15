@@ -84,20 +84,17 @@
 }
 
 @layer utilities {
+
+  @keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(var(--scroll-distance)); }
+  }
+
   .scroller {
     animation: scroll 60s linear infinite;
   }
 
   .scroller:hover {
     animation-play-state: paused;
-  }
-
-  @keyframes scroll {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(calc(-350px * 7));
-    }
   }
 }

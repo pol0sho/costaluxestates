@@ -84,23 +84,31 @@ const Scroller = ({ children }: { children: React.ReactNode }) => {
     const scroller = scrollerRef.current;
     if (scroller) {
       const childrenArray = Array.from(scroller.children);
+
+   
       childrenArray.forEach((child) => {
         const clone = child.cloneNode(true);
-        (clone as HTMLElement).setAttribute('aria-hidden', 'true');
+        (clone as HTMLElement).setAttribute("aria-hidden", "true");
         scroller.appendChild(clone);
       });
+
+      
+      const totalWidth = scroller.scrollWidth / 2; 
+      scroller.style.setProperty("--scroll-distance", `-${totalWidth}px`);
     }
   }, []);
 
   return (
     <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]">
-      <div ref={scrollerRef} className="flex min-w-max flex-nowrap gap-4 scroller">
+      <div
+        ref={scrollerRef}
+        className="flex min-w-max flex-nowrap gap-4 scroller"
+      >
         {children}
       </div>
     </div>
   );
 };
-
 export default function Home() {
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
