@@ -7,6 +7,9 @@ import { Toaster } from '@/components/ui/toaster';
 export const metadata: Metadata = {
   title: 'CostaLux Estates',
   description: 'Find your elegant home.',
+  icons: {
+    icon: '/favicon.png',
+  },
 };
 
 export default function RootLayout({
