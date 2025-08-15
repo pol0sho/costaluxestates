@@ -26,14 +26,11 @@ type Property = {
   property_type?: string;
   town?: string;
   province?: string;
-  description?: string;
+  description?: { lang: string; description: string }[];
   images: { url: string }[];
   aiHints?: string[];
   ref: string;
-};
-
-type PropertyVideo = {
-  promotion_video: string | null;
+  promotion_video?: string | null;
 };
 
 const FeatureItem = ({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: React.ReactNode }) => (
@@ -48,7 +45,6 @@ const FeatureItem = ({ icon: Icon, label, value }: { icon: React.ElementType; la
 
 export default function PropertyDetailPage({ params }: { params: { id: string } }) {
   const [property, setProperty] = useState<Property | null>(null);
-  const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -64,7 +60,6 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
         };
         const realestate = domainToRealestate[hostname] || "costalux";
 
-        // Fetch property details
         const res = await fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}`);
         const data = await res.json();
         const matched = Array.isArray(data)
@@ -76,17 +71,8 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
         } else {
           setProperty(matched);
         }
-
-        // Fetch video separately
-        const videoRes = await fetch(`https://api.habigrid.com/api/public/property-videos/${params.id}`);
-        if (videoRes.ok) {
-          const videoData: PropertyVideo = await videoRes.json();
-          if (videoData?.promotion_video) {
-            setVideoUrl(videoData.promotion_video);
-          }
-        }
       } catch (err) {
-        console.error("Failed to load property or video:", err);
+        console.error("Failed to load property:", err);
       } finally {
         setLoading(false);
       }
@@ -104,7 +90,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
   }
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -113,13 +99,15 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
       <div className="container mx-auto max-w-7xl px-4 md:px-6 py-8 md:py-12">
         
         {/* Promotion Video if exists */}
-        {videoUrl && (
+        {property.promotion_video && (
           <div className="mb-8 aspect-video">
             <iframe
               className="w-full h-full rounded-lg shadow-lg"
-              src={videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be")
-                ? videoUrl.replace("watch?v=", "embed/")
-                : videoUrl}
+              src={
+                property.promotion_video.includes("youtube.com") || property.promotion_video.includes("youtu.be")
+                  ? property.promotion_video.replace("watch?v=", "embed/")
+                  : property.promotion_video
+              }
               title="Promotion Video"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
