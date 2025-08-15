@@ -11,7 +11,7 @@ export default function NewBuildsPage() {
 
   useEffect(() => {
     const fetchProperties = async () => {
-      const realestate = "abracasabra";
+      const realestate = "costalux";
       try {
         const res = await fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}`);
         const data = await res.json();
