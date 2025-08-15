@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation"; // ✅ import
 import { PropertyCard } from "@/components/property-card";
 import { SearchModule } from "@/components/search-module-pages";
 import {
@@ -16,6 +17,7 @@ import {
 const PROPERTIES_PER_PAGE = 16;
 
 export default function NewBuildsClient() {
+  const searchParams = useSearchParams(); // ✅
   const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -30,6 +32,21 @@ export default function NewBuildsClient() {
 
   const [currentPage, setCurrentPage] = useState(1);
 
+  // ✅ Sync filters from URL whenever search params change
+  useEffect(() => {
+    const newFilters = {
+      location: searchParams.get("location") || "any",
+      type: searchParams.get("type") || "any",
+      bedrooms: searchParams.get("bedrooms") || "any",
+      bathrooms: searchParams.get("bathrooms") || "any",
+      priceMin: Number(searchParams.get("priceMin") || 0),
+      priceMax: Number(searchParams.get("priceMax") || 3000000),
+    };
+    setFilters(newFilters);
+    setCurrentPage(1);
+  }, [searchParams]);
+
+  // Fetch all newbuild properties for this domain
   useEffect(() => {
     const fetchProperties = async () => {
       try {
@@ -65,7 +82,7 @@ export default function NewBuildsClient() {
     fetchProperties();
   }, []);
 
-  // Filter in-memory
+  // Apply filters in-memory
   const filtered = properties
     .filter(
       (p) =>
@@ -104,7 +121,6 @@ export default function NewBuildsClient() {
   const renderPaginationLinks = () => {
     const pageNumbers = [];
     const visiblePages = 5;
-
     let startPage = Math.max(1, currentPage - Math.floor(visiblePages / 2));
     let endPage = Math.min(totalPages, startPage + visiblePages - 1);
 
@@ -155,13 +171,7 @@ export default function NewBuildsClient() {
   return (
     <div className="container mx-auto px-4 md:px-6 py-12">
       <div className="mb-12 flex justify-center">
-        <SearchModule
-          showListingType={false}
-          onFiltersChange={(newFilters) => {
-            setFilters(newFilters);
-            setCurrentPage(1); 
-          }}
-        />
+        <SearchModule showListingType={false} />
       </div>
 
       <div className="mb-8 text-center">
