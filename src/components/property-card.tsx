@@ -7,6 +7,7 @@ import { formatPrice } from "@/utils/formatPrice";
 
 type Property = {
   id: number;
+  ref: string;
   title: string;
   list_price: number;
   priceType?: 'from' | 'exact';
@@ -26,7 +27,7 @@ type PropertyCardProps = {
 
 export function PropertyCard({ property }: PropertyCardProps) {
   return (
-    <Link href={`/properties/${property.id}`}>
+    <Link href={`/properties/${property.ref}`}>
       <Card className="overflow-hidden h-full flex flex-col group transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border-border/60">
         <CardHeader className="p-0 relative">
           <Image
