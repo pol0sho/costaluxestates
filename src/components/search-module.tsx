@@ -3,16 +3,16 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { BedDouble, Bath, Home, Search, MapPin, LayoutGrid } from "lucide-react"
+import { Search } from "lucide-react"
 import { Slider } from "./ui/slider"
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
 const formatPrice = (value: number) => {
-  if (value >= 1000000) return `€${(value / 1000000).toFixed(1)}M`;
-  if (value >= 1000) return `€${(value / 1000)}k`;
-  return `€${value}`;
-};
+  if (value >= 1000000) return `€${(value / 1000000).toFixed(1)}M`
+  if (value >= 1000) return `€${(value / 1000)}k`
+  return `€${value}`
+}
 
 export function SearchModule({ showListingType = true }: { showListingType?: boolean }) {
   const router = useRouter()
@@ -25,8 +25,12 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
   const [bedrooms, setBedrooms] = useState("any")
   const [bathrooms, setBathrooms] = useState("any")
 
+  const [allProperties, setAllProperties] = useState<any[]>([])
+  const [filteredCount, setFilteredCount] = useState(0)
+
+  // Fetch all properties + locations
   useEffect(() => {
-    const fetchLocations = async () => {
+    const fetchProperties = async () => {
       try {
         const hostname = window.location.hostname
         const domainToRealestate: Record<string, string> = {
@@ -41,6 +45,8 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
         const res = await fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}`)
         const data = await res.json()
 
+        setAllProperties(Array.isArray(data) ? data : [])
+
         const uniqueLocations = Array.from(
           new Set(
             data
@@ -51,12 +57,29 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
 
         setLocations(uniqueLocations)
       } catch (err) {
-        console.error("Error fetching locations:", err)
+        console.error("Error fetching properties:", err)
       }
     }
 
-    fetchLocations()
+    fetchProperties()
   }, [])
+
+  // Update filtered count when filters change
+  useEffect(() => {
+    const count = allProperties
+      .filter(p => {
+        if (location !== "any" && p.town?.toLowerCase() !== location.toLowerCase()) return false
+        if (propertyType !== "any" && p.property_type?.toLowerCase() !== propertyType.toLowerCase()) return false
+        if (bedrooms !== "any" && Number(p.bedrooms) < Number(bedrooms)) return false
+        if (bathrooms !== "any" && Number(p.bathrooms) < Number(bathrooms)) return false
+        if (Number(p.list_price) < priceRange[0] || Number(p.list_price) > priceRange[1]) return false
+        if (showListingType && listingType === "new-builds" && p.listingtype?.toLowerCase() !== "newbuild") return false
+        if (showListingType && listingType === "properties" && p.listingtype?.toLowerCase() !== "resale") return false
+        return true
+      }).length
+
+    setFilteredCount(count)
+  }, [allProperties, location, propertyType, bedrooms, bathrooms, priceRange, listingType, showListingType])
 
   const handleSearch = () => {
     const params = new URLSearchParams()
@@ -83,7 +106,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
 
           {/* Location dropdown */}
           <div className="lg:col-span-2">
-            <label htmlFor="location" className="block text-sm font-medium text-white text-foreground mb-1 font-body">Location</label>
+            <label className="block text-sm font-medium text-foreground mb-1 font-body">Location</label>
             <Select value={location} onValueChange={setLocation}>
               <SelectTrigger id="location" className="font-body">
                 <SelectValue placeholder="Any" />
@@ -102,7 +125,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
           {/* Listing Type */}
           {showListingType && (
             <div className="lg:col-span-2">
-              <label htmlFor="listing-type" className="block text-sm font-medium text-white text-foreground mb-1 font-body">Listing Type</label>
+              <label className="block text-sm font-medium text-foreground mb-1 font-body">Listing Type</label>
               <Select value={listingType} onValueChange={setListingType}>
                 <SelectTrigger id="listing-type" className="font-body">
                   <SelectValue placeholder="Properties" />
@@ -117,7 +140,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
 
           {/* Property Type */}
           <div className="lg:col-span-2">
-            <label htmlFor="type" className="block text-sm font-medium text-white text-foreground mb-1 font-body">Property Type</label>
+            <label className="block text-sm font-medium text-foreground mb-1 font-body">Property Type</label>
             <Select value={propertyType} onValueChange={setPropertyType}>
               <SelectTrigger id="type" className="font-body">
                 <SelectValue placeholder="Any" />
@@ -134,7 +157,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
 
           {/* Bedrooms */}
           <div className="lg:col-span-1">
-            <label htmlFor="bedrooms" className="block text-sm font-medium text-white text-foreground mb-1 font-body">Bedrooms</label>
+            <label className="block text-sm font-medium text-foreground mb-1 font-body">Bedrooms</label>
             <Select value={bedrooms} onValueChange={setBedrooms}>
               <SelectTrigger id="bedrooms" className="font-body">
                 <SelectValue placeholder="Any" />
@@ -150,7 +173,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
 
           {/* Bathrooms */}
           <div className="lg:col-span-1">
-            <label htmlFor="bathrooms" className="block text-sm font-medium text-white text-foreground mb-1 font-body">Bathrooms</label>
+            <label className="block text-sm font-medium text-foreground mb-1 font-body">Bathrooms</label>
             <Select value={bathrooms} onValueChange={setBathrooms}>
               <SelectTrigger id="bathrooms" className="font-body">
                 <SelectValue placeholder="Any" />
@@ -166,7 +189,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
 
           {/* Price Range */}
           <div className="sm:col-span-2 lg:col-span-2 space-y-2 pb-1">
-            <label className="block text-sm font-medium text-white text-foreground mb-1 font-body">Price Range</label>
+            <label className="block text-sm font-medium text-foreground mb-1 font-body">Price Range</label>
             <div className="flex justify-between text-xs text-foreground font-body">
               <span>{formatPrice(priceRange[0])}</span>
               <span>{priceRange[1] === 3000000 ? `${formatPrice(priceRange[1])}+` : formatPrice(priceRange[1])}</span>
@@ -181,7 +204,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
             />
           </div>
 
-          {/* Search Button */}
+          {/* Search Button with live count */}
           <div className="sm:col-span-2 lg:col-span-2">
             <Button
               onClick={handleSearch}
@@ -189,7 +212,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
               className="w-full text-base font-bold bg-accent text-accent-foreground hover:bg-accent/90 transition-all duration-300 transform hover:scale-105"
             >
               <Search className="mr-2 h-5 w-5" />
-              Search properties
+              Search {filteredCount} {filteredCount === 1 ? "property" : "properties"}
             </Button>
           </div>
         </div>
