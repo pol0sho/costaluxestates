@@ -36,7 +36,7 @@ export default function BuyInDubaiPage() {
                 <h3 className="font-headline text-3xl md:text-4xl font-bold text-center mb-8">Your Gateway to Luxury Real Estate in Dubai</h3>
 
                 <div className="my-12 flex justify-center">
-                    <Image src="https://placehold.co/800x400.png" alt="Dubai Skyline" width={800} height={400} className="rounded-lg shadow-md" data-ai-hint="Dubai skyline" />
+                    <Image src="/dubai.png" alt="Buy in Dubai and surroundings" width={800} height={400} className="rounded-lg shadow-md" data-ai-hint="Buy in Dubai and surroundings" />
                 </div>
                 
                 <p>Welcome to Dubai, a global metropolis where futuristic vision meets unparalleled luxury. As one of the world's most dynamic real estate markets, Dubai offers a unique combination of tax-free returns, a world-class lifestyle, and exceptional investment opportunities. Whether you're seeking a high-yield rental property, a luxury holiday home, or a secure long-term investment, Dubai's property market is your gateway to success.</p>
@@ -58,7 +58,7 @@ export default function BuyInDubaiPage() {
                 </ol>
 
                 <div className="my-12 flex justify-center">
-                     <Image src="https://placehold.co/800x400.png" alt="Real estate agent shaking hands with client" width={800} height={400} className="rounded-lg shadow-md" data-ai-hint="handshake deal" />
+                     <Image src="/dubai2.png" alt="Buy in Dubai and surroundings" width={800} height={400} className="rounded-lg shadow-md" data-ai-hint="handshake deal" />
                 </div>
                 
                 <h2 className="font-headline text-2xl mt-12 mb-6">Associated Costs</h2>

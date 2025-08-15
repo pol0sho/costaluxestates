@@ -78,7 +78,7 @@ export function Header() {
             <NavLink href="/">Home</NavLink>
             <NavLink href="/properties">Properties</NavLink>
             <NavLink href="/new-builds">New Builds</NavLink>
-            <NavLink href="/buy-in-dubai">Buy in Dubai</NavLink>
+            <NavLink href="/buy-in-dubai">Buy in Dubai and surroundings</NavLink>
           </nav>
            <div className="h-6 border-l border-border/70 mx-4"></div>
           <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
@@ -104,7 +104,7 @@ export function Header() {
                   <Link href="/" onClick={() => setIsMenuOpen(false)} className="font-body text-lg">Home</Link>
                   <Link href="/properties" onClick={() => setIsMenuOpen(false)} className="font-body text-lg">Properties</Link>
                   <Link href="/new-builds" onClick={() => setIsMenuOpen(false)} className="font-body text-lg">New Builds</Link>
-                  <Link href="/buy-in-dubai" onClick={() => setIsMenuOpen(false)} className="font-body text-lg">Buy in Dubai</Link>
+                  <Link href="/buy-in-dubai" onClick={() => setIsMenuOpen(false)} className="font-body text-lg">Buy in Dubai and surroundings</Link>
                 </nav>
                  <div className="flex items-center justify-between">
                     <Button asChild className="flex-grow bg-accent text-accent-foreground hover:bg-accent/90">
