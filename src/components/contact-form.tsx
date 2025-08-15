@@ -57,14 +57,30 @@ export function ContactForm({ title = "Send us a Message", description = "Fill o
         },
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
-        toast({
-            title: "Message Sent!",
-            description: "Thank you for contacting us. We will get back to you shortly.",
-        });
-        form.reset();
-    }
+async function onSubmit(values: z.infer<typeof formSchema>) {
+  try {
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    });
+
+    if (!res.ok) throw new Error("Failed to send");
+
+    toast({
+      title: "Message Sent!",
+      description: "Thank you for contacting us. We will get back to you shortly.",
+    });
+
+    form.reset();
+  } catch (err) {
+    toast({
+      title: "Error",
+      description: "Could not send your message. Please try again later.",
+      variant: "destructive",
+    });
+  }
+}
 
     return (
         <Card className="shadow-lg border-none h-full">
