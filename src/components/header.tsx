@@ -22,7 +22,7 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
 const Logo = () => (
   <img
     src="/logo.png"
-    alt="AbraCasaBra Real Estates"
+    alt="CostaLux Estates"
     width={250}
     height={55}
   />
@@ -77,9 +77,46 @@ export function Header() {
           <nav className="flex items-center space-x-8 text-sm">
             <NavLink href="/">Home</NavLink>
             <NavLink href="/properties">Properties</NavLink>
+            <NavLink href="/new-builds">New Builds</NavLink>
+            <NavLink href="/cost-of-buying-in-spain">Cost of buying in Spain</NavLink>
+            <NavLink href="/buy-in-dubai">Buy in Dubai</NavLink>
           </nav>
-       
-          
+           <div className="h-6 border-l border-border/70 mx-4"></div>
+          <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
+            <Link href="/contact">Contact</Link>
+          </Button>
+          <LanguageSwitcher />
+        </div>
+
+        <div className="md:hidden flex items-center gap-2">
+          <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Menu className="h-6 w-6" />
+                <span className="sr-only">Open menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[240px]">
+              <div className="p-6 flex flex-col h-full">
+                <Link href="/" className="mb-8 flex items-center" onClick={() => setIsMenuOpen(false)}>
+                   <Logo />
+                </Link>
+                <nav className="flex flex-col space-y-4 flex-grow">
+                  <Link href="/" onClick={() => setIsMenuOpen(false)} className="font-body text-lg">Home</Link>
+                  <Link href="/properties" onClick={() => setIsMenuOpen(false)} className="font-body text-lg">Properties</Link>
+                  <Link href="/new-builds" onClick={() => setIsMenuOpen(false)} className="font-body text-lg">New Builds</Link>
+                  <Link href="/cost-of-buying-in-spain" onClick={() => setIsMenuOpen(false)} className="font-body text-lg">Cost of buying in Spain</Link>
+                  <Link href="/buy-in-dubai" onClick={() => setIsMenuOpen(false)} className="font-body text-lg">Buy in Dubai</Link>
+                </nav>
+                 <div className="flex items-center justify-between">
+                    <Button asChild className="flex-grow bg-accent text-accent-foreground hover:bg-accent/90">
+                        <Link href="/contact" onClick={() => setIsMenuOpen(false)}>Contact</Link>
+                    </Button>
+                    <LanguageSwitcher />
+                 </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </header>

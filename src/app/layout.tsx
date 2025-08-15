@@ -5,7 +5,7 @@ import { Footer } from '@/components/footer';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'AbraCasaBra Real Estate',
+  title: 'CostaLux Estates',
   description: 'Find your elegant home.',
 };
 

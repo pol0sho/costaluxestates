@@ -32,9 +32,9 @@ export default function PropertiesPageClient() {
 
             const domainToRealestate: Record<string, string> = {
             "localhost": "abracasabra",
-            "www.abracasabraweb.onrender.com": "abracasabra",
-            "abracasabraweb.onrender.com": "abracasabra",
-            "www.costaluxestates.com": "abracasabra",
+            "www.costaluxestatesweb.onrender.com": "costalux",
+            "costaluxestatesweb.onrender.com": "costalux",
+            "www.costaluxestates.com": "costalux",
             "costaluxestates.com": "costalux",
             };
 

@@ -110,7 +110,7 @@ export default function Home() {
   useEffect(() => {
     const load = async () => {
       try {
-        const realestate = "abracasabra"; // or detect from domain
+        const realestate = "costalux"; // or detect from domain
         const res = await fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}`);
         const data = await res.json();
         setProperties(data);
@@ -139,7 +139,7 @@ export default function Home() {
       transition={{ duration: 0.5 }}
       className="font-body overflow-x-hidden"
     >
-      {/* Hero Section */}
+        {/* Hero Section */}
       <section className="relative min-h-[60vh] md:min-h-[500px] flex flex-col items-center justify-center text-center overflow-hidden py-16 sm:py-24">
         <div className="absolute top-0 left-0 w-full h-full z-0">
           <video
@@ -156,15 +156,31 @@ export default function Home() {
         </div>
         <div className="absolute inset-0 bg-black/40" />
         <Button
-          variant="ghost"
-          size="icon"
-          onClick={toggleMute}
-          className="absolute z-10 bottom-4 right-4 text-white hover:bg-white/20 hover:text-white"
-          aria-label={isMuted ? "Unmute video" : "Mute video"}
+            variant="ghost"
+            size="icon"
+            onClick={toggleMute}
+            className="absolute z-10 bottom-4 right-4 text-white hover:bg-white/20 hover:text-white"
+            aria-label={isMuted ? "Unmute video" : "Mute video"}
         >
-          {isMuted ? <VolumeX className="h-6 w-6" /> : <Volume2 className="h-6 w-6" />}
+            {isMuted ? <VolumeX className="h-6 w-6" /> : <Volume2 className="h-6 w-6" />}
         </Button>
-
+        <div className="relative z-10 container mx-auto px-4 text-white">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="max-w-6xl mx-auto">
+            <h1 className="font-body text-2xl md:text-3xl font-bold mb-4">Welcome to CostaLux Estates</h1>
+            <p className="text-lg md:text-xl max-w-5xl mx-auto mb-8">
+                Your trusted partner for exclusive real estate on the Costa del Sol. <br/>
+                Whether you're looking for a luxury villa, a charming apartment, or an investment opportunity, we guide you every step of the way -- with integrity, dedication, and local expertise. <br/>
+                We speak 5 languages (English, Spanish, Dutch, French and German) to make sure you feel at home from the very first conversation.
+            </p>
+          </motion.div>
+        </div>
+        <div className="relative z-10 container mx-auto px-4 mt-8 w-full">
+            <SearchModule showListingType={true} />
+        </div>
       </section>
 
       {/* Featured Properties Section */}
@@ -203,7 +219,31 @@ export default function Home() {
         </div>
       </AnimatedSection>
 
-      {/* New Build Projects Section */}
+           {/* New Build Projects Section */}
+      <section className="pb-12 md:pb-16 bg-secondary">
+        <div className="container mx-auto px-4 md:px-6">
+          <AnimatedSection direction="left">
+            <div className="relative rounded-lg overflow-hidden bg-cover bg-center p-8 md:p-12 min-h-[400px] flex items-center" style={{backgroundImage: "url('https://media-feed.resales-online.com/live/ShowFeedImage.asp?SecId=cuzsrpzyg6rxh6z&Id=P1&ImgId=X1009636&z=1753335295')"}} data-ai-hint="modern architecture sketch">
+                <div className="absolute inset-0 bg-black/40" />
+                <div className="relative z-10 md:w-1/2 text-white">
+                  <h2 className="font-headline text-2xl md:text-3xl font-bold mb-4">Discover New Build Projects</h2>
+                  <p className="mb-4">
+                    We offer exclusive access to the latest and most prestigious new build projects on the Costa del Sol. Explore modern designs, state-of-the-art amenities, and prime locations.
+                  </p>
+                  <p className="mb-6">
+                    From contemporary villas to luxury apartment complexes, let us help you find your perfect, brand-new home in the sun.
+                  </p>
+                  <Link href="/new-builds">
+                    <Button size="lg" className="text-base font-bold bg-accent hover:bg-accent/90 text-accent-foreground transition-all duration-300 transform hover:scale-105">
+                      See all New Builds
+                      <ArrowRight className="ml-2 h-5 w-5"/>
+                    </Button>
+                  </Link>
+                </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
      
     </motion.div>
   );
