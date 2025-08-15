@@ -182,7 +182,7 @@ export default function PropertiesPageClient() {
     if (newFilters.priceMin !== 0) params.set("priceMin", String(newFilters.priceMin));
     if (newFilters.priceMax !== 3000000) params.set("priceMax", String(newFilters.priceMax));
 
-    router.replace(`/properties?${params.toString()}`);
+      router.replace(`${window.location.pathname}?${params.toString()}`);
   };
 
   return (
