@@ -63,6 +63,32 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
     fetchProperties()
   }, [])
 
+
+  useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  const locFromUrl = params.get("location");
+  if (locFromUrl) {
+    setLocation(locFromUrl); // exact casing from URL
+  }
+  const typeFromUrl = params.get("type");
+  if (typeFromUrl) {
+    setPropertyType(typeFromUrl);
+  }
+  const bedsFromUrl = params.get("bedrooms");
+  if (bedsFromUrl) {
+    setBedrooms(bedsFromUrl);
+  }
+  const bathsFromUrl = params.get("bathrooms");
+  if (bathsFromUrl) {
+    setBathrooms(bathsFromUrl);
+  }
+  const priceMin = params.get("priceMin");
+  const priceMax = params.get("priceMax");
+  if (priceMin && priceMax) {
+    setPriceRange([Number(priceMin), Number(priceMax)]);
+  }
+}, []);
+
   useEffect(() => {
     const count = allProperties
       .filter(p => {
