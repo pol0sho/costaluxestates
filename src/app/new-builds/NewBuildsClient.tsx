@@ -30,31 +30,45 @@ export default function NewBuildsClient({ realestate }: { realestate: string }) 
   const [loading, setLoading] = useState(false);
 
   // Fetch from backend when page or filters change
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
+useEffect(() => {
+  const fetchData = async () => {
+    setLoading(true);
 
-      const params = new URLSearchParams({
-        realestate,
-        page: String(currentPage),
-        limit: String(PROPERTIES_PER_PAGE),
-        location: filters.location,
-        type: filters.type,
-        bedrooms: filters.bedrooms,
-        bathrooms: filters.bathrooms,
-        priceMin: String(filters.priceMin),
-        priceMax: String(filters.priceMax)
-      });
+    const API_BASE =
+      typeof window !== "undefined" && window.location.hostname.includes("localhost")
+        ? "http://localhost:5000"
+        : "https://api.habigrid.com";
 
-      const res = await fetch(`/api/public/properties?${params.toString()}`);
+    const params = new URLSearchParams({
+      realestate,
+      page: String(currentPage),
+      limit: String(PROPERTIES_PER_PAGE),
+      location: filters.location,
+      type: filters.type,
+      bedrooms: filters.bedrooms,
+      bathrooms: filters.bathrooms,
+      priceMin: String(filters.priceMin),
+      priceMax: String(filters.priceMax)
+    });
+
+    try {
+      const res = await fetch(`${API_BASE}/api/public/properties?${params.toString()}`);
+      if (!res.ok) {
+        throw new Error(`Request failed: ${res.status} ${res.statusText}`);
+      }
       const data = await res.json();
       setProperties(data.properties || []);
       setTotal(data.total || 0);
+    } catch (err) {
+      console.error("Failed to fetch properties:", err);
+    } finally {
       setLoading(false);
-    };
+    }
+  };
 
-    fetchData();
-  }, [filters, currentPage, realestate]);
+  fetchData();
+}, [filters, currentPage, realestate]);
+
 
   const totalPages = Math.ceil(total / PROPERTIES_PER_PAGE);
 
