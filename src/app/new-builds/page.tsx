@@ -1,93 +1,73 @@
 'use client';
 
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import NewBuildsClient from "./NewBuildsClient";
 import { motion } from "framer-motion";
 
-const PAGE_SIZE = 40; // how many per API call
+const PAGE_SIZE = 40;
 
 export default function NewBuildsPage() {
   const [allProperties, setAllProperties] = useState<any[]>([]);
-  const [visibleProperties, setVisibleProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const loaderRef = useRef<HTMLDivElement | null>(null);
 
-  const fetchPage = useCallback(async (pageNum: number) => {
-  try {
-    const hostname = window.location.hostname;
-    const domainToRealestate: Record<string, string> = {
-      localhost: "costalux",
-      "www.costaluxestatesweb.onrender.com": "costalux",
-      "costaluxestatesweb.onrender.com": "costalux",
-      "www.costaluxestates.com": "costalux",
-      "costaluxestates.com": "costalux",
-    };
-    const realestate = domainToRealestate[hostname] || "costalux";
+  const fetchAllPages = useCallback(async () => {
+    try {
+      const hostname = window.location.hostname;
+      const domainToRealestate: Record<string, string> = {
+        localhost: "costalux",
+        "www.costaluxestatesweb.onrender.com": "costalux",
+        "costaluxestatesweb.onrender.com": "costalux",
+        "www.costaluxestates.com": "costalux",
+        "costaluxestates.com": "costalux",
+      };
+      const realestate = domainToRealestate[hostname] || "costalux";
 
-    const res = await fetch(
-      `https://api.habigrid.com/api/public/properties?realestate=${realestate}&includeImages=true&page=${pageNum}&limit=${PAGE_SIZE}`
-    );
-    if (!res.ok) throw new Error(`API error: ${res.status}`);
+      let pageNum = 1;
+      let hasMore = true;
+      let allResults: any[] = [];
 
-    const data = await res.json();
+      while (hasMore) {
+        const res = await fetch(
+          `https://api.habigrid.com/api/public/properties?realestate=${realestate}&includeImages=true&page=${pageNum}&limit=${PAGE_SIZE}`
+        );
+        if (!res.ok) throw new Error(`API error: ${res.status}`);
 
-    // --- Normalize array shape ---
-    let props: any[] = [];
-    if (Array.isArray(data)) {
-      props = data;
-    } else if (Array.isArray(data.properties)) {
-      props = data.properties;
-    } else if (Array.isArray(data.data)) {
-      props = data.data;
-    }
-
-    // --- Stop only when API gives less than PAGE_SIZE ---
-    if (props.length < PAGE_SIZE) {
-      setHasMore(false);
-    }
-
-    // --- Filter new builds locally ---
-    const newBuilds = props.filter((p) => {
-      const lt = (p.listingtype || "").toLowerCase().replace(/\s|_/g, "");
-      return lt.includes("newbuild");
-    });
-
-    setAllProperties((prev) => [...prev, ...newBuilds]);
-    setVisibleProperties((prev) => [...prev, ...newBuilds]);
-  } catch (err) {
-    console.error("Failed to load new builds:", err);
-  } finally {
-    setLoading(false);
-  }
-}, []);
-
-  // First load
-  useEffect(() => {
-    fetchPage(1);
-  }, [fetchPage]);
-
-  // Intersection observer for infinite scroll
-  useEffect(() => {
-    if (!loaderRef.current || !hasMore) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setPage((prev) => {
-            const next = prev + 1;
-            fetchPage(next);
-            return next;
-          });
+        const data = await res.json();
+        let props: any[] = [];
+        if (Array.isArray(data)) {
+          props = data;
+        } else if (Array.isArray(data.properties)) {
+          props = data.properties;
+        } else if (Array.isArray(data.data)) {
+          props = data.data;
         }
-      },
-      { threshold: 1 }
-    );
 
-    observer.observe(loaderRef.current);
-    return () => observer.disconnect();
-  }, [fetchPage, hasMore]);
+        // stop when API returns less than PAGE_SIZE
+        if (props.length < PAGE_SIZE) {
+          hasMore = false;
+        }
+
+        // filter for new builds
+        const newBuilds = props.filter((p) => {
+          const lt = (p.listingtype || "").toLowerCase().replace(/\s|_/g, "");
+          return lt.includes("newbuild");
+        });
+
+        allResults = [...allResults, ...newBuilds];
+        pageNum++;
+      }
+
+      setAllProperties(allResults);
+    } catch (err) {
+      console.error("Failed to load new builds:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchAllPages();
+  }, [fetchAllPages]);
 
   return (
     <motion.div
@@ -118,17 +98,10 @@ export default function NewBuildsPage() {
         </div>
       </section>
 
-      {loading && page === 1 ? (
+      {loading ? (
         <p className="text-center py-8">Loading...</p>
       ) : (
-        <>
-          <NewBuildsClient properties={visibleProperties} />
-          {hasMore && (
-            <div ref={loaderRef} className="text-center py-6 text-muted-foreground">
-              Loading more...
-            </div>
-          )}
-        </>
+        <NewBuildsClient properties={allProperties} />
       )}
     </motion.div>
   );
