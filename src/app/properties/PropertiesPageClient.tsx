@@ -48,7 +48,6 @@ export default function PropertiesPageClient() {
     setFilters(initialFilters);
   }, [searchParams]);
 
-  // 2️⃣ Fetch properties
 // 2️⃣ Fetch properties
 useEffect(() => {
   const fetchProperties = async () => {
@@ -66,14 +65,21 @@ useEffect(() => {
       const res = await fetch(
         `https://api.habigrid.com/api/public/properties?realestate=${realestate}`
       );
+
+      if (!res.ok) throw new Error(`API error ${res.status}`);
+
       const data = await res.json();
 
-      // handle both API formats: array or { properties: [...] }
-      const rawProperties = Array.isArray(data.properties)
-        ? data.properties
-        : Array.isArray(data)
-        ? data
-        : [];
+      // Ensure we always get an array
+      let rawProperties = [];
+      if (Array.isArray(data)) {
+        rawProperties = data;
+      } else if (Array.isArray(data.properties)) {
+        rawProperties = data.properties;
+      } else {
+        console.warn("Unexpected API format", data);
+        rawProperties = [];
+      }
 
       setProperties(
         rawProperties.filter(
@@ -82,7 +88,7 @@ useEffect(() => {
       );
     } catch (err) {
       console.error("Failed to fetch properties:", err);
-      setProperties([]);
+      setProperties([]); // Always reset to array
     } finally {
       setLoading(false);
     }
