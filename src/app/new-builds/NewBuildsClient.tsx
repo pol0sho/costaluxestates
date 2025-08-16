@@ -29,27 +29,37 @@ export default function NewBuildsClient({ properties }: { properties: any[] }) {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  // ✅ Filter properties in-memory
   const filteredProperties = useMemo(() => {
     return allProperties.filter((p) => {
-      if (filters.location !== "any" && p.town !== filters.location) return false;
-      if (filters.type !== "any" && (p.type || "").toLowerCase() !== filters.type.toLowerCase()) return false;
-      if (filters.bedrooms !== "any" && Number(p.bedrooms || 0) < Number(filters.bedrooms)) return false;
-      if (filters.bathrooms !== "any" && Number(p.bathrooms || 0) < Number(filters.bathrooms)) return false;
-      if (Number(p.price || 0) < filters.priceMin) return false;
-      if (Number(p.price || 0) > filters.priceMax) return false;
+      const town = (p.town || p.location || "").toLowerCase();
+      const type = (p.property_type || p.type || "").toLowerCase();
+      const price = Number(p.list_price ?? p.price ?? 0);
+      const beds = Number(p.bedrooms ?? 0);
+      const baths = Number(p.bathrooms ?? 0);
+
+      if (filters.location !== "any" && town !== filters.location.toLowerCase()) return false;
+
+      if (filters.type !== "any") {
+        const filterType = filters.type.toLowerCase();
+        // match exact or partial (so "apartment" matches "Top Floor Apartment")
+        if (!type.includes(filterType)) return false;
+      }
+
+      if (filters.bedrooms !== "any" && beds < Number(filters.bedrooms)) return false;
+      if (filters.bathrooms !== "any" && baths < Number(filters.bathrooms)) return false;
+      if (price < filters.priceMin) return false;
+      if (price > filters.priceMax) return false;
+
       return true;
     });
   }, [allProperties, filters]);
 
-  // ✅ Pagination in-memory
   const totalPages = Math.ceil(filteredProperties.length / PROPERTIES_PER_PAGE);
   const paginatedProperties = useMemo(() => {
     const start = (currentPage - 1) * PROPERTIES_PER_PAGE;
     return filteredProperties.slice(start, start + PROPERTIES_PER_PAGE);
   }, [filteredProperties, currentPage]);
 
-  // Reset to first page when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [filters]);
