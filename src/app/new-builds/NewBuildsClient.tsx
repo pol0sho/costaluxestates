@@ -16,6 +16,11 @@ import {
 
 const PROPERTIES_PER_PAGE = 16;
 
+// ✅ API base (auto-switch between local & production)
+const API_BASE = typeof window !== "undefined" && window.location.hostname.includes("localhost")
+  ? "http://localhost:5000" // your local backend
+  : "https://api.habigrid.com"; // your Render backend API
+
 export default function NewBuildsClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -55,27 +60,25 @@ export default function NewBuildsClient() {
         realestate: "costalux",
         page: currentPage.toString(),
         limit: PROPERTIES_PER_PAGE.toString(),
-        ...(
-          filters.location !== "any" ? { location: filters.location } : {}
-        ),
-        ...(
-          filters.type !== "any" ? { type: filters.type } : {}
-        ),
-        ...(
-          filters.bedrooms !== "any" ? { bedrooms: filters.bedrooms } : {}
-        ),
-        ...(
-          filters.bathrooms !== "any" ? { bathrooms: filters.bathrooms } : {}
-        ),
+        ...(filters.location !== "any" ? { location: filters.location } : {}),
+        ...(filters.type !== "any" ? { type: filters.type } : {}),
+        ...(filters.bedrooms !== "any" ? { bedrooms: filters.bedrooms } : {}),
+        ...(filters.bathrooms !== "any" ? { bathrooms: filters.bathrooms } : {}),
         ...(filters.priceMin !== 0 ? { priceMin: String(filters.priceMin) } : {}),
         ...(filters.priceMax !== 3000000 ? { priceMax: String(filters.priceMax) } : {}),
       });
 
-      const res = await fetch(`/api/public/properties?${params.toString()}`);
-      const data = await res.json();
-
-      setProperties(data.properties);
-      setTotal(data.total);
+      try {
+        const res = await fetch(`${API_BASE}/api/public/properties?${params.toString()}`);
+        if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+        const data = await res.json();
+        setProperties(data.properties || []);
+        setTotal(data.total || 0);
+      } catch (err) {
+        console.error("Error fetching properties:", err);
+        setProperties([]);
+        setTotal(0);
+      }
       setLoading(false);
     };
 
