@@ -88,11 +88,6 @@ useEffect(() => {
         />
       </div>
 
-      <div className="mb-8 text-center">
-        <p className="text-muted-foreground">
-          {loading ? "Loading..." : `${total} new build properties found`}
-        </p>
-      </div>
 
       {!loading && properties.length > 0 ? (
         <>

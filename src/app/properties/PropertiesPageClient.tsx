@@ -220,15 +220,6 @@ useEffect(() => {
           />
         </div>
 
-        <div className="mb-8 text-center">
-          {loading ? (
-            <p className="text-muted-foreground">Loading properties...</p>
-          ) : (
-            <p className="text-muted-foreground">
-              {totalProperties} properties found
-            </p>
-          )}
-        </div>
 
         {!loading && (
           <>
