@@ -1,47 +1,81 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import NewBuildsClient from "./NewBuildsClient";
 import { motion } from "framer-motion";
 
+const PAGE_SIZE = 40; // how many per API call
+
 export default function NewBuildsPage() {
-  const [properties, setProperties] = useState<any[]>([]);
+  const [allProperties, setAllProperties] = useState<any[]>([]);
+  const [visibleProperties, setVisibleProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const loaderRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        const hostname = window.location.hostname;
-        const domainToRealestate: Record<string, string> = {
-          "localhost": "costalux",
-          "www.costaluxestatesweb.onrender.com": "costalux",
-          "costaluxestatesweb.onrender.com": "costalux",
-          "www.costaluxestates.com": "costalux",
-          "costaluxestates.com": "costalux",
-        };
-        const realestate = domainToRealestate[hostname] || "costalux";
+  const fetchPage = useCallback(async (pageNum: number) => {
+    try {
+      const hostname = window.location.hostname;
+      const domainToRealestate: Record<string, string> = {
+        localhost: "costalux",
+        "www.costaluxestatesweb.onrender.com": "costalux",
+        "costaluxestatesweb.onrender.com": "costalux",
+        "www.costaluxestates.com": "costalux",
+        "costaluxestates.com": "costalux",
+      };
+      const realestate = domainToRealestate[hostname] || "costalux";
 
-        // Request all properties with images in one go
-        const res = await fetch(
-          `https://api.habigrid.com/api/public/properties?realestate=${realestate}&includeImages=true&limit=10000`
-        );
-        const data = await res.json();
+      const res = await fetch(
+        `https://api.habigrid.com/api/public/properties?realestate=${realestate}&includeImages=true&page=${pageNum}&limit=${PAGE_SIZE}`
+      );
 
-        // Keep only newbuilds
-        const newBuilds = Array.isArray(data)
-          ? data.filter((p) => p.listingtype?.toLowerCase() === "newbuild")
-          : [];
+      if (!res.ok) throw new Error(`API error: ${res.status}`);
+      const data = await res.json();
 
-        setProperties(newBuilds);
-      } catch (err) {
-        console.error("Failed to load new builds:", err);
-      } finally {
-        setLoading(false);
+      // Filter newbuilds
+      const newBuilds = Array.isArray(data)
+        ? data.filter((p) => p.listingtype?.toLowerCase() === "newbuild")
+        : [];
+
+      if (newBuilds.length < PAGE_SIZE) {
+        setHasMore(false); // no more pages
       }
-    };
 
-    fetchProperties();
+      setAllProperties((prev) => [...prev, ...newBuilds]);
+      setVisibleProperties((prev) => [...prev, ...newBuilds]);
+    } catch (err) {
+      console.error("Failed to load new builds:", err);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  // First load
+  useEffect(() => {
+    fetchPage(1);
+  }, [fetchPage]);
+
+  // Intersection observer for infinite scroll
+  useEffect(() => {
+    if (!loaderRef.current || !hasMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setPage((prev) => {
+            const next = prev + 1;
+            fetchPage(next);
+            return next;
+          });
+        }
+      },
+      { threshold: 1 }
+    );
+
+    observer.observe(loaderRef.current);
+    return () => observer.disconnect();
+  }, [fetchPage, hasMore]);
 
   return (
     <motion.div
@@ -72,7 +106,18 @@ export default function NewBuildsPage() {
         </div>
       </section>
 
-      {!loading && <NewBuildsClient properties={properties} />}
+      {loading && page === 1 ? (
+        <p className="text-center py-8">Loading...</p>
+      ) : (
+        <>
+          <NewBuildsClient properties={visibleProperties} />
+          {hasMore && (
+            <div ref={loaderRef} className="text-center py-6 text-muted-foreground">
+              Loading more...
+            </div>
+          )}
+        </>
+      )}
     </motion.div>
   );
 }
