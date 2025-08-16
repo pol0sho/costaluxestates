@@ -19,23 +19,27 @@ export function ImageSlideshow({ images, title, aiHints = [] }: ImageSlideshowPr
   return (
     <Carousel className="w-full">
       <CarouselContent>
-        {Array.isArray(images) && images.map((src, index) => (
-          <CarouselItem key={index}>
-            <Card className="border-none rounded-lg overflow-hidden">
-              <CardContent className="flex aspect-[16/9] items-center justify-center p-0">
-                <Image
-                  src={src}
-                  alt={`${title} - image ${index + 1}`}
-                  width={1200}
-                  height={675}
-                  className="w-full h-full object-cover"
-                  data-ai-hint={aiHints?.join(' ') || ''}
-                  priority={index === 0}
-                />
-              </CardContent>
-            </Card>
-          </CarouselItem>
-        ))}
+        {Array.isArray(images) && images.map((img, index) => {
+          const src = typeof img === 'string' ? img : img.url;
+          return (
+            <CarouselItem key={index}>
+              <Card className="border-none rounded-lg overflow-hidden">
+                <CardContent className="flex aspect-[16/9] items-center justify-center p-0">
+                  <Image
+                    src={src}
+                    alt={`${title} - image ${index + 1}`}
+                    width={1200}
+                    height={675}
+                    unoptimized
+                    className="w-full h-full object-cover"
+                    data-ai-hint={aiHints?.join(' ') || ''}
+                    priority={index === 0}
+                  />
+                </CardContent>
+              </Card>
+            </CarouselItem>
+          );
+        })}
       </CarouselContent>
       <CarouselPrevious className="ml-16" />
       <CarouselNext className="mr-16" />
