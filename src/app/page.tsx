@@ -120,36 +120,36 @@ export default function Home() {
     }
   }, []);
 
-  useEffect(() => {
-    if (!authenticated) return;
-    const load = async () => {
-      try {
-        const realestate = "costalux"; 
-        const res = await fetch(
-          `https://api.habigrid.com/api/public/properties?realestate=${realestate}`
-        );
-        const data = await res.json();
+useEffect(() => {
+  if (!authenticated) return;
+  const load = async () => {
+    try {
+      const realestate = "costalux"; 
+      const res = await fetch(
+        `https://api.habigrid.com/api/public/properties?realestate=${realestate}&limit=10&page=1&latestOnly=true`
+      );
+      const data = await res.json();
 
-        let propertyArray: Property[] = [];
-        if (Array.isArray(data)) {
-          propertyArray = data;
-        } else if (Array.isArray(data.properties)) {
-          propertyArray = data.properties;
-        } else {
-          console.warn("Unexpected API shape", data);
-          propertyArray = [];
-        }
-
-        setProperties(propertyArray);
-      } catch (e) {
-        console.error("Failed to fetch properties:", e);
-        setProperties([]);
-      } finally {
-        setLoading(false);
+      let propertyArray: Property[] = [];
+      if (Array.isArray(data)) {
+        propertyArray = data;
+      } else if (Array.isArray(data.properties)) {
+        propertyArray = data.properties;
+      } else {
+        console.warn("Unexpected API shape", data);
+        propertyArray = [];
       }
-    };
-    load();
-  }, [authenticated]);
+
+      setProperties(propertyArray);
+    } catch (e) {
+      console.error("Failed to fetch properties:", e);
+      setProperties([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+  load();
+}, [authenticated]);
 
   const toggleMute = () => {
     if (videoRef.current) {
@@ -242,13 +242,13 @@ export default function Home() {
           <div className="text-center mb-12">
             <h2 className="font-headline text-2xl md:text-2xl font-bold">Latest Properties</h2>
           </div>
-          <Scroller>
-            {properties.map((property) => (
-              <div key={property.ref} className="w-[350px]">
-                <PropertyCard property={property} />
-              </div>
-            ))}
-          </Scroller>
+<Scroller>
+  {properties.slice(0, 10).map((property) => (
+    <div key={property.ref} className="w-[350px]">
+      <PropertyCard property={property} />
+    </div>
+  ))}
+</Scroller>
         </div>
       </AnimatedSection>
 
