@@ -49,39 +49,47 @@ export default function PropertiesPageClient() {
   }, [searchParams]);
 
   // 2️⃣ Fetch properties
-  useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        const hostname = window.location.hostname;
-        const domainToRealestate: Record<string, string> = {
-          localhost: "costalux",
-          "www.costaluxestatesweb.onrender.com": "costalux",
-          "costaluxestatesweb.onrender.com": "costalux",
-          "www.costaluxestates.com": "costalux",
-          "costaluxestates.com": "costalux",
-        };
+// 2️⃣ Fetch properties
+useEffect(() => {
+  const fetchProperties = async () => {
+    try {
+      const hostname = window.location.hostname;
+      const domainToRealestate: Record<string, string> = {
+        localhost: "costalux",
+        "www.costaluxestatesweb.onrender.com": "costalux",
+        "costaluxestatesweb.onrender.com": "costalux",
+        "www.costaluxestates.com": "costalux",
+        "costaluxestates.com": "costalux",
+      };
 
-        const realestate = domainToRealestate[hostname] || "costalux";
-        const res = await fetch(
-          `https://api.habigrid.com/api/public/properties?realestate=${realestate}`
-        );
-        const data = await res.json();
+      const realestate = domainToRealestate[hostname] || "costalux";
+      const res = await fetch(
+        `https://api.habigrid.com/api/public/properties?realestate=${realestate}`
+      );
+      const data = await res.json();
 
-        setProperties(
-          Array.isArray(data)
-            ? data.filter((p) => p.listingtype?.toLowerCase() === "resale")
-            : []
-        );
-      } catch (err) {
-        console.error("Failed to fetch properties:", err);
-        setProperties([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+      // handle both API formats: array or { properties: [...] }
+      const rawProperties = Array.isArray(data.properties)
+        ? data.properties
+        : Array.isArray(data)
+        ? data
+        : [];
 
-    fetchProperties();
-  }, []);
+      setProperties(
+        rawProperties.filter(
+          (p) => p.listingtype?.toLowerCase() === "resale"
+        )
+      );
+    } catch (err) {
+      console.error("Failed to fetch properties:", err);
+      setProperties([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchProperties();
+}, []);
 
   // 3️⃣ Filter in memory
   const filtered = properties
