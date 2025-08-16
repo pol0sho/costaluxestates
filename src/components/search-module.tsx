@@ -216,13 +216,13 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
             <label className="block text-sm font-medium text-foreground mb-1 font-body">Price Range</label>
             <div className="flex justify-between text-xs text-foreground font-body">
               <span>{formatPrice(priceRange[0])}</span>
-              <span>{priceRange[1] === 3000000 ? `${formatPrice(priceRange[1])}+` : formatPrice(priceRange[1])}</span>
+              <span>{priceRange[1] === 20000000 ? `${formatPrice(priceRange[1])}+` : formatPrice(priceRange[1])}</span>
             </div>
             <Slider
               value={priceRange}
               onValueChange={setPriceRange}
               min={0}
-              max={3000000}
+              max={20000000}
               step={50000}
               className="[&>span>span]:bg-accent [&>span>span]:border-accent-foreground"
             />

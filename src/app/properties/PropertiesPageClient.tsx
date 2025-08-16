@@ -30,7 +30,7 @@ export default function PropertiesPageClient() {
     bedrooms: "any",
     bathrooms: "any",
     priceMin: 0,
-    priceMax: 3000000,
+    priceMax: 20000000,
   });
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,7 +43,7 @@ export default function PropertiesPageClient() {
       bedrooms: searchParams.get("bedrooms") || "any",
       bathrooms: searchParams.get("bathrooms") || "any",
       priceMin: Number(searchParams.get("priceMin") || 0),
-      priceMax: Number(searchParams.get("priceMax") || 3000000),
+      priceMax: Number(searchParams.get("priceMax") || 20000000),
     };
     setFilters(initialFilters);
   }, [searchParams]);
@@ -180,7 +180,7 @@ export default function PropertiesPageClient() {
     if (newFilters.bedrooms !== "any") params.set("bedrooms", newFilters.bedrooms);
     if (newFilters.bathrooms !== "any") params.set("bathrooms", newFilters.bathrooms);
     if (newFilters.priceMin !== 0) params.set("priceMin", String(newFilters.priceMin));
-    if (newFilters.priceMax !== 3000000) params.set("priceMax", String(newFilters.priceMax));
+    if (newFilters.priceMax !== 20000000) params.set("priceMax", String(newFilters.priceMax));
 
       router.replace(`${window.location.pathname}?${params.toString()}`);
   };
