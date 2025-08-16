@@ -15,7 +15,9 @@ import {
 
 const PROPERTIES_PER_PAGE = 16;
 
-export default function NewBuildsClient({ allProperties }: { allProperties: any[] }) {
+export default function NewBuildsClient({ properties }: { properties: any[] }) {
+  const allProperties = properties || [];
+
   const [filters, setFilters] = useState({
     location: "any",
     type: "any",
