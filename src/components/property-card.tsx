@@ -29,20 +29,24 @@ export function PropertyCard({ property }: PropertyCardProps) {
   return (
     <Link href={`/properties/${property.ref}`}>
       <Card className="overflow-hidden h-full flex flex-col group transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border-border/60">
-        <CardHeader className="p-0 relative">
-          <Image
-            src={property.images[0]?.url || "/no-image.png"}
-            alt={property.title}
-            width={400}
-            height={250}
-            className="w-full h-56 object-cover transition-transform duration-300 group-hover:scale-105"
-            data-ai-hint={property.aiHints?.join(' ') || ''}
-          />
-          <Badge variant="secondary" className="absolute top-3 right-3 font-bold text-lg bg-background/80 backdrop-blur-sm">
-            {property.priceType === 'from' && 'From '}
-            {formatPrice(property.list_price)}
-          </Badge>
-        </CardHeader>
+<CardHeader className="p-0 relative">
+  <Image
+    src={property.images[0]?.url || "/no-image.png"}
+    alt={property.title}
+    width={400}
+    height={250}
+    unoptimized
+    className="w-full h-56 object-cover transition-transform duration-300 group-hover:scale-105"
+    data-ai-hint={property.aiHints?.join(' ') || ''}
+  />
+  <Badge
+    variant="secondary"
+    className="absolute top-3 right-3 font-bold text-lg bg-background/80 backdrop-blur-sm"
+  >
+    {property.priceType === 'from' && 'From '}
+    {formatPrice(property.list_price)}
+  </Badge>
+</CardHeader>
         <CardContent className="p-4 flex-grow">
           <h3 className="font-headline text-xl font-semibold mb-1 truncate">{property.title}</h3>
           <div className="flex items-center text-muted-foreground text-sm mb-3">
