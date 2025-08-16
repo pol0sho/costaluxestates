@@ -1,32 +1,33 @@
 'use client';
 
-import { Card, CardContent } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { BedDouble, Bath, Home, MapPin, LayoutGrid } from "lucide-react"
-import { Slider } from "./ui/slider"
-import React, { useEffect, useState } from "react"
+import { Card, CardContent } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Slider } from "./ui/slider";
+import React, { useEffect, useState } from "react";
 
 const formatPrice = (value: number) => {
-  if (value >= 1000000) return `€${(value / 1000000).toFixed(1)}M`
-  if (value >= 1000) return `€${(value / 1000)}k`
-  return `€${value}`
-}
+  if (value >= 1000000) return `€${(value / 1000000).toFixed(1)}M`;
+  if (value >= 1000) return `€${(value / 1000)}k`;
+  return `€${value}`;
+};
 
 export function SearchModule({
   showListingType = true,
   onFiltersChange,
-  initialFilters
+  initialFilters,
+  properties // ✅ now passed from parent
 }: {
-  showListingType?: boolean
-  onFiltersChange?: (filters: any) => void
+  showListingType?: boolean;
+  onFiltersChange?: (filters: any) => void;
   initialFilters?: {
-    location: string
-    type: string
-    bedrooms: string
-    bathrooms: string
-    priceMin: number
-    priceMax: number
-  }
+    location: string;
+    type: string;
+    bedrooms: string;
+    bathrooms: string;
+    priceMin: number;
+    priceMax: number;
+  };
+  properties: any[]; // ✅ new prop
 }) {
   const [filters, setFilters] = useState({
     location: "any",
@@ -35,106 +36,76 @@ export function SearchModule({
     bathrooms: "any",
     priceMin: 0,
     priceMax: 3000000,
-  })
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 3000000])
-  const [locations, setLocations] = useState<string[]>([])
+  });
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 3000000]);
+  const [locations, setLocations] = useState<string[]>([]);
 
-  // ✅ Load initial filters from props (URL state)
+  // ✅ Load initial filters from props
   useEffect(() => {
     if (initialFilters) {
-      setFilters(initialFilters)
-      setPriceRange([initialFilters.priceMin, initialFilters.priceMax])
+      setFilters(initialFilters);
+      setPriceRange([initialFilters.priceMin, initialFilters.priceMax]);
     }
-  }, [initialFilters])
+  }, [initialFilters]);
 
-  // ✅ Fetch distinct towns from DB
+  // ✅ Get unique locations from the already-loaded properties
   useEffect(() => {
-  const fetchLocations = async () => {
-    try {
-      const hostname = window.location.hostname
-      const domainToRealestate: Record<string, string> = {
-        localhost: "costalux",
-        "www.costaluxestatesweb.onrender.com": "costalux",
-        "costaluxestatesweb.onrender.com": "costalux",
-        "www.costaluxestates.com": "costalux",
-        "costaluxestates.com": "costalux",
-      }
-      const realestate = domainToRealestate[hostname] || "costalux"
+    if (Array.isArray(properties) && properties.length > 0) {
+      const towns = properties
+        .map((p) => (p.town ?? "").trim())
+        .filter((t) => t.length > 0);
 
-      const res = await fetch(
-        `https://api.habigrid.com/api/public/properties?realestate=${realestate}`
-      )
-
-      if (!res.ok) {
-        console.error("Failed to fetch properties:", res.status, await res.text())
-        return
-      }
-
-      const data = await res.json()
-      const towns: string[] = Array.isArray(data)
-        ? data
-            .map((p: any) => (p.town ?? "").trim())
-            .filter((t: string) => t.length > 0)
-        : []
-
-      // case-insensitive unique + alphabetical
       const unique = Array.from(
-        new Map(towns.map(t => [t.toLowerCase(), t])).values()
-      ).sort((a, b) => a.localeCompare(b))
+        new Map(towns.map((t) => [t.toLowerCase(), t])).values()
+      ).sort((a, b) => a.localeCompare(b));
 
-      setLocations(unique)
-    } catch (err) {
-      console.error("Failed to fetch locations:", err)
+      setLocations(unique);
     }
-  }
+  }, [properties]);
 
-  fetchLocations()
-}, [])
-
-  // ✅ Price slider change
   const handlePriceChange = (range: [number, number]) => {
-    setPriceRange(range)
-    const updated = { ...filters, priceMin: range[0], priceMax: range[1] }
-    setFilters(updated)
-    onFiltersChange?.(updated)
-  }
+    setPriceRange(range);
+    const updated = { ...filters, priceMin: range[0], priceMax: range[1] };
+    setFilters(updated);
+    onFiltersChange?.(updated);
+  };
 
-  // ✅ Dropdown changes
   const handleChange = (key: keyof typeof filters, value: string) => {
-    const updated = { ...filters, [key]: value }
-    setFilters(updated)
-    onFiltersChange?.(updated)
-  }
+    const updated = { ...filters, [key]: value };
+    setFilters(updated);
+    onFiltersChange?.(updated);
+  };
 
   return (
     <Card className="shadow-lg border-none bg-background/20 backdrop-blur-sm w-full max-w-7xl mx-auto">
       <CardContent className="p-4 sm:p-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 items-end justify-center">
-          
-{/* Location Dropdown */}
-<div className="lg:col-span-2">
-  <label htmlFor="location" className="block text-sm font-medium text-foreground mb-1 font-body">
-    Location
-  </label>
-  <Select
-    value={filters.location}
-    onValueChange={(val) => handleChange("location", val)}
-  >
-    <SelectTrigger id="location" className="font-body">
-      <SelectValue>
-        {filters.location === "any" ? "Any Location" : filters.location}
-      </SelectValue>
-    </SelectTrigger>
-    <SelectContent>
-      <SelectItem value="any">Any Location</SelectItem>
-      {locations.map((loc) => (
-        <SelectItem key={loc} value={loc}>
-          {loc}
-        </SelectItem>
-      ))}
-    </SelectContent>
-  </Select>
-</div>
+
+          {/* Location Dropdown */}
+          <div className="lg:col-span-2">
+            <label htmlFor="location" className="block text-sm font-medium text-foreground mb-1 font-body">
+              Location
+            </label>
+            <Select
+              value={filters.location}
+              onValueChange={(val) => handleChange("location", val)}
+            >
+              <SelectTrigger id="location" className="font-body">
+                <SelectValue>
+                  {filters.location === "any" ? "Any Location" : filters.location}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="any">Any Location</SelectItem>
+                {locations.map((loc) => (
+                  <SelectItem key={loc} value={loc}>
+                    {loc}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
           {/* Listing Type */}
           {showListingType && (
             <div className="lg:col-span-2">
@@ -240,5 +211,5 @@ export function SearchModule({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
