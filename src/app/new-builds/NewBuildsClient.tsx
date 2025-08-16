@@ -16,7 +16,7 @@ import {
 
 const PROPERTIES_PER_PAGE = 16;
 
-export default function NewBuildsClient({ properties: initialProperties }: { properties: any[] }) {
+export default function NewBuildsClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -29,7 +29,10 @@ export default function NewBuildsClient({ properties: initialProperties }: { pro
     priceMax: 3000000,
   });
 
+  const [properties, setProperties] = useState<any[]>([]);
+  const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   // Initialize filters from URL
   useEffect(() => {
@@ -44,47 +47,59 @@ export default function NewBuildsClient({ properties: initialProperties }: { pro
     setFilters(initialFiltersFromUrl);
   }, [searchParams]);
 
-// Apply filters in memory
-const filtered = initialProperties
-  .filter(
-    (p) =>
-      filters.location === "any" ||
-      p.town?.toLowerCase() === filters.location.toLowerCase()
-  )
-  .filter(
-    (p) =>
-      filters.type === "any" ||
-      p.property_type?.toLowerCase() === filters.type.toLowerCase()
-  )
-  .filter(
-    (p) =>
-      filters.bedrooms === "any" ||
-      Number(p.bedrooms) >= Number(filters.bedrooms)
-  )
-  .filter(
-    (p) =>
-      filters.bathrooms === "any" ||
-      Number(p.bathrooms) >= Number(filters.bathrooms)
-  )
-  .filter(
-    (p) =>
-      Number(p.list_price) >= filters.priceMin &&
-      (
-        filters.priceMax < 3000000
-          ? Number(p.list_price) <= filters.priceMax
-          : true
-      )
-  );
+  // Fetch from API whenever filters or page change
+  useEffect(() => {
+    const fetchProperties = async () => {
+      setLoading(true);
+      const params = new URLSearchParams({
+        realestate: "costalux",
+        page: currentPage.toString(),
+        limit: PROPERTIES_PER_PAGE.toString(),
+        ...(
+          filters.location !== "any" ? { location: filters.location } : {}
+        ),
+        ...(
+          filters.type !== "any" ? { type: filters.type } : {}
+        ),
+        ...(
+          filters.bedrooms !== "any" ? { bedrooms: filters.bedrooms } : {}
+        ),
+        ...(
+          filters.bathrooms !== "any" ? { bathrooms: filters.bathrooms } : {}
+        ),
+        ...(filters.priceMin !== 0 ? { priceMin: String(filters.priceMin) } : {}),
+        ...(filters.priceMax !== 3000000 ? { priceMax: String(filters.priceMax) } : {}),
+      });
 
-  const totalProperties = filtered.length;
-  const totalPages = Math.ceil(totalProperties / PROPERTIES_PER_PAGE);
+      const res = await fetch(`/api/public/properties?${params.toString()}`);
+      const data = await res.json();
 
-  const paginatedProperties = filtered.slice(
-    (currentPage - 1) * PROPERTIES_PER_PAGE,
-    currentPage * PROPERTIES_PER_PAGE
-  );
+      setProperties(data.properties);
+      setTotal(data.total);
+      setLoading(false);
+    };
 
-  // Pagination rendering
+    fetchProperties();
+  }, [filters, currentPage]);
+
+  const totalPages = Math.ceil(total / PROPERTIES_PER_PAGE);
+
+  // Update filters + reset page + sync URL
+  const handleFiltersChange = (newFilters: typeof filters) => {
+    setFilters(newFilters);
+    setCurrentPage(1);
+
+    const params = new URLSearchParams();
+    if (newFilters.location !== "any") params.set("location", newFilters.location);
+    if (newFilters.type !== "any") params.set("type", newFilters.type);
+    if (newFilters.bedrooms !== "any") params.set("bedrooms", newFilters.bedrooms);
+    if (newFilters.bathrooms !== "any") params.set("bathrooms", newFilters.bathrooms);
+    if (newFilters.priceMin !== 0) params.set("priceMin", String(newFilters.priceMin));
+    if (newFilters.priceMax !== 3000000) params.set("priceMax", String(newFilters.priceMax));
+
+    router.replace(`${window.location.pathname}?${params.toString()}`);
+  };
+
   const renderPaginationLinks = () => {
     const pageNumbers = [];
     const visiblePages = 5;
@@ -101,9 +116,7 @@ const filtered = initialProperties
           <PaginationLink onClick={() => setCurrentPage(1)}>1</PaginationLink>
         </PaginationItem>
       );
-      if (startPage > 2) {
-        pageNumbers.push(<PaginationEllipsis key="start-ellipsis" />);
-      }
+      if (startPage > 2) pageNumbers.push(<PaginationEllipsis key="start-ellipsis" />);
     }
 
     for (let i = startPage; i <= endPage; i++) {
@@ -120,9 +133,7 @@ const filtered = initialProperties
     }
 
     if (endPage < totalPages) {
-      if (endPage < totalPages - 1) {
-        pageNumbers.push(<PaginationEllipsis key="end-ellipsis" />);
-      }
+      if (endPage < totalPages - 1) pageNumbers.push(<PaginationEllipsis key="end-ellipsis" />);
       pageNumbers.push(
         <PaginationItem key={totalPages}>
           <PaginationLink onClick={() => setCurrentPage(totalPages)}>
@@ -131,29 +142,11 @@ const filtered = initialProperties
         </PaginationItem>
       );
     }
-
     return pageNumbers;
-  };
-
-  // Handle live filter changes and update URL
-  const handleFiltersChange = (newFilters: typeof filters) => {
-    setFilters(newFilters);
-    setCurrentPage(1);
-
-    const params = new URLSearchParams();
-    if (newFilters.location !== "any") params.set("location", newFilters.location);
-    if (newFilters.type !== "any") params.set("type", newFilters.type);
-    if (newFilters.bedrooms !== "any") params.set("bedrooms", newFilters.bedrooms);
-    if (newFilters.bathrooms !== "any") params.set("bathrooms", newFilters.bathrooms);
-    if (newFilters.priceMin !== 0) params.set("priceMin", String(newFilters.priceMin));
-    if (newFilters.priceMax !== 3000000) params.set("priceMax", String(newFilters.priceMax));
-
-    router.replace(`${window.location.pathname}?${params.toString()}`);
   };
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-12">
-      {/* Search Bar */}
       <div className="mb-12 flex justify-center">
         <SearchModule
           showListingType={false}
@@ -162,23 +155,20 @@ const filtered = initialProperties
         />
       </div>
 
-      {/* Property Count */}
       <div className="mb-8 text-center">
         <p className="text-muted-foreground">
-          {totalProperties} new build properties found
+          {loading ? "Loading..." : `${total} new build properties found`}
         </p>
       </div>
 
-      {/* Properties Grid */}
-      {totalProperties > 0 ? (
+      {properties.length > 0 ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {paginatedProperties.map((property) => (
+            {properties.map((property) => (
               <PropertyCard key={property.id} property={property} />
             ))}
           </div>
 
-          {/* Pagination */}
           {totalPages > 1 && (
             <div className="mt-16">
               <Pagination>
@@ -204,16 +194,18 @@ const filtered = initialProperties
           )}
         </>
       ) : (
-        <div className="flex items-center justify-center py-24">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold tracking-tight">
-              No New Builds Found
-            </h2>
-            <p className="text-muted-foreground">
-              Please check back later for new build projects.
-            </p>
+        !loading && (
+          <div className="flex items-center justify-center py-24">
+            <div className="text-center">
+              <h2 className="text-2xl font-bold tracking-tight">
+                No New Builds Found
+              </h2>
+              <p className="text-muted-foreground">
+                Please check back later for new build projects.
+              </p>
+            </div>
           </div>
-        </div>
+        )
       )}
     </div>
   );
