@@ -47,39 +47,40 @@ export default function PropertyDetailPage({ params }: { params: { ref: string }
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchProperty = async () => {
-      try {
-        const hostname = window.location.hostname;
-        const domainToRealestate: Record<string, string> = {
-          "localhost": "costalux",
-          "www.costaluxestatesweb.onrender.com": "costalux",
-          "costaluxestatesweb.onrender.com": "costalux",
-          "www.costaluxestates.com": "costalux",
-          "costaluxestates.com": "costalux",
-        };
-        const realestate = domainToRealestate[hostname] || "costalux";
+useEffect(() => {
+  const fetchProperty = async () => {
+    try {
+      const hostname = window.location.hostname;
+      const domainToRealestate: Record<string, string> = {
+        "localhost": "costalux",
+        "www.costaluxestatesweb.onrender.com": "costalux",
+        "costaluxestatesweb.onrender.com": "costalux",
+        "www.costaluxestates.com": "costalux",
+        "costaluxestates.com": "costalux",
+      };
+      const realestate = domainToRealestate[hostname] || "costalux";
 
-        const res = await fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}`);
-        const data = await res.json();
-        const matched = Array.isArray(data)
-          ? data.find((p: any) => p.ref?.toString() === params.ref)
-          : null;
+      const res = await fetch(
+        `https://api.habigrid.com/api/public/properties/${params.ref}?realestate=${realestate}`
+      );
 
-        if (!matched) {
-          notFound();
-        } else {
-          setProperty(matched);
-        }
-      } catch (err) {
-        console.error("Failed to load property:", err);
-      } finally {
-        setLoading(false);
+      if (!res.ok) throw new Error(`API error: ${res.status}`);
+      const data = await res.json();
+
+      if (!data) {
+        notFound();
+      } else {
+        setProperty(data);
       }
-    };
+    } catch (err) {
+      console.error("Failed to load property:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchProperty();
-  }, [params.id]);
+  fetchProperty();
+}, [params.ref]);
 
   if (loading) {
     return <div className="text-center py-12">Loading property...</div>;
