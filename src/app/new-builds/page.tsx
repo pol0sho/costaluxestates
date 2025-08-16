@@ -43,15 +43,16 @@ export default function NewBuildsPage() {
       props = data.data;
     }
 
-    // --- Flexible match for "new build" ---
+    // --- Stop only when API gives less than PAGE_SIZE ---
+    if (props.length < PAGE_SIZE) {
+      setHasMore(false);
+    }
+
+    // --- Filter new builds locally ---
     const newBuilds = props.filter((p) => {
       const lt = (p.listingtype || "").toLowerCase().replace(/\s|_/g, "");
       return lt.includes("newbuild");
     });
-
-    if (newBuilds.length < PAGE_SIZE) {
-      setHasMore(false);
-    }
 
     setAllProperties((prev) => [...prev, ...newBuilds]);
     setVisibleProperties((prev) => [...prev, ...newBuilds]);
