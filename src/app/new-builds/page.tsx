@@ -1,4 +1,3 @@
-// app/new-builds/page.tsx
 'use client';
 
 import { useEffect, useState } from "react";
@@ -11,11 +10,28 @@ export default function NewBuildsPage() {
 
   useEffect(() => {
     const fetchProperties = async () => {
-      const realestate = "costalux";
       try {
-        const res = await fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}`);
+        const hostname = window.location.hostname;
+        const domainToRealestate: Record<string, string> = {
+          "localhost": "costalux",
+          "www.costaluxestatesweb.onrender.com": "costalux",
+          "costaluxestatesweb.onrender.com": "costalux",
+          "www.costaluxestates.com": "costalux",
+          "costaluxestates.com": "costalux",
+        };
+        const realestate = domainToRealestate[hostname] || "costalux";
+
+        // Request all properties with images in one go
+        const res = await fetch(
+          `https://api.habigrid.com/api/public/properties?realestate=${realestate}&includeImages=true&limit=10000`
+        );
         const data = await res.json();
-        const newBuilds = data.filter((p: any) => p.listingtype?.toLowerCase() === "newbuild");
+
+        // Keep only newbuilds
+        const newBuilds = Array.isArray(data)
+          ? data.filter((p) => p.listingtype?.toLowerCase() === "newbuild")
+          : [];
+
         setProperties(newBuilds);
       } catch (err) {
         console.error("Failed to load new builds:", err);
@@ -23,6 +39,7 @@ export default function NewBuildsPage() {
         setLoading(false);
       }
     };
+
     fetchProperties();
   }, []);
 
@@ -33,10 +50,10 @@ export default function NewBuildsPage() {
       transition={{ duration: 0.5 }}
       className="bg-background"
     >
-<section
-  className="relative h-[30vh] min-h-[250px] flex items-center justify-center text-center bg-cover bg-center"
-  style={{ backgroundImage: "url('/newbuildpage.jpg')" }}
->
+      <section
+        className="relative h-[30vh] min-h-[250px] flex items-center justify-center text-center bg-cover bg-center"
+        style={{ backgroundImage: "url('/newbuildpage.jpg')" }}
+      >
         <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
         <div className="relative z-10 container mx-auto px-4 text-white">
           <motion.div

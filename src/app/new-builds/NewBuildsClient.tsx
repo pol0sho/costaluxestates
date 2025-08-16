@@ -16,12 +16,9 @@ import {
 
 const PROPERTIES_PER_PAGE = 16;
 
-export default function NewBuildsClient() {
+export default function NewBuildsClient({ properties: initialProperties }: { properties: any[] }) {
   const searchParams = useSearchParams();
   const router = useRouter();
-
-  const [properties, setProperties] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
 
   const [filters, setFilters] = useState({
     location: "any",
@@ -34,9 +31,9 @@ export default function NewBuildsClient() {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  // 1️⃣ Initialize filters from URL on first load or when query changes
+  // Initialize filters from URL
   useEffect(() => {
-    const initialFilters = {
+    const initialFiltersFromUrl = {
       location: searchParams.get("location") || "any",
       type: searchParams.get("type") || "any",
       bedrooms: searchParams.get("bedrooms") || "any",
@@ -44,46 +41,11 @@ export default function NewBuildsClient() {
       priceMin: Number(searchParams.get("priceMin") || 0),
       priceMax: Number(searchParams.get("priceMax") || 3000000),
     };
-    setFilters(initialFilters);
+    setFilters(initialFiltersFromUrl);
   }, [searchParams]);
 
-  // 2️⃣ Fetch properties once
-  useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        const hostname = window.location.hostname;
-        const domainToRealestate: Record<string, string> = {
-          "localhost": "costalux",
-          "www.costaluxestatesweb.onrender.com": "costalux",
-          "costaluxestatesweb.onrender.com": "costalux",
-          "www.costaluxestates.com": "costalux",
-          "costaluxestates.com": "costalux",
-        };
-        const realestate = domainToRealestate[hostname] || "costalux";
-
-        const res = await fetch(
-          `https://api.habigrid.com/api/public/properties?realestate=${realestate}`
-        );
-        const data = await res.json();
-
-        setProperties(
-          Array.isArray(data)
-            ? data.filter((p) => p.listingtype?.toLowerCase() === "newbuild")
-            : []
-        );
-      } catch (err) {
-        console.error("Failed to fetch properties:", err);
-        setProperties([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProperties();
-  }, []);
-
-  // 3️⃣ Apply filters in memory
-  const filtered = properties
+  // Apply filters in memory
+  const filtered = initialProperties
     .filter(
       (p) =>
         filters.location === "any" ||
@@ -118,7 +80,7 @@ export default function NewBuildsClient() {
     currentPage * PROPERTIES_PER_PAGE
   );
 
-  // 4️⃣ Pagination rendering
+  // Pagination rendering
   const renderPaginationLinks = () => {
     const pageNumbers = [];
     const visiblePages = 5;
@@ -169,7 +131,7 @@ export default function NewBuildsClient() {
     return pageNumbers;
   };
 
-  // 5️⃣ Handle live filter changes and update URL
+  // Handle live filter changes and update URL
   const handleFiltersChange = (newFilters: typeof filters) => {
     setFilters(newFilters);
     setCurrentPage(1);
@@ -192,23 +154,19 @@ export default function NewBuildsClient() {
         <SearchModule
           showListingType={false}
           onFiltersChange={handleFiltersChange}
-          initialFilters={filters} // ✅ pass URL filters to SearchModule
+          initialFilters={filters}
         />
       </div>
 
       {/* Property Count */}
       <div className="mb-8 text-center">
-        {loading ? (
-          <p className="text-muted-foreground">Loading properties...</p>
-        ) : (
-          <p className="text-muted-foreground">
-            {totalProperties} new build properties found
-          </p>
-        )}
+        <p className="text-muted-foreground">
+          {totalProperties} new build properties found
+        </p>
       </div>
 
       {/* Properties Grid */}
-      {!loading && totalProperties > 0 ? (
+      {totalProperties > 0 ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {paginatedProperties.map((property) => (
@@ -242,18 +200,16 @@ export default function NewBuildsClient() {
           )}
         </>
       ) : (
-        !loading && (
-          <div className="flex items-center justify-center py-24">
-            <div className="text-center">
-              <h2 className="text-2xl font-bold tracking-tight">
-                No New Builds Found
-              </h2>
-              <p className="text-muted-foreground">
-                Please check back later for new build projects.
-              </p>
-            </div>
+        <div className="flex items-center justify-center py-24">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold tracking-tight">
+              No New Builds Found
+            </h2>
+            <p className="text-muted-foreground">
+              Please check back later for new build projects.
+            </p>
           </div>
-        )
+        </div>
       )}
     </div>
   );
