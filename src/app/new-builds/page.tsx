@@ -15,41 +15,52 @@ export default function NewBuildsPage() {
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
   const fetchPage = useCallback(async (pageNum: number) => {
-    try {
-      const hostname = window.location.hostname;
-      const domainToRealestate: Record<string, string> = {
-        localhost: "costalux",
-        "www.costaluxestatesweb.onrender.com": "costalux",
-        "costaluxestatesweb.onrender.com": "costalux",
-        "www.costaluxestates.com": "costalux",
-        "costaluxestates.com": "costalux",
-      };
-      const realestate = domainToRealestate[hostname] || "costalux";
+  try {
+    const hostname = window.location.hostname;
+    const domainToRealestate: Record<string, string> = {
+      localhost: "costalux",
+      "www.costaluxestatesweb.onrender.com": "costalux",
+      "costaluxestatesweb.onrender.com": "costalux",
+      "www.costaluxestates.com": "costalux",
+      "costaluxestates.com": "costalux",
+    };
+    const realestate = domainToRealestate[hostname] || "costalux";
 
-      const res = await fetch(
-        `https://api.habigrid.com/api/public/properties?realestate=${realestate}&includeImages=true&page=${pageNum}&limit=${PAGE_SIZE}`
-      );
+    const res = await fetch(
+      `https://api.habigrid.com/api/public/properties?realestate=${realestate}&includeImages=true&page=${pageNum}&limit=${PAGE_SIZE}`
+    );
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
 
-      if (!res.ok) throw new Error(`API error: ${res.status}`);
-      const data = await res.json();
+    const data = await res.json();
 
-      // Filter newbuilds
-      const newBuilds = Array.isArray(data)
-        ? data.filter((p) => p.listingtype?.toLowerCase() === "newbuild")
-        : [];
-
-      if (newBuilds.length < PAGE_SIZE) {
-        setHasMore(false); // no more pages
-      }
-
-      setAllProperties((prev) => [...prev, ...newBuilds]);
-      setVisibleProperties((prev) => [...prev, ...newBuilds]);
-    } catch (err) {
-      console.error("Failed to load new builds:", err);
-    } finally {
-      setLoading(false);
+    // --- Normalize array shape ---
+    let props: any[] = [];
+    if (Array.isArray(data)) {
+      props = data;
+    } else if (Array.isArray(data.properties)) {
+      props = data.properties;
+    } else if (Array.isArray(data.data)) {
+      props = data.data;
     }
-  }, []);
+
+    // --- Flexible match for "new build" ---
+    const newBuilds = props.filter((p) => {
+      const lt = (p.listingtype || "").toLowerCase().replace(/\s|_/g, "");
+      return lt.includes("newbuild");
+    });
+
+    if (newBuilds.length < PAGE_SIZE) {
+      setHasMore(false);
+    }
+
+    setAllProperties((prev) => [...prev, ...newBuilds]);
+    setVisibleProperties((prev) => [...prev, ...newBuilds]);
+  } catch (err) {
+    console.error("Failed to load new builds:", err);
+  } finally {
+    setLoading(false);
+  }
+}, []);
 
   // First load
   useEffect(() => {
