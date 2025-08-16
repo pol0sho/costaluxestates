@@ -44,33 +44,37 @@ export default function NewBuildsClient({ properties: initialProperties }: { pro
     setFilters(initialFiltersFromUrl);
   }, [searchParams]);
 
-  // Apply filters in memory
-  const filtered = initialProperties
-    .filter(
-      (p) =>
-        filters.location === "any" ||
-        p.town?.toLowerCase() === filters.location.toLowerCase()
-    )
-    .filter(
-      (p) =>
-        filters.type === "any" ||
-        p.property_type?.toLowerCase() === filters.type.toLowerCase()
-    )
-    .filter(
-      (p) =>
-        filters.bedrooms === "any" ||
-        Number(p.bedrooms) >= Number(filters.bedrooms)
-    )
-    .filter(
-      (p) =>
-        filters.bathrooms === "any" ||
-        Number(p.bathrooms) >= Number(filters.bathrooms)
-    )
-    .filter(
-      (p) =>
-        Number(p.list_price) >= filters.priceMin &&
-        Number(p.list_price) <= filters.priceMax
-    );
+// Apply filters in memory
+const filtered = initialProperties
+  .filter(
+    (p) =>
+      filters.location === "any" ||
+      p.town?.toLowerCase() === filters.location.toLowerCase()
+  )
+  .filter(
+    (p) =>
+      filters.type === "any" ||
+      p.property_type?.toLowerCase() === filters.type.toLowerCase()
+  )
+  .filter(
+    (p) =>
+      filters.bedrooms === "any" ||
+      Number(p.bedrooms) >= Number(filters.bedrooms)
+  )
+  .filter(
+    (p) =>
+      filters.bathrooms === "any" ||
+      Number(p.bathrooms) >= Number(filters.bathrooms)
+  )
+  .filter(
+    (p) =>
+      Number(p.list_price) >= filters.priceMin &&
+      (
+        filters.priceMax < 3000000
+          ? Number(p.list_price) <= filters.priceMax
+          : true
+      )
+  );
 
   const totalProperties = filtered.length;
   const totalPages = Math.ceil(totalProperties / PROPERTIES_PER_PAGE);
