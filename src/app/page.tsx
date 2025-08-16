@@ -109,21 +109,36 @@ export default function Home() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
 
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const realestate = "costalux"; // or detect from domain
-        const res = await fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}`);
-        const data = await res.json();
-        setProperties(data);
-      } catch (e) {
-        console.error("Failed to fetch properties:", e);
-      } finally {
-        setLoading(false);
+useEffect(() => {
+  const load = async () => {
+    try {
+      const realestate = "costalux"; // or detect from domain
+      const res = await fetch(
+        `https://api.habigrid.com/api/public/properties?realestate=${realestate}`
+      );
+      const data = await res.json();
+
+      // ✅ Always set an array
+      let propertyArray: Property[] = [];
+      if (Array.isArray(data)) {
+        propertyArray = data;
+      } else if (Array.isArray(data.properties)) {
+        propertyArray = data.properties;
+      } else {
+        console.warn("Unexpected API shape", data);
+        propertyArray = [];
       }
-    };
-    load();
-  }, []);
+
+      setProperties(propertyArray);
+    } catch (e) {
+      console.error("Failed to fetch properties:", e);
+      setProperties([]); // ✅ Fallback to empty array
+    } finally {
+      setLoading(false);
+    }
+  };
+  load();
+}, []);
 
   const toggleMute = () => {
     if (videoRef.current) {
