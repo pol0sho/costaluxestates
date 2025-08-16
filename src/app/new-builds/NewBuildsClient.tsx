@@ -47,8 +47,10 @@ export default function NewBuildsClient({ properties }: { properties: any[] }) {
 
       if (filters.bedrooms !== "any" && beds < Number(filters.bedrooms)) return false;
       if (filters.bathrooms !== "any" && baths < Number(filters.bathrooms)) return false;
-      if (price < filters.priceMin) return false;
-      if (price > filters.priceMax) return false;
+if (price < filters.priceMin) return false;
+
+// Only enforce upper limit if it's not "unlimited"
+if (filters.priceMax !== Number.MAX_SAFE_INTEGER && price > filters.priceMax) return false;
 
       return true;
     });
