@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useState, useEffect, useMemo } from "react";
 import { PropertyCard } from "@/components/property-card";
 import { SearchModule } from "@/components/search-module-pages";
 import {
@@ -16,15 +15,7 @@ import {
 
 const PROPERTIES_PER_PAGE = 16;
 
-// ✅ API base (auto-switch between local & production)
-const API_BASE = typeof window !== "undefined" && window.location.hostname.includes("localhost")
-  ? "http://localhost:5000" // your local backend
-  : "https://api.habigrid.com"; // your Render backend API
-
-export default function NewBuildsClient() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-
+export default function NewBuildsClient({ allProperties }: { allProperties: any[] }) {
   const [filters, setFilters] = useState({
     location: "any",
     type: "any",
@@ -34,73 +25,35 @@ export default function NewBuildsClient() {
     priceMax: 3000000,
   });
 
-  const [properties, setProperties] = useState<any[]>([]);
-  const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(false);
 
-  // Initialize filters from URL
+  // ✅ Filter properties in-memory
+  const filteredProperties = useMemo(() => {
+    return allProperties.filter((p) => {
+      if (filters.location !== "any" && p.town !== filters.location) return false;
+      if (filters.type !== "any" && (p.type || "").toLowerCase() !== filters.type.toLowerCase()) return false;
+      if (filters.bedrooms !== "any" && Number(p.bedrooms || 0) < Number(filters.bedrooms)) return false;
+      if (filters.bathrooms !== "any" && Number(p.bathrooms || 0) < Number(filters.bathrooms)) return false;
+      if (Number(p.price || 0) < filters.priceMin) return false;
+      if (Number(p.price || 0) > filters.priceMax) return false;
+      return true;
+    });
+  }, [allProperties, filters]);
+
+  // ✅ Pagination in-memory
+  const totalPages = Math.ceil(filteredProperties.length / PROPERTIES_PER_PAGE);
+  const paginatedProperties = useMemo(() => {
+    const start = (currentPage - 1) * PROPERTIES_PER_PAGE;
+    return filteredProperties.slice(start, start + PROPERTIES_PER_PAGE);
+  }, [filteredProperties, currentPage]);
+
+  // Reset to first page when filters change
   useEffect(() => {
-    const initialFiltersFromUrl = {
-      location: searchParams.get("location") || "any",
-      type: searchParams.get("type") || "any",
-      bedrooms: searchParams.get("bedrooms") || "any",
-      bathrooms: searchParams.get("bathrooms") || "any",
-      priceMin: Number(searchParams.get("priceMin") || 0),
-      priceMax: Number(searchParams.get("priceMax") || 3000000),
-    };
-    setFilters(initialFiltersFromUrl);
-  }, [searchParams]);
+    setCurrentPage(1);
+  }, [filters]);
 
-  // Fetch from API whenever filters or page change
-  useEffect(() => {
-    const fetchProperties = async () => {
-      setLoading(true);
-      const params = new URLSearchParams({
-        realestate: "costalux",
-        page: currentPage.toString(),
-        limit: PROPERTIES_PER_PAGE.toString(),
-        ...(filters.location !== "any" ? { location: filters.location } : {}),
-        ...(filters.type !== "any" ? { type: filters.type } : {}),
-        ...(filters.bedrooms !== "any" ? { bedrooms: filters.bedrooms } : {}),
-        ...(filters.bathrooms !== "any" ? { bathrooms: filters.bathrooms } : {}),
-        ...(filters.priceMin !== 0 ? { priceMin: String(filters.priceMin) } : {}),
-        ...(filters.priceMax !== 3000000 ? { priceMax: String(filters.priceMax) } : {}),
-      });
-
-      try {
-        const res = await fetch(`${API_BASE}/api/public/properties?${params.toString()}`);
-        if (!res.ok) throw new Error(`HTTP error ${res.status}`);
-        const data = await res.json();
-        setProperties(data.properties || []);
-        setTotal(data.total || 0);
-      } catch (err) {
-        console.error("Error fetching properties:", err);
-        setProperties([]);
-        setTotal(0);
-      }
-      setLoading(false);
-    };
-
-    fetchProperties();
-  }, [filters, currentPage]);
-
-  const totalPages = Math.ceil(total / PROPERTIES_PER_PAGE);
-
-  // Update filters + reset page + sync URL
   const handleFiltersChange = (newFilters: typeof filters) => {
     setFilters(newFilters);
-    setCurrentPage(1);
-
-    const params = new URLSearchParams();
-    if (newFilters.location !== "any") params.set("location", newFilters.location);
-    if (newFilters.type !== "any") params.set("type", newFilters.type);
-    if (newFilters.bedrooms !== "any") params.set("bedrooms", newFilters.bedrooms);
-    if (newFilters.bathrooms !== "any") params.set("bathrooms", newFilters.bathrooms);
-    if (newFilters.priceMin !== 0) params.set("priceMin", String(newFilters.priceMin));
-    if (newFilters.priceMax !== 3000000) params.set("priceMax", String(newFilters.priceMax));
-
-    router.replace(`${window.location.pathname}?${params.toString()}`);
   };
 
   const renderPaginationLinks = () => {
@@ -160,14 +113,14 @@ export default function NewBuildsClient() {
 
       <div className="mb-8 text-center">
         <p className="text-muted-foreground">
-          {loading ? "Loading..." : `${total} new build properties found`}
+          {`${filteredProperties.length} new build properties found`}
         </p>
       </div>
 
-      {properties.length > 0 ? (
+      {paginatedProperties.length > 0 ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {properties.map((property) => (
+            {paginatedProperties.map((property) => (
               <PropertyCard key={property.id} property={property} />
             ))}
           </div>
@@ -197,18 +150,16 @@ export default function NewBuildsClient() {
           )}
         </>
       ) : (
-        !loading && (
-          <div className="flex items-center justify-center py-24">
-            <div className="text-center">
-              <h2 className="text-2xl font-bold tracking-tight">
-                No New Builds Found
-              </h2>
-              <p className="text-muted-foreground">
-                Please check back later for new build projects.
-              </p>
-            </div>
+        <div className="flex items-center justify-center py-24">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold tracking-tight">
+              No New Builds Found
+            </h2>
+            <p className="text-muted-foreground">
+              Please check back later for new build projects.
+            </p>
           </div>
-        )
+        </div>
       )}
     </div>
   );
