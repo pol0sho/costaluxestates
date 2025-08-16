@@ -63,12 +63,16 @@ export function SearchModule({
     }
   }, [properties]);
 
-  const handlePriceChange = (range: [number, number]) => {
-    setPriceRange(range);
-    const updated = { ...filters, priceMin: range[0], priceMax: range[1] };
-    setFilters(updated);
-    onFiltersChange?.(updated);
-  };
+const handlePriceChange = (range: [number, number]) => {
+  // If max value is slider's max (3M), treat as unlimited
+  const adjustedMax =
+    range[1] === 3000000 ? Number.MAX_SAFE_INTEGER : range[1];
+
+  setPriceRange(range);
+  const updated = { ...filters, priceMin: range[0], priceMax: adjustedMax };
+  setFilters(updated);
+  onFiltersChange?.(updated);
+};
 
   const handleChange = (key: keyof typeof filters, value: string) => {
     const updated = { ...filters, [key]: value };
