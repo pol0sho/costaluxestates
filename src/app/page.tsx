@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, VolumeX, Volume2 } from "lucide-react";
 import { motion } from "framer-motion";
+import { Suspense } from "react";
 
 type Property = {
   id: number;
@@ -203,7 +204,9 @@ export default function Home() {
           </motion.div>
         </div>
         <div className="relative z-10 container mx-auto px-4 mt-8 w-full">
+          <Suspense fallback={<div>Loading search...</div>}>
           <SearchModule showListingType={true} />
+          </Suspense>
         </div>
       </section>
 
