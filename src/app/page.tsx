@@ -144,7 +144,9 @@ export default function Home() {
     }
   };
 
-  const featuredProperties = properties.slice(0, 3);
+  const featuredProperties = properties
+  .filter((p: any) => p.featured === true) 
+  .slice(0, 3); 
 
   return (
     <motion.div
@@ -210,27 +212,27 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Properties */}
-      <AnimatedSection className="pt-12 md:pt-16 bg-secondary">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="text-center mb-12">
-            <h2 className="font-headline text-2xl md:text-2xl font-bold">
-              Featured Properties
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredProperties.map((property, i) => (
-              <AnimatedSection
-                key={property.id}
-                className="transition-all duration-500"
-                style={{ transitionDelay: `${i * 150}ms` } as React.CSSProperties}
-              >
-                <FeaturedPropertyCard property={property} />
-              </AnimatedSection>
-            ))}
-          </div>
-        </div>
-      </AnimatedSection>
+{/* Featured Properties */}
+<AnimatedSection className="pt-12 md:pt-16 bg-secondary">
+  <div className="container mx-auto px-4 md:px-6">
+    <div className="text-center mb-12">
+      <h2 className="font-headline text-2xl md:text-2xl font-bold">
+        Featured Properties
+      </h2>
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {featuredProperties.map((property, i) => (
+        <AnimatedSection
+          key={property.id}
+          className="transition-all duration-500"
+          style={{ transitionDelay: `${i * 150}ms` } as React.CSSProperties}
+        >
+          <FeaturedPropertyCard property={property} />
+        </AnimatedSection>
+      ))}
+    </div>
+  </div>
+</AnimatedSection>
 
       {/* Latest Properties */}
       <AnimatedSection direction="right" className="py-12 md:py-16 bg-secondary">
