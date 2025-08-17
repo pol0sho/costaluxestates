@@ -107,36 +107,38 @@ export default function Home() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
 
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const realestate = "costalux";
-        const res = await fetch(
-          `https://api.habigrid.com/api/public/properties?realestate=${realestate}&limit=10&page=1&latestOnly=true`
-        );
-        const data = await res.json();
+useEffect(() => {
+  const load = async () => {
+    try {
+      const realestate = "costalux";
 
-        let propertyArray: Property[] = [];
-        if (Array.isArray(data)) {
-          propertyArray = data;
-        } else if (Array.isArray(data.properties)) {
-          propertyArray = data.properties;
-        } else {
-          console.warn("Unexpected API shape", data);
-          propertyArray = [];
-        }
+      const [latestRes, featuredRes] = await Promise.all([
+        fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}&limit=10&page=1&latestOnly=true`),
+        fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}&limit=100&page=1`) 
+      ]);
 
-        setProperties(propertyArray);
-      } catch (e) {
-        console.error("Failed to fetch properties:", e);
-        setProperties([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
-  }, []);
+      const latestData = await latestRes.json();
+      const featuredData = await featuredRes.json();
 
+      const latest = Array.isArray(latestData.properties)
+        ? latestData.properties
+        : [];
+      const featured = Array.isArray(featuredData.properties)
+        ? featuredData.properties.filter((p: any) => p.featured === true)
+        : [];
+
+      setProperties(latest);   // for Latest
+      setFeaturedProperties(featured); // for Featured
+    } catch (e) {
+      console.error("Failed to fetch properties:", e);
+      setProperties([]);
+      setFeaturedProperties([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+  load();
+}, []);
   const toggleMute = () => {
     if (videoRef.current) {
       videoRef.current.muted = !videoRef.current.muted;
