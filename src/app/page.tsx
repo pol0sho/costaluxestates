@@ -26,11 +26,11 @@ type Property = {
 const AnimatedSection = ({
   children,
   className,
-  direction = 'up',
+  direction = "up",
 }: {
   children: React.ReactNode;
   className?: string;
-  direction?: 'up' | 'left' | 'right';
+  direction?: "up" | "left" | "right";
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -46,28 +46,26 @@ const AnimatedSection = ({
       { threshold: 0.1 }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
+    if (ref.current) observer.observe(ref.current);
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
-      }
+      if (ref.current) observer.unobserve(ref.current);
     };
   }, []);
 
   const animationClasses = {
-    up: 'translate-y-10',
-    left: '-translate-x-10',
-    right: 'translate-x-10',
+    up: "translate-y-10",
+    left: "-translate-x-10",
+    right: "translate-x-10",
   };
 
   return (
     <div
       ref={ref}
       className={`${className} transition-all duration-1000 ${
-        isVisible ? 'opacity-100 translate-x-0 translate-y-0' : `opacity-0 ${animationClasses[direction]}`
+        isVisible
+          ? "opacity-100 translate-x-0 translate-y-0"
+          : `opacity-0 ${animationClasses[direction]}`
       }`}
     >
       {children}
@@ -107,49 +105,36 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
-  const [authenticated, setAuthenticated] = useState(false);
 
-  // Simple password protection
   useEffect(() => {
-    const entered = prompt("This site is password protected. Please enter the password:");
-    if (entered === "costaluxpass") {
-      setAuthenticated(true);
-    } else {
-      alert("Incorrect password. Access denied.");
-      window.location.href = "https://www.google.com";
-    }
-  }, []);
+    const load = async () => {
+      try {
+        const realestate = "costalux";
+        const res = await fetch(
+          `https://api.habigrid.com/api/public/properties?realestate=${realestate}&limit=10&page=1&latestOnly=true`
+        );
+        const data = await res.json();
 
-useEffect(() => {
-  if (!authenticated) return;
-  const load = async () => {
-    try {
-      const realestate = "costalux"; 
-      const res = await fetch(
-        `https://api.habigrid.com/api/public/properties?realestate=${realestate}&limit=10&page=1&latestOnly=true`
-      );
-      const data = await res.json();
+        let propertyArray: Property[] = [];
+        if (Array.isArray(data)) {
+          propertyArray = data;
+        } else if (Array.isArray(data.properties)) {
+          propertyArray = data.properties;
+        } else {
+          console.warn("Unexpected API shape", data);
+          propertyArray = [];
+        }
 
-      let propertyArray: Property[] = [];
-      if (Array.isArray(data)) {
-        propertyArray = data;
-      } else if (Array.isArray(data.properties)) {
-        propertyArray = data.properties;
-      } else {
-        console.warn("Unexpected API shape", data);
-        propertyArray = [];
+        setProperties(propertyArray);
+      } catch (e) {
+        console.error("Failed to fetch properties:", e);
+        setProperties([]);
+      } finally {
+        setLoading(false);
       }
-
-      setProperties(propertyArray);
-    } catch (e) {
-      console.error("Failed to fetch properties:", e);
-      setProperties([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-  load();
-}, [authenticated]);
+    };
+    load();
+  }, []);
 
   const toggleMute = () => {
     if (videoRef.current) {
@@ -157,10 +142,6 @@ useEffect(() => {
       setIsMuted(videoRef.current.muted);
     }
   };
-
-  if (!authenticated) {
-    return null; // Prevent rendering until password is correct
-  }
 
   const featuredProperties = properties.slice(0, 3);
 
@@ -194,7 +175,11 @@ useEffect(() => {
           className="absolute z-10 bottom-4 right-4 text-white hover:bg-white/20 hover:text-white"
           aria-label={isMuted ? "Unmute video" : "Mute video"}
         >
-          {isMuted ? <VolumeX className="h-6 w-6" /> : <Volume2 className="h-6 w-6" />}
+          {isMuted ? (
+            <VolumeX className="h-6 w-6" />
+          ) : (
+            <Volume2 className="h-6 w-6" />
+          )}
         </Button>
         <div className="relative z-10 container mx-auto px-4 text-white">
           <motion.div
@@ -203,11 +188,17 @@ useEffect(() => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="max-w-6xl mx-auto"
           >
-            <h1 className="font-body text-2xl md:text-3xl font-bold mb-4">Welcome to CostaLux Estates</h1>
+            <h1 className="font-body text-2xl md:text-3xl font-bold mb-4">
+              Welcome to CostaLux Estates
+            </h1>
             <p className="text-lg md:text-xl max-w-5xl mx-auto mb-8">
-              Your trusted partner for exclusive real estate on the Costa del Sol. <br />
-              Whether you're looking for a luxury villa, a charming apartment, or an investment opportunity, we guide you every step of the way -- with integrity, dedication, and local expertise. <br /> <br />
-              We speak 5 languages (English, Spanish, Dutch, French and German) to make sure you feel at home from the very first conversation.
+              Your trusted partner for exclusive real estate on the Costa del
+              Sol. <br />
+              Whether you're looking for a luxury villa, a charming apartment,
+              or an investment opportunity, we guide you every step of the way
+              -- with integrity, dedication, and local expertise. <br /> <br />
+              We speak 5 languages (English, Spanish, Dutch, French and German)
+              to make sure you feel at home from the very first conversation.
             </p>
           </motion.div>
         </div>
@@ -220,12 +211,14 @@ useEffect(() => {
       <AnimatedSection className="pt-12 md:pt-16 bg-secondary">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-12">
-            <h2 className="font-headline text-2xl md:text-2xl font-bold">Featured Properties</h2>
+            <h2 className="font-headline text-2xl md:text-2xl font-bold">
+              Featured Properties
+            </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredProperties.map((property, i) => (
               <AnimatedSection
-                key={property.ref}
+                key={property.id}
                 className="transition-all duration-500"
                 style={{ transitionDelay: `${i * 150}ms` } as React.CSSProperties}
               >
@@ -240,15 +233,17 @@ useEffect(() => {
       <AnimatedSection direction="right" className="py-12 md:py-16 bg-secondary">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-12">
-            <h2 className="font-headline text-2xl md:text-2xl font-bold">Latest Properties</h2>
+            <h2 className="font-headline text-2xl md:text-2xl font-bold">
+              Latest Properties
+            </h2>
           </div>
-<Scroller>
-  {properties.slice(0, 10).map((property) => (
-    <div key={property.ref} className="w-[350px]">
-      <PropertyCard property={property} />
-    </div>
-  ))}
-</Scroller>
+          <Scroller>
+            {properties.slice(0, 10).map((property) => (
+              <div key={property.id} className="w-[350px]">
+                <PropertyCard property={property} />
+              </div>
+            ))}
+          </Scroller>
         </div>
       </AnimatedSection>
 
@@ -266,17 +261,23 @@ useEffect(() => {
             >
               <div className="absolute inset-0 bg-black/40" />
               <div className="relative z-10 md:w-1/2 text-white">
-                <h2 className="font-headline text-2xl md:text-3xl font-bold mb-4">Discover New Build Projects</h2>
+                <h2 className="font-headline text-2xl md:text-3xl font-bold mb-4">
+                  Discover New Build Projects
+                </h2>
                 <p className="mb-4">
-                  We offer exclusive access to the latest and most prestigious new build projects on the Costa del Sol.
-                  Explore modern designs, state-of-the-art amenities, and prime locations.
+                  We offer exclusive access to the latest and most prestigious
+                  new build projects on the Costa del Sol. Explore modern
+                  designs, state-of-the-art amenities, and prime locations.
                 </p>
                 <p className="mb-6">
-                  From contemporary villas to luxury apartment complexes, let us help you find your perfect, brand-new
-                  home in the sun.
+                  From contemporary villas to luxury apartment complexes, let us
+                  help you find your perfect, brand-new home in the sun.
                 </p>
                 <Link href="/new-builds">
-                  <Button size="lg" className="text-base font-bold bg-accent hover:bg-accent/90 text-accent-foreground transition-all duration-300 transform hover:scale-105">
+                  <Button
+                    size="lg"
+                    className="text-base font-bold bg-accent hover:bg-accent/90 text-accent-foreground transition-all duration-300 transform hover:scale-105"
+                  >
                     See all New Builds
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
