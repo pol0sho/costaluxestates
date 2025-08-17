@@ -24,6 +24,8 @@ type Property = {
   images: string[];
 };
 
+
+
 const AnimatedSection = ({
   children,
   className,
@@ -113,19 +115,34 @@ useEffect(() => {
     try {
       const realestate = "costalux";
 
-const [latestRes, featuredRes] = await Promise.all([
-  fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}&limit=10&page=1&latestOnly=true`),
-  fetch(`https://api.habigrid.com/api/public/properties/featured?realestate=${realestate}`)
-]);
+      const [latestRes, featuredRes] = await Promise.all([
+        fetch(
+          `https://api.habigrid.com/api/public/properties?realestate=${realestate}&limit=10&page=1&latestOnly=true`
+        ),
+        fetch(
+          `https://api.habigrid.com/api/public/properties/featured?realestate=${realestate}`
+        ),
+      ]);
 
-const latestData = await latestRes.json();
-const featuredData = await featuredRes.json();
+      const latestData = await latestRes.json();
+      const featuredData = await featuredRes.json();
 
-const latest = Array.isArray(latestData.properties) ? latestData.properties : [];
-const featured = Array.isArray(featuredData.properties) ? featuredData.properties : [];
+      const latest = Array.isArray(latestData.properties)
+        ? latestData.properties
+        : [];
 
-setProperties(latest);
-setFeaturedProperties(featured);
+      // ✅ Normalize images here
+      const featured = Array.isArray(featuredData.properties)
+        ? featuredData.properties.map((p: any) => ({
+            ...p,
+            images: Array.isArray(p.images)
+              ? p.images.map((img: any) => img.url)
+              : [],
+          }))
+        : [];
+
+      setProperties(latest);
+      setFeaturedProperties(featured);
     } catch (e) {
       console.error("Failed to fetch properties:", e);
       setProperties([]);
@@ -136,6 +153,7 @@ setFeaturedProperties(featured);
   };
   load();
 }, []);
+
   const toggleMute = () => {
     if (videoRef.current) {
       videoRef.current.muted = !videoRef.current.muted;
