@@ -186,6 +186,8 @@ useEffect(() => {
                 title="Interested in this property?"
                 description={`Contact us for more information about this property (Ref: ${property.ref})`}
                 buttonText="Send Inquiry"
+                propertyRef={property.ref} 
+                propertyTitle={property.title}
               />
             </div>
           </div>
