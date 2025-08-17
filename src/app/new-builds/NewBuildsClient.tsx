@@ -48,7 +48,8 @@ useEffect(() => {
       bedrooms: filters.bedrooms,
       bathrooms: filters.bathrooms,
       priceMin: String(filters.priceMin),
-      priceMax: String(filters.priceMax)
+      priceMax: String(filters.priceMax),
+      listingtype: "newbuild"
     });
 
     try {
