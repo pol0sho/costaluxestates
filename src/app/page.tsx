@@ -116,7 +116,7 @@ useEffect(() => {
       const realestate = "costalux";
 
 const [latestRes, featuredRes] = await Promise.all([
-  fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}&limit=10&page=1&latestOnly=true`),
+  fetch(`https://api.habigrid.com/api/public/properties?realestate=costalux&limit=10&page=1&latestOnly=true&imageLimit=3`),
   fetch(`https://api.habigrid.com/api/public/properties/featured?realestate=${realestate}`)
 ]);
 
