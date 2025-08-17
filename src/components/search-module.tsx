@@ -50,22 +50,27 @@ export function SearchModule({
     updateFilter("priceMax", range[1] === 3000000 ? Number.MAX_SAFE_INTEGER : range[1]);
   };
 
-  const handleSearch = () => {
-    const params = new URLSearchParams();
+const handleSearch = () => {
+  const params = new URLSearchParams();
 
-    if (filters.location !== "any") params.set("location", filters.location);
-    if (filters.type !== "any") params.set("type", filters.type);
-    if (filters.bedrooms !== "any") params.set("bedrooms", filters.bedrooms);
-    if (filters.bathrooms !== "any") params.set("bathrooms", filters.bathrooms);
-    if (filters.priceMin > 0) params.set("priceMin", filters.priceMin.toString());
-    if (filters.priceMax < Number.MAX_SAFE_INTEGER) params.set("priceMax", filters.priceMax.toString());
-    if (filters.listingType !== "properties") params.set("listingType", filters.listingType);
+  if (filters.location !== "any") params.set("location", filters.location);
+  if (filters.type !== "any") params.set("type", filters.type);
+  if (filters.bedrooms !== "any") params.set("bedrooms", filters.bedrooms);
+  if (filters.bathrooms !== "any") params.set("bathrooms", filters.bathrooms);
+  if (filters.priceMin > 0) params.set("priceMin", filters.priceMin.toString());
+  if (filters.priceMax < Number.MAX_SAFE_INTEGER)
+    params.set("priceMax", filters.priceMax.toString());
 
-    // Always reset to page 1 on new search
-    params.set("page", "1");
+  // Always reset page
+  params.set("page", "1");
 
+  // ✅ Route depends on listingType
+  if (filters.listingType === "new-builds") {
+    router.push(`/newbuilds?${params.toString()}`);
+  } else {
     router.push(`/properties?${params.toString()}`);
-  };
+  }
+};
 
   return (
     <Card className="shadow-lg border-none bg-background/20 backdrop-blur-sm w-full max-w-7xl mx-auto">
