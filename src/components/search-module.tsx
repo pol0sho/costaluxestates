@@ -14,17 +14,43 @@ const formatPrice = (value: number) => {
   return `€${value}`;
 };
 
-export function SearchModule({
-  showListingType = true,
-  locations = []
-}: {
-  showListingType?: boolean;
-  locations: string[];
-}) {
+export function SearchModule({ showListingType = true }: { showListingType?: boolean }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Filters state
+  // ✅ Locations state
+  const [locations, setLocations] = useState<string[]>([]);
+
+  // ✅ Fetch locations on mount
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const hostname = window.location.hostname;
+        const domainToRealestate: Record<string, string> = {
+          localhost: "costalux",
+          "www.costaluxestatesweb.onrender.com": "costalux",
+          "costaluxestatesweb.onrender.com": "costalux",
+          "www.costaluxestates.com": "costalux",
+          "costaluxestates.com": "costalux",
+        };
+        const realestate = domainToRealestate[hostname] || "costalux";
+
+        const res = await fetch(
+          `https://api.habigrid.com/api/public/locations?realestate=${realestate}`
+        );
+        if (!res.ok) throw new Error("Failed to fetch locations");
+
+        const data = await res.json();
+        setLocations(data);
+      } catch (err) {
+        console.error("Error loading locations:", err);
+      }
+    };
+
+    fetchLocations();
+  }, []);
+
+  // ✅ Filters state
   const [filters, setFilters] = useState({
     location: searchParams.get("location") || "any",
     type: searchParams.get("type") || "any",
@@ -50,27 +76,27 @@ export function SearchModule({
     updateFilter("priceMax", range[1] === 3000000 ? Number.MAX_SAFE_INTEGER : range[1]);
   };
 
-const handleSearch = () => {
-  const params = new URLSearchParams();
+  const handleSearch = () => {
+    const params = new URLSearchParams();
 
-  if (filters.location !== "any") params.set("location", filters.location);
-  if (filters.type !== "any") params.set("type", filters.type);
-  if (filters.bedrooms !== "any") params.set("bedrooms", filters.bedrooms);
-  if (filters.bathrooms !== "any") params.set("bathrooms", filters.bathrooms);
-  if (filters.priceMin > 0) params.set("priceMin", filters.priceMin.toString());
-  if (filters.priceMax < Number.MAX_SAFE_INTEGER)
-    params.set("priceMax", filters.priceMax.toString());
+    if (filters.location !== "any") params.set("location", filters.location);
+    if (filters.type !== "any") params.set("type", filters.type);
+    if (filters.bedrooms !== "any") params.set("bedrooms", filters.bedrooms);
+    if (filters.bathrooms !== "any") params.set("bathrooms", filters.bathrooms);
+    if (filters.priceMin > 0) params.set("priceMin", filters.priceMin.toString());
+    if (filters.priceMax < Number.MAX_SAFE_INTEGER)
+      params.set("priceMax", filters.priceMax.toString());
 
-  // Always reset page
-  params.set("page", "1");
+    // Always reset page
+    params.set("page", "1");
 
-  // ✅ Route depends on listingType
-  if (filters.listingType === "new-builds") {
-    router.push(`/new-builds?${params.toString()}`);
-  } else {
-    router.push(`/properties?${params.toString()}`);
-  }
-};
+    // ✅ Route depends on listingType
+    if (filters.listingType === "new-builds") {
+      router.push(`/new-builds?${params.toString()}`);
+    } else {
+      router.push(`/properties?${params.toString()}`);
+    }
+  };
 
   return (
     <Card className="shadow-lg border-none bg-background/20 backdrop-blur-sm w-full max-w-7xl mx-auto">
