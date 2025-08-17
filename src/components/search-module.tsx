@@ -67,7 +67,7 @@ useEffect(() => {
     bathrooms: searchParams.get("bathrooms") || "any",
     priceMin: Number(searchParams.get("priceMin")) || 0,
     priceMax: Number(searchParams.get("priceMax")) || 3000000,
-    listingType: searchParams.get("listingType") || "properties",
+      listingType: searchParams.get("listingType") || "new-builds",
   });
 
   const [priceRange, setPriceRange] = useState<[number, number]>([
