@@ -66,7 +66,7 @@ const handleSearch = () => {
 
   // ✅ Route depends on listingType
   if (filters.listingType === "new-builds") {
-    router.push(`/newbuilds?${params.toString()}`);
+    router.push(`/new-builds?${params.toString()}`);
   } else {
     router.push(`/properties?${params.toString()}`);
   }
