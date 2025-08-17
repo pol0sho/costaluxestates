@@ -18,37 +18,41 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // ✅ Locations state
+
   const [locations, setLocations] = useState<string[]>([]);
 
-  // ✅ Fetch locations on mount
-  useEffect(() => {
-    const fetchLocations = async () => {
-      try {
-        const hostname = window.location.hostname;
-        const domainToRealestate: Record<string, string> = {
-          localhost: "costalux",
-          "www.costaluxestatesweb.onrender.com": "costalux",
-          "costaluxestatesweb.onrender.com": "costalux",
-          "www.costaluxestates.com": "costalux",
-          "costaluxestates.com": "costalux",
-        };
-        const realestate = domainToRealestate[hostname] || "costalux";
 
-        const res = await fetch(
-          `https://api.habigrid.com/api/public/locations?realestate=${realestate}`
-        );
-        if (!res.ok) throw new Error("Failed to fetch locations");
+useEffect(() => {
+  const fetchLocations = async () => {
+    try {
+      const hostname = window.location.hostname;
+      const domainToRealestate: Record<string, string> = {
+        localhost: "costalux",
+        "www.costaluxestatesweb.onrender.com": "costalux",
+        "costaluxestatesweb.onrender.com": "costalux",
+        "www.costaluxestates.com": "costalux",
+        "costaluxestates.com": "costalux",
+      };
+      const realestate = domainToRealestate[hostname] || "costalux";
 
-        const data = await res.json();
-        setLocations(data);
-      } catch (err) {
-        console.error("Error loading locations:", err);
-      }
-    };
+      const res = await fetch(
+        `https://api.habigrid.com/api/public/locations?realestate=${realestate}`
+      );
+      if (!res.ok) throw new Error("Failed to fetch locations");
 
-    fetchLocations();
-  }, []);
+      const data = await res.json();
+      setLocations({
+        resale: data.resale || [],
+        newbuild: data.newbuild || []
+      });
+    } catch (err) {
+      console.error("Error loading locations:", err);
+    }
+  };
+
+  fetchLocations();
+}, []);
+
 
   // ✅ Filters state
   const [filters, setFilters] = useState({
@@ -108,12 +112,12 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
             <label className="block text-sm font-medium mb-1">Location</label>
             <Select value={filters.location} onValueChange={(v) => updateFilter("location", v)}>
               <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="any">Any Location</SelectItem>
-                {locations.map((loc) => (
-                  <SelectItem key={loc} value={loc}>{loc}</SelectItem>
-                ))}
-              </SelectContent>
+<SelectContent>
+  <SelectItem value="any">Any Location</SelectItem>
+  {(filters.listingType === "new-builds" ? locations.newbuild : locations.resale).map((loc) => (
+    <SelectItem key={loc} value={loc}>{loc}</SelectItem>
+  ))}
+</SelectContent>
             </Select>
           </div>
 
