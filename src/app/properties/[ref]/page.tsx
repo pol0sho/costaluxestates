@@ -167,14 +167,26 @@ useEffect(() => {
 
                 <Separator className="my-8" />
 
-                <div className="mt-6 text-foreground/90 leading-relaxed">
-                  <h2 className="font-headline text-xl font-bold mb-4">Description</h2>
-                  <p>
-                    {Array.isArray(property.description)
-                      ? property.description.find((d) => d.lang === "en")?.description || "No English description."
-                      : "No description available."}
-                  </p>
-                </div>
+<div className="mt-6 text-foreground/90 leading-relaxed">
+  <h2 className="font-headline text-xl font-bold mb-4">Description</h2>
+  <p>
+    {Array.isArray(property.description)
+      ? property.description.find((d) => d.lang === "en")?.description || "No English description."
+      : "No description available."}
+  </p>
+
+
+  {property.listingtype === "newbuild" && (
+    <div className="mt-6">
+      <a
+        href="/cost-of-buying-in-spain"
+        className="text-primary font-semibold underline hover:text-primary/80"
+      >
+        Learn more about the cost of buying in Spain →
+      </a>
+    </div>
+  )}
+</div>
               </CardContent>
             </Card>
           </div>
