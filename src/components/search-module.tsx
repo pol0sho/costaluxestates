@@ -19,7 +19,12 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
   const searchParams = useSearchParams();
 
 
-  const [locations, setLocations] = useState<string[]>([]);
+
+
+const [locations, setLocations] = useState<{ resale: string[]; newbuild: string[] }>({
+  resale: [],
+  newbuild: []
+});
 
 
 useEffect(() => {
@@ -54,7 +59,7 @@ useEffect(() => {
 }, []);
 
 
-  // ✅ Filters state
+ 
   const [filters, setFilters] = useState({
     location: searchParams.get("location") || "any",
     type: searchParams.get("type") || "any",
