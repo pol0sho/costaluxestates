@@ -1,6 +1,7 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { PropertyCard } from "@/components/property-card";
 import { SearchModule } from "@/components/search-module-pages";
 import {
@@ -15,67 +16,83 @@ import {
 const PROPERTIES_PER_PAGE = 16;
 
 export default function NewBuildsClient({ realestate }: { realestate: string }) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  // ✅ Initialize filters from URL
   const [filters, setFilters] = useState({
-    location: "any",
-    type: "any",
-    bedrooms: "any",
-    bathrooms: "any",
-    priceMin: 0,
-    priceMax: 3000000,
+    location: searchParams.get("location") || "any",
+    type: searchParams.get("type") || "any",
+    bedrooms: searchParams.get("bedrooms") || "any",
+    bathrooms: searchParams.get("bathrooms") || "any",
+    priceMin: Number(searchParams.get("priceMin")) || 0,
+    priceMax: Number(searchParams.get("priceMax")) || 3000000,
   });
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(
+    Number(searchParams.get("page")) || 1
+  );
   const [properties, setProperties] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  // Fetch from backend when page or filters change
-useEffect(() => {
-  const fetchData = async () => {
-    setLoading(true);
+  // ✅ Refetch when filters, page, or realestate changes
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
 
-    const API_BASE =
-      typeof window !== "undefined" && window.location.hostname.includes("localhost")
-        ? "http://localhost:5000"
-        : "https://api.habigrid.com";
+      const API_BASE =
+        typeof window !== "undefined" && window.location.hostname.includes("localhost")
+          ? "http://localhost:5000"
+          : "https://api.habigrid.com";
 
-    const params = new URLSearchParams({
-      realestate,
-      page: String(currentPage),
-      limit: String(PROPERTIES_PER_PAGE),
-      location: filters.location,
-      type: filters.type,
-      bedrooms: filters.bedrooms,
-      bathrooms: filters.bathrooms,
-      priceMin: String(filters.priceMin),
-      priceMax: String(filters.priceMax),
-      listingtype: "newbuild"
-    });
+      const params = new URLSearchParams({
+        realestate,
+        page: String(currentPage),
+        limit: String(PROPERTIES_PER_PAGE),
+        location: filters.location,
+        type: filters.type,
+        bedrooms: filters.bedrooms,
+        bathrooms: filters.bathrooms,
+        priceMin: String(filters.priceMin),
+        priceMax: String(filters.priceMax),
+        listingtype: "newbuild", // 👈 force only new builds
+      });
 
-    try {
-      const res = await fetch(`${API_BASE}/api/public/properties?${params.toString()}`);
-      if (!res.ok) {
-        throw new Error(`Request failed: ${res.status} ${res.statusText}`);
+      try {
+        const res = await fetch(`${API_BASE}/api/public/properties?${params.toString()}`);
+        if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+        const data = await res.json();
+        setProperties(data.properties || []);
+        setTotal(data.total || 0);
+      } catch (err) {
+        console.error("Failed to fetch properties:", err);
+        setProperties([]);
+      } finally {
+        setLoading(false);
       }
-      const data = await res.json();
-      setProperties(data.properties || []);
-      setTotal(data.total || 0);
-    } catch (err) {
-      console.error("Failed to fetch properties:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  fetchData();
-}, [filters, currentPage, realestate]);
-
+    fetchData();
+  }, [filters, currentPage, realestate]);
 
   const totalPages = Math.ceil(total / PROPERTIES_PER_PAGE);
 
+  // ✅ Sync filters → URL
   const handleFiltersChange = (newFilters: typeof filters) => {
     setFilters(newFilters);
-    setCurrentPage(1); // Reset to first page on filter change
+    setCurrentPage(1);
+
+    const params = new URLSearchParams();
+    if (newFilters.location !== "any") params.set("location", newFilters.location);
+    if (newFilters.type !== "any") params.set("type", newFilters.type);
+    if (newFilters.bedrooms !== "any") params.set("bedrooms", newFilters.bedrooms);
+    if (newFilters.bathrooms !== "any") params.set("bathrooms", newFilters.bathrooms);
+    if (newFilters.priceMin > 0) params.set("priceMin", String(newFilters.priceMin));
+    if (newFilters.priceMax < 3000000) params.set("priceMax", String(newFilters.priceMax));
+    params.set("page", "1");
+
+    router.replace(`/new-builds?${params.toString()}`);
   };
 
   return (
@@ -84,11 +101,9 @@ useEffect(() => {
         <SearchModule
           showListingType={false}
           onFiltersChange={handleFiltersChange}
-          initialFilters={filters}
-          properties={[]} // No need to pass all props
+          initialFilters={filters} // ✅ pre-fill from URL
         />
       </div>
-
 
       {!loading && properties.length > 0 ? (
         <>
@@ -134,7 +149,9 @@ useEffect(() => {
           <div className="flex items-center justify-center py-24">
             <div className="text-center">
               <h2 className="text-2xl font-bold tracking-tight">No New Builds Found</h2>
-              <p className="text-muted-foreground">Please check back later for new build projects.</p>
+              <p className="text-muted-foreground">
+                Please check back later for new build projects.
+              </p>
             </div>
           </div>
         )
