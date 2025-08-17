@@ -64,12 +64,8 @@ export function SearchModule({
   }, [properties]);
 
 const handlePriceChange = (range: [number, number]) => {
-  // If max value is slider's max (3M), treat as unlimited
-  const adjustedMax =
-    range[1] === 3000000 ? Number.MAX_SAFE_INTEGER : range[1];
-
   setPriceRange(range);
-  const updated = { ...filters, priceMin: range[0], priceMax: adjustedMax };
+  const updated = { ...filters, priceMin: range[0], priceMax: range[1] }; // 👈 keep max as 3,000,000
   setFilters(updated);
   onFiltersChange?.(updated);
 };
@@ -196,22 +192,28 @@ const handlePriceChange = (range: [number, number]) => {
             </Select>
           </div>
 
-          {/* Price Range */}
-          <div className="sm:col-span-2 lg:col-span-2 space-y-2 pb-1">
-            <label className="block text-sm font-medium text-foreground mb-1 font-body">Price Range</label>
-            <div className="flex justify-between text-xs text-foreground font-body">
-              <span>{formatPrice(priceRange[0])}</span>
-              <span>{priceRange[1] === 3000000 ? `${formatPrice(priceRange[1])}+` : formatPrice(priceRange[1])}</span>
-            </div>
-            <Slider
-              value={priceRange}
-              onValueChange={handlePriceChange}
-              min={0}
-              max={3000000}
-              step={50000}
-              className="[&>span>span]:bg-accent [&>span>span]:border-accent-foreground"
-            />
-          </div>
+{/* Price Range */}
+<div className="sm:col-span-2 lg:col-span-2 space-y-2 pb-1">
+  <label className="block text-sm font-medium text-foreground mb-1 font-body">
+    Price Range
+  </label>
+  <div className="flex justify-between text-xs text-foreground font-body">
+    <span>{formatPrice(priceRange[0])}</span>
+    <span>
+      {priceRange[1] === 3000000
+        ? `${formatPrice(priceRange[1])}+`
+        : formatPrice(priceRange[1])}
+    </span>
+  </div>
+  <Slider
+    value={priceRange}
+    onValueChange={handlePriceChange}
+    min={0}
+    max={3000000}
+    step={50000}
+    className="[&>span>span]:bg-accent [&>span>span]:border-accent-foreground"
+  />
+</div>
         </div>
       </CardContent>
     </Card>
