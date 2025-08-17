@@ -145,9 +145,6 @@ useEffect(() => {
     }
   };
 
-  const featuredProperties = properties
-  .filter((p: any) => p.featured === true) 
-  .slice(0, 3); 
 
   return (
     <motion.div
@@ -222,7 +219,7 @@ useEffect(() => {
       </h2>
     </div>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {featuredProperties.map((property, i) => (
+      {featuredProperties.slice(0, 3).map((property, i) => (
         <AnimatedSection
           key={property.id}
           className="transition-all duration-500"
