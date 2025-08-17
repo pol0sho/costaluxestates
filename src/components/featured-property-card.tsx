@@ -5,12 +5,19 @@ import Link from 'next/link';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { BedDouble, Bath, LandPlot, Home } from 'lucide-react';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from './ui/carousel';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from './ui/carousel';
 import React from 'react';
-import { formatPrice } from "@/utils/formatPrice";
+import { formatPrice } from '@/utils/formatPrice';
 
 type Property = {
   id: number;
+  ref: string;
   title: string;
   list_price: string;
   priceType?: 'from' | 'exact';
@@ -20,7 +27,7 @@ type Property = {
   bathrooms: number;
   built_size: number;
   plot_size: number;
-  images: { url: string; order: number }[];
+  images: { url: string; order: number }[]; // ✅ keep objects
   aiHints: string[];
 };
 
@@ -36,30 +43,39 @@ export function FeaturedPropertyCard({ property }: PropertyCardProps) {
 
   return (
     <Card className="overflow-hidden h-full flex flex-col group transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border-border/60">
+      {/* ---------- Header with carousel ---------- */}
       <CardHeader className="p-0 relative">
         <Carousel
           className="w-full"
-          onMouseEnter={(e) => e.currentTarget.querySelector('.carousel-nav')?.classList.remove('opacity-0')}
-          onMouseLeave={(e) => e.currentTarget.querySelector('.carousel-nav')?.classList.add('opacity-0')}
+          onMouseEnter={(e) =>
+            e.currentTarget.querySelector('.carousel-nav')?.classList.remove('opacity-0')
+          }
+          onMouseLeave={(e) =>
+            e.currentTarget.querySelector('.carousel-nav')?.classList.add('opacity-0')
+          }
           opts={{ loop: true }}
         >
           <CarouselContent>
-            {property.images.map((src, index) => (
-              <CarouselItem key={index}>
-                <Link href={`/properties/${property.ref}`}>
-                  <Image
-                    src={src?.url || "/no-image.png"}
-                    alt={property.title}
-                    width={400}
-                    height={250}
-                    className="w-full h-56 object-cover transition-transform duration-300 group-hover:scale-105"
-                    data-ai-hint={property.aiHints?.join(' ') || ''}
-                    priority={index === 0}
-                  />
-                </Link>
-              </CarouselItem>
-            ))}
+            {property.images
+              .sort((a, b) => a.order - b.order) // ✅ ensure order is respected
+              .map((img, index) => (
+                <CarouselItem key={index}>
+                  <Link href={`/properties/${property.ref}`}>
+                    <Image
+                      src={img?.url || '/no-image.png'}
+                      alt={property.title}
+                      width={400}
+                      height={250}
+                      className="w-full h-56 object-cover transition-transform duration-300 group-hover:scale-105"
+                      data-ai-hint={property.aiHints?.join(' ') || ''}
+                      priority={index === 0}
+                    />
+                  </Link>
+                </CarouselItem>
+              ))}
           </CarouselContent>
+
+          {/* ---------- Carousel nav arrows ---------- */}
           <div
             className="carousel-nav absolute inset-x-0 bottom-1/2 flex justify-between px-2 opacity-0 transition-opacity duration-300"
             onClick={stopPropagation}
@@ -68,22 +84,34 @@ export function FeaturedPropertyCard({ property }: PropertyCardProps) {
             <CarouselNext className="static -translate-x-0 -translate-y-0 bg-background/50 hover:bg-background/80" />
           </div>
         </Carousel>
+
+        {/* ---------- Price Badge ---------- */}
         <Link href={`/properties/${property.ref}`}>
-          <Badge variant="secondary" className="absolute top-3 right-3 font-bold text-lg bg-background/80 backdrop-blur-sm cursor-pointer">
+          <Badge
+            variant="secondary"
+            className="absolute top-3 right-3 font-bold text-lg bg-background/80 backdrop-blur-sm cursor-pointer"
+          >
             {property.priceType === 'from' && 'From '}
-{formatPrice(property.list_price)}
+            {formatPrice(property.list_price)}
           </Badge>
         </Link>
       </CardHeader>
 
+      {/* ---------- Content ---------- */}
       <Link href={`/properties/${property.ref}`} className="flex flex-col flex-grow">
         <CardContent className="p-4 flex-grow">
-          <h3 className="font-headline text-xl font-semibold mb-1 truncate">{property.title}</h3>
+          <h3 className="font-headline text-xl font-semibold mb-1 truncate">
+            {property.title}
+          </h3>
           <div className="flex items-center text-muted-foreground text-sm mb-3">
             <Home className="h-4 w-4 mr-1 text-accent" />
-            <span>{property.town}, {property.province}</span>
+            <span>
+              {property.town}, {property.province}
+            </span>
           </div>
         </CardContent>
+
+        {/* ---------- Footer ---------- */}
         <CardFooter className="p-4 bg-secondary/50 flex justify-between text-sm flex-wrap gap-y-2">
           <div className="flex items-center space-x-4">
             <div className="flex items-center" title="Bedrooms">

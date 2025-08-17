@@ -21,7 +21,7 @@ type Property = {
   built_size: number;
   plot_size: number;
   aiHints?: string[];
-  images: string[];
+  images: { url: string; order: number }[];
 };
 
 
@@ -115,34 +115,19 @@ useEffect(() => {
     try {
       const realestate = "costalux";
 
-      const [latestRes, featuredRes] = await Promise.all([
-        fetch(
-          `https://api.habigrid.com/api/public/properties?realestate=${realestate}&limit=10&page=1&latestOnly=true`
-        ),
-        fetch(
-          `https://api.habigrid.com/api/public/properties/featured?realestate=${realestate}`
-        ),
-      ]);
+const [latestRes, featuredRes] = await Promise.all([
+  fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}&limit=10&page=1&latestOnly=true`),
+  fetch(`https://api.habigrid.com/api/public/properties/featured?realestate=${realestate}`)
+]);
 
-      const latestData = await latestRes.json();
-      const featuredData = await featuredRes.json();
+const latestData = await latestRes.json();
+const featuredData = await featuredRes.json();
 
-      const latest = Array.isArray(latestData.properties)
-        ? latestData.properties
-        : [];
+const latest = Array.isArray(latestData.properties) ? latestData.properties : [];
+const featured = Array.isArray(featuredData.properties) ? featuredData.properties : [];
 
-      // ✅ Normalize images here
-      const featured = Array.isArray(featuredData.properties)
-        ? featuredData.properties.map((p: any) => ({
-            ...p,
-            images: Array.isArray(p.images)
-              ? p.images.map((img: any) => img.url)
-              : [],
-          }))
-        : [];
-
-      setProperties(latest);
-      setFeaturedProperties(featured);
+setProperties(latest);
+setFeaturedProperties(featured);
     } catch (e) {
       console.error("Failed to fetch properties:", e);
       setProperties([]);
@@ -153,7 +138,6 @@ useEffect(() => {
   };
   load();
 }, []);
-
   const toggleMute = () => {
     if (videoRef.current) {
       videoRef.current.muted = !videoRef.current.muted;
