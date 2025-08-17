@@ -103,6 +103,7 @@ const Scroller = ({ children }: { children: React.ReactNode }) => {
 
 export default function Home() {
   const [properties, setProperties] = useState<Property[]>([]);
+  const [featuredProperties, setFeaturedProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
