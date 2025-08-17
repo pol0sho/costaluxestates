@@ -112,20 +112,6 @@ useEffect(() => {
       <CardContent className="p-4 sm:p-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
 
-          {/* Location */}
-          <div className="lg:col-span-2">
-            <label className="block text-sm font-medium mb-1">Location</label>
-            <Select value={filters.location} onValueChange={(v) => updateFilter("location", v)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-<SelectContent>
-  <SelectItem value="any">Any Location</SelectItem>
-  {(filters.listingType === "new-builds" ? locations.newbuild : locations.resale).map((loc) => (
-    <SelectItem key={loc} value={loc}>{loc}</SelectItem>
-  ))}
-</SelectContent>
-            </Select>
-          </div>
-
           {/* Listing Type */}
           {showListingType && (
             <div className="lg:col-span-2">
@@ -139,6 +125,20 @@ useEffect(() => {
               </Select>
             </div>
           )}
+
+                    {/* Location */}
+          <div className="lg:col-span-2">
+            <label className="block text-sm font-medium mb-1">Location</label>
+            <Select value={filters.location} onValueChange={(v) => updateFilter("location", v)}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+<SelectContent>
+  <SelectItem value="any">Any Location</SelectItem>
+  {(filters.listingType === "new-builds" ? locations.newbuild : locations.resale).map((loc) => (
+    <SelectItem key={loc} value={loc}>{loc}</SelectItem>
+  ))}
+</SelectContent>
+            </Select>
+          </div>
 
           {/* Property Type */}
           <div className="lg:col-span-2">
