@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import NewBuildsClient from "./NewBuildsClient";
 import { motion } from "framer-motion";
+import { Loader2 } from "lucide-react"; // ✅ spinner
 
 const PAGE_SIZE = 16;
 
@@ -34,6 +35,7 @@ export default function NewBuildsPage() {
       setTotal(data.total || 0);
     } catch (err) {
       console.error("Failed to load new builds:", err);
+      setProperties([]);
     } finally {
       setLoading(false);
     }
@@ -73,8 +75,10 @@ export default function NewBuildsPage() {
       </section>
 
       {loading ? (
-        <p className="text-center py-8">Loading...</p>
-      ) : (
+        <div className="flex justify-center items-center py-20">
+          <Loader2 className="h-10 w-10 animate-spin text-primary" />
+        </div>
+      ) : properties.length > 0 ? (
         <NewBuildsClient
           properties={properties}
           total={total}
@@ -83,6 +87,15 @@ export default function NewBuildsPage() {
           onPageChange={setCurrentPage}
           realestate={realestate}
         />
+      ) : (
+        <div className="flex items-center justify-center py-24">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold tracking-tight">No New Build Properties Found</h2>
+            <p className="text-muted-foreground">
+              Please check back later for new build projects.
+            </p>
+          </div>
+        </div>
       )}
     </motion.div>
   );

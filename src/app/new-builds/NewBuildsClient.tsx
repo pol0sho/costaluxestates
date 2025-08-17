@@ -105,13 +105,13 @@ export default function NewBuildsClient({ realestate }: { realestate: string }) 
         />
       </div>
 
-      {!loading && properties.length > 0 ? (
-        <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {properties.map((property) => (
-              <PropertyCard key={`${property.source}-${property.id}`} property={property} />
-            ))}
-          </div>
+{!loading && properties.length > 0 ? (
+  <>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      {properties.map((property) => (
+        <PropertyCard key={`${property.source}-${property.id}`} property={property} />
+      ))}
+    </div>
 
           {totalPages > 1 && (
             <div className="mt-16">
@@ -146,16 +146,16 @@ export default function NewBuildsClient({ realestate }: { realestate: string }) 
         </>
       ) : (
         !loading && (
-          <div className="flex items-center justify-center py-24">
-            <div className="text-center">
-              <h2 className="text-2xl font-bold tracking-tight">No New Builds Found</h2>
-              <p className="text-muted-foreground">
-                Please check back later for new build projects.
-              </p>
-            </div>
-          </div>
-        )
-      )}
+    <div className="flex items-center justify-center py-24">
+      <div className="text-center">
+        <h2 className="text-2xl font-bold tracking-tight">No New Build Properties Found</h2>
+        <p className="text-muted-foreground">
+          Please check back later for new build projects.
+        </p>
+      </div>
+    </div>
+  )
+)}
     </div>
   );
 }

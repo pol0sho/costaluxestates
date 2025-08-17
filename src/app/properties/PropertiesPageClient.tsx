@@ -14,6 +14,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Loader2 } from "lucide-react"; // ✅ spinner
 
 const PROPERTIES_PER_PAGE = 20;
 
@@ -35,7 +36,7 @@ export default function PropertiesPageClient() {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  // 1️⃣ Initialize filters from URL on load or when URL changes
+  // 1️⃣ Initialize filters from URL
   useEffect(() => {
     const initialFilters = {
       location: searchParams.get("location") || "any",
@@ -48,54 +49,51 @@ export default function PropertiesPageClient() {
     setFilters(initialFilters);
   }, [searchParams]);
 
-// 2️⃣ Fetch properties
-useEffect(() => {
-  const fetchProperties = async () => {
-    try {
-      const hostname = window.location.hostname;
-      const domainToRealestate: Record<string, string> = {
-        localhost: "costalux",
-        "www.costaluxestatesweb.onrender.com": "costalux",
-        "costaluxestatesweb.onrender.com": "costalux",
-        "www.costaluxestates.com": "costalux",
-        "costaluxestates.com": "costalux",
-      };
+  // 2️⃣ Fetch properties
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const hostname = window.location.hostname;
+        const domainToRealestate: Record<string, string> = {
+          localhost: "costalux",
+          "www.costaluxestatesweb.onrender.com": "costalux",
+          "costaluxestatesweb.onrender.com": "costalux",
+          "www.costaluxestates.com": "costalux",
+          "costaluxestates.com": "costalux",
+        };
 
-      const realestate = domainToRealestate[hostname] || "costalux";
-      const res = await fetch(
-        `https://api.habigrid.com/api/public/properties?realestate=${realestate}`
-      );
+        const realestate = domainToRealestate[hostname] || "costalux";
+        const res = await fetch(
+          `https://api.habigrid.com/api/public/properties?realestate=${realestate}`
+        );
 
-      if (!res.ok) throw new Error(`API error ${res.status}`);
+        if (!res.ok) throw new Error(`API error ${res.status}`);
 
-      const data = await res.json();
+        const data = await res.json();
 
-      // Ensure we always get an array
-      let rawProperties = [];
-      if (Array.isArray(data)) {
-        rawProperties = data;
-      } else if (Array.isArray(data.properties)) {
-        rawProperties = data.properties;
-      } else {
-        console.warn("Unexpected API format", data);
-        rawProperties = [];
+        let rawProperties = [];
+        if (Array.isArray(data)) {
+          rawProperties = data;
+        } else if (Array.isArray(data.properties)) {
+          rawProperties = data.properties;
+        } else {
+          console.warn("Unexpected API format", data);
+          rawProperties = [];
+        }
+
+        setProperties(
+          rawProperties.filter((p) => p.listingtype?.toLowerCase() === "resale")
+        );
+      } catch (err) {
+        console.error("Failed to fetch properties:", err);
+        setProperties([]);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      setProperties(
-        rawProperties.filter(
-          (p) => p.listingtype?.toLowerCase() === "resale"
-        )
-      );
-    } catch (err) {
-      console.error("Failed to fetch properties:", err);
-      setProperties([]); // Always reset to array
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchProperties();
-}, []);
+    fetchProperties();
+  }, []);
 
   // 3️⃣ Filter in memory
   const filtered = properties
@@ -122,12 +120,9 @@ useEffect(() => {
     .filter(
       (p) =>
         Number(p.list_price) >= filters.priceMin &&
-        +   (
-     filters.priceMax < 3000000
-       ? Number(p.list_price) <= filters.priceMax
-       : true // include all if slider is at max
-  )
-
+        (filters.priceMax < 3000000
+          ? Number(p.list_price) <= filters.priceMax
+          : true)
     );
 
   const totalProperties = filtered.length;
@@ -188,7 +183,7 @@ useEffect(() => {
     return pageNumbers;
   };
 
-  // 4️⃣ Live filter changes + URL sync
+  // 4️⃣ Handle filter changes + URL sync
   const handleFiltersChange = (newFilters: typeof filters) => {
     setFilters(newFilters);
     setCurrentPage(1);
@@ -201,7 +196,7 @@ useEffect(() => {
     if (newFilters.priceMin !== 0) params.set("priceMin", String(newFilters.priceMin));
     if (newFilters.priceMax !== 3000000) params.set("priceMax", String(newFilters.priceMax));
 
-      router.replace(`${window.location.pathname}?${params.toString()}`);
+    router.replace(`${window.location.pathname}?${params.toString()}`);
   };
 
   return (
@@ -216,12 +211,15 @@ useEffect(() => {
           <SearchModule
             showListingType={false}
             onFiltersChange={handleFiltersChange}
-            initialFilters={filters} // ✅ pre-fill from URL
+            initialFilters={filters}
           />
         </div>
 
-
-        {!loading && (
+        {loading ? (
+          <div className="flex items-center justify-center py-32">
+            <Loader2 className="h-10 w-10 animate-spin text-primary" />
+          </div>
+        ) : paginatedProperties.length > 0 ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {paginatedProperties.map((property) => (
@@ -253,6 +251,17 @@ useEffect(() => {
               </div>
             )}
           </>
+        ) : (
+          <div className="flex items-center justify-center py-24">
+            <div className="text-center">
+              <h2 className="text-2xl font-bold tracking-tight">
+                No Properties Found
+              </h2>
+              <p className="text-muted-foreground">
+                Try adjusting your filters or check back later.
+              </p>
+            </div>
+          </div>
         )}
       </div>
     </motion.div>
