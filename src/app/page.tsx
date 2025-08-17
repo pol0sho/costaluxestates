@@ -113,21 +113,19 @@ useEffect(() => {
     try {
       const realestate = "costalux";
 
-      const [latestRes, featuredRes] = await Promise.all([
-        fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}&limit=10&page=1&latestOnly=true`),
-        fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}&limit=100&page=1`)
-      ]);
+const [latestRes, featuredRes] = await Promise.all([
+  fetch(`https://api.habigrid.com/api/public/properties?realestate=${realestate}&limit=10&page=1&latestOnly=true`),
+  fetch(`https://api.habigrid.com/api/public/properties/featured?realestate=${realestate}`)
+]);
 
-      const latestData = await latestRes.json();
-      const featuredData = await featuredRes.json();
+const latestData = await latestRes.json();
+const featuredData = await featuredRes.json();
 
-      const latest = Array.isArray(latestData.properties) ? latestData.properties : [];
-      const featured = Array.isArray(featuredData.properties)
-        ? featuredData.properties.filter((p: any) => p.featured === true)
-        : [];
+const latest = Array.isArray(latestData.properties) ? latestData.properties : [];
+const featured = Array.isArray(featuredData.properties) ? featuredData.properties : [];
 
-      setProperties(latest);
-      setFeaturedProperties(featured); // ✅
+setProperties(latest);
+setFeaturedProperties(featured);
     } catch (e) {
       console.error("Failed to fetch properties:", e);
       setProperties([]);
