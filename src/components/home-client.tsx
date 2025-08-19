@@ -113,7 +113,7 @@ export default function HomeClient({ dict, locale }: { dict: any; locale: string
 
         <div className="relative z-10 container mx-auto px-4 mt-8 w-full">
           <Suspense fallback={<div>Loading search...</div>}>
-            <SearchModule showListingType={true} />
+            <SearchModule showListingType={true} dict={dict} />
           </Suspense>
         </div>
       </section>
