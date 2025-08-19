@@ -1,9 +1,9 @@
 const dictionaries: Record<string, any> = {
-  en: () => import("../public/dictionaries/en.json"),
-  es: () => import("../public/dictionaries/es.json"),
-  fr: () => import("../public/dictionaries/fr.json"),
-  nl: () => import("../public/dictionaries/nl.json"),
-  de: () => import("../public/dictionaries/de.json"),
+  en: () => import("../data/dictionaries/en.json"),
+  es: () => import("../data/dictionaries/es.json"),
+  fr: () => import("../data/dictionaries/fr.json"),
+  nl: () => import("../data/dictionaries/nl.json"),
+  de: () => import("../data/dictionaries/de.json"),
 };
 
 export async function getDictionary(locale: string) {
