@@ -208,11 +208,12 @@ export default function PropertiesPageClient({ dict }: { dict: any }) {
     >
       <div className="container mx-auto px-4 md:px-6 py-12">
         <div className="mb-8 flex justify-center">
-          <SearchModule
-            showListingType={false}
-            onFiltersChange={handleFiltersChange}
-            initialFilters={filters}
-          />
+<SearchModule
+  showListingType={false}
+  onFiltersChange={handleFiltersChange}
+  initialFilters={filters}
+  dict={dict}   // ✅ add this
+/>
         </div>
 
         {loading ? (
