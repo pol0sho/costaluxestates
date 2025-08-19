@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect } from 'react';
 
 export default function LanguageRedirect() {
@@ -10,10 +9,10 @@ export default function LanguageRedirect() {
         const data = await res.json();
 
         if (data.language) {
-          const lang = data.language.toLowerCase();
-
-          if (!window.location.pathname.startsWith(`/${lang}`)) {
-            window.location.href = `/${lang}${window.location.pathname}`;
+          const locale = data.language.toLowerCase();
+          // only redirect if not already at that locale
+          if (!window.location.pathname.startsWith(`/${locale}`)) {
+            window.location.href = `/${locale}${window.location.pathname}`;
           }
         }
       } catch (err) {

@@ -4,10 +4,11 @@ export const dynamic = "force-dynamic";
 import pkg from "pg";
 const { Client } = pkg;
 
-export async function POST(request) {
+export async function POST(request: Request) {
   try {
     const { language } = await request.json();
 
+    // expect `language` like "en", "es", "nl", "fr", "de"
     if (!language) {
       return new Response(
         JSON.stringify({ error: "Missing language" }),
@@ -21,7 +22,7 @@ export async function POST(request) {
       "unknown";
 
     const client = new Client({
-      connectionString: process.env.DATABASE_URL, // ✅ use env var
+      connectionString: process.env.DATABASE_URL,
       ssl: { rejectUnauthorized: false },
     });
 
