@@ -1,8 +1,8 @@
-
 'use client';
 export const dynamic = "force-dynamic";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";  // Import the useRouter hook
 import { notFound } from "next/navigation";
 import { ImageSlideshow } from "@/components/image-slideshow";
 import { Badge } from "@/components/ui/badge";
@@ -47,6 +47,7 @@ const FeatureItem = ({ icon: Icon, label, value }: { icon: React.ElementType; la
 export default function PropertyDetailPage({ params, dict }: { params: { ref: string }, dict: any }) {
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
+  const { locale } = useRouter(); // Extract current locale from URL
 
   useEffect(() => {
     const fetchProperty = async () => {
@@ -91,6 +92,9 @@ export default function PropertyDetailPage({ params, dict }: { params: { ref: st
     return <div className="text-center py-12 text-red-500">{dict.property.notFound}</div>;
   }
 
+  // Determine the dynamic language-specific URL
+  const languageLink = `/${locale === "es" ? "es" : "en"}/cost-of-buying-in-spain`; // Example for English and Spanish URLs
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -105,11 +109,9 @@ export default function PropertyDetailPage({ params, dict }: { params: { ref: st
           <div className="mb-8 aspect-video">
             <iframe
               className="w-full h-full rounded-lg shadow-lg"
-              src={
-                property.promotion_video.includes("youtube.com") || property.promotion_video.includes("youtu.be")
-                  ? property.promotion_video.replace("watch?v=", "embed/")
-                  : property.promotion_video
-              }
+              src={property.promotion_video.includes("youtube.com") || property.promotion_video.includes("youtu.be")
+                ? property.promotion_video.replace("watch?v=", "embed/")
+                : property.promotion_video}
               title={dict.property.promotionVideo}
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -178,7 +180,7 @@ export default function PropertyDetailPage({ params, dict }: { params: { ref: st
 
                   <div className="mt-6">
                     <a
-                      href="/cost-of-buying-in-spain"
+                      href={languageLink}  {/* Dynamically set the language URL */}
                       className="text-primary font-semibold underline hover:text-primary/80"
                     >
                       {dict.property.learnMore}
@@ -192,11 +194,11 @@ export default function PropertyDetailPage({ params, dict }: { params: { ref: st
           {/* Contact */}
           <div className="lg:col-span-1">
             <div className="sticky top-24">
-<ContactForm 
-  dict={dict}
-  propertyRef={property.ref}
-  propertyTitle={property.title}
-/>
+              <ContactForm 
+                dict={dict}
+                propertyRef={property.ref}
+                propertyTitle={property.title}
+              />
             </div>
           </div>
         </div>
