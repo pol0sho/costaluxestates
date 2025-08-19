@@ -166,6 +166,11 @@
   "anyLocation": "Any Location",
   "button": "Search"
 },
+
+"common": {
+  "yes": "Yes",
+  "no": "No"
+},
   "terms": {
     "title": "Términos y Condiciones",
     "lastUpdated": "Última Actualización",

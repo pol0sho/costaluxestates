@@ -166,6 +166,10 @@
   "anyLocation": "Any Location",
   "button": "Search"
 },
+"common": {
+  "yes": "Yes",
+  "no": "No"
+},
 
   "terms": {
     "title": "Allgemeine Geschäftsbedingungen",

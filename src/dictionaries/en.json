@@ -289,6 +289,10 @@
     }
   }
 },
+"common": {
+  "yes": "Yes",
+  "no": "No"
+},
   "page": {
     "home": {
       "heroTitle": "Welcome to CostaLux Estates",

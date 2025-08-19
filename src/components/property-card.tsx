@@ -1,9 +1,12 @@
+"use client";
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { BedDouble, Bath, LandPlot, Home } from 'lucide-react';
 import { formatPrice } from "@/utils/formatPrice";
+import { useParams } from "next/navigation"; // 👈 add this
 
 type Property = {
   id: number;
@@ -23,12 +26,14 @@ type Property = {
 
 type PropertyCardProps = {
   property: Property;
-    dict: any;
+  dict: any;
 };
 
 export function PropertyCard({ property, dict }: PropertyCardProps) {
+  const { locale } = useParams(); // 👈 current locale from the route
+
   return (
-    <Link href={`/properties/${property.ref}`}>
+    <Link href={`/${locale}/properties/${property.ref}`}>
       <Card className="overflow-hidden h-full flex flex-col group transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border-border/60">
         <CardHeader className="p-0 relative">
           <Image

@@ -139,6 +139,10 @@
     "paymentFeesBody": "Afhankelijk van de bank kan dit variëren van 0% tot 1%.",
     "closingNote": "De bovengenoemde kosten zijn gemiddelden en kunnen variëren per regio."
   },
+  "common": {
+  "yes": "Yes",
+  "no": "No"
+}, 
   "search": {
   "listingType": {
     "label": "Listing Type",
