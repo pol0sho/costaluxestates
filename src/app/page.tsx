@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState, useRef, Suspense } from "react";
 import { FeaturedPropertyCard } from "@/components/featured-property-card";
 import { PropertyCard } from "@/components/property-card";
@@ -8,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, VolumeX, Volume2 } from "lucide-react";
 import { motion } from "framer-motion";
+import { getDictionary } from "@/lib/dictionaries"; // ✅ import
 
 type Property = {
   id: number;
@@ -23,14 +22,14 @@ type Property = {
   images: { url: string; order: number }[];
 };
 
-export default function Home({
-  params,
-  dict,
-}: {
-  params: { locale: string };
-  dict: any;
-}) {
-  const locale = params.locale;
+// ✅ Async server component
+export default async function Home({ params }: { params: { locale: string } }) {
+  const dict = await getDictionary(params.locale); // ✅ load dict here
+  return <HomeClient locale={params.locale} dict={dict} />;
+}
+
+// ✅ Client component
+function HomeClient({ dict, locale }: { dict: any; locale: string }) {
   const [properties, setProperties] = useState<Property[]>([]);
   const [featuredProperties, setFeaturedProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,7 +40,6 @@ export default function Home({
     const load = async () => {
       try {
         const realestate = "costalux";
-
         const [latestRes, featuredRes] = await Promise.all([
           fetch(
             `https://api.habigrid.com/api/public/properties?realestate=costalux&limit=10&page=1&latestOnly=true&imageLimit=3`
@@ -50,16 +48,12 @@ export default function Home({
             `https://api.habigrid.com/api/public/properties/featured?realestate=${realestate}`
           ),
         ]);
-
         const latestData = await latestRes.json();
         const featuredData = await featuredRes.json();
-
         setProperties(latestData.properties || []);
         setFeaturedProperties(featuredData.properties || []);
       } catch (e) {
         console.error("Failed to fetch properties:", e);
-        setProperties([]);
-        setFeaturedProperties([]);
       } finally {
         setLoading(false);
       }
@@ -81,6 +75,7 @@ export default function Home({
       transition={{ duration: 0.5 }}
       className="font-body overflow-x-hidden"
     >
+
       {/* Hero Section */}
       <section className="relative min-h-[60vh] md:min-h-[500px] flex flex-col items-center justify-center text-center overflow-hidden py-16 sm:py-24">
         <div className="absolute top-0 left-0 w-full h-full z-0">
