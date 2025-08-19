@@ -34,7 +34,7 @@ export default async function Home({
           </p>
         </div>
         <div className="relative z-10 container mx-auto px-4 mt-8 w-full">
-          <SearchModule showListingType={true} />
+          <SearchModule showListingType={true} dict={dict} />
         </div>
       </section>
 
