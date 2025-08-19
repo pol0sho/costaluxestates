@@ -43,7 +43,7 @@ export default async function Home({
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-12">
             <h2 className="font-headline text-2xl md:text-2xl font-bold">
-              {dict.page.home.featured.title}
+              {dict.page.home.featuredTitle}
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -61,13 +61,13 @@ export default async function Home({
             <div className="absolute inset-0 bg-black/40" />
             <div className="relative z-10 md:w-1/2 text-white">
               <h2 className="font-headline text-2xl md:text-3xl font-bold mb-4">
-                {dict.page.home.newbuilds.title}
+                {dict.page.home.newBuildsTitle}
               </h2>
-              <p className="mb-4">{dict.page.home.newbuilds.subtitle1}</p>
-              <p className="mb-6">{dict.page.home.newbuilds.subtitle2}</p>
+              <p className="mb-4">{dict.page.home.newBuildsSubtitle}</p>
+              <p className="mb-6">{dict.page.home.newBuildsSubtitle2}</p>
               <Link href={`/${params.locale}/new-builds`}>
                 <Button size="lg" className="bg-accent hover:bg-accent/90">
-                  {dict.page.home.newbuilds.cta}
+                  {dict.page.home.newBuildsCta}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
