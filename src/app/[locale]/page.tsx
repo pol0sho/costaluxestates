@@ -27,10 +27,10 @@ export default async function Home({
       <section className="relative min-h-[60vh] md:min-h-[500px] flex flex-col items-center justify-center text-center py-16 sm:py-24">
         <div className="relative z-10 container mx-auto px-4 text-white">
           <h1 className="font-body text-2xl md:text-3xl font-bold mb-4">
-            {dict.page.home.hero.title}
+            {dict.page.home.heroTitle}
           </h1>
           <p className="text-lg md:text-xl max-w-5xl mx-auto mb-8">
-            {dict.page.home.hero.subtitle}
+            {dict.page.home.heroSubtitle}
           </p>
         </div>
         <div className="relative z-10 container mx-auto px-4 mt-8 w-full">
