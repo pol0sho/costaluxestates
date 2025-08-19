@@ -1,9 +1,19 @@
-import "server-only";
-
 export async function getDictionary(locale: string) {
   try {
-    return (await import(`../dictionaries/${locale}.json`)).default;
-  } catch (e) {
-    return (await import(`../dictionaries/en.json`)).default;
+    switch (locale) {
+      case "es":
+        return (await import("../dictionaries/es.json")).default;
+      case "fr":
+        return (await import("../dictionaries/fr.json")).default;
+      case "de":
+        return (await import("../dictionaries/de.json")).default;
+      case "nl":
+        return (await import("../dictionaries/nl.json")).default;
+      default:
+        return (await import("../dictionaries/en.json")).default;
+    }
+  } catch (err) {
+    console.error("Error loading dictionary:", err);
+    return (await import("../dictionaries/en.json")).default;
   }
 }
