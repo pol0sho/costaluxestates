@@ -1,13 +1,16 @@
-const dictionaries: Record<string, any> = {
-  en: () => import("../src/dictionaries/en.json").then((m) => m.default),
-  es: () => import("../src/dictionaries/es.json").then((m) => m.default),
-  fr: () => import("../src/dictionaries/fr.json").then((m) => m.default),
-  nl: () => import("../src/dictionaries/nl.json").then((m) => m.default),
-  de: () => import("../src/dictionaries/de.json").then((m) => m.default),
-};
-
 export async function getDictionary(locale: string) {
-  // Fallback to English if dictionary missing
-  const loader = dictionaries[locale] ?? dictionaries["en"];
-  return loader();
+  const supportedLocales = ['en', 'es', 'fr', 'nl', 'de'];
+  const localeCode = supportedLocales.includes(locale) ? locale : 'en'; // default to 'en' if not found
+
+  try {
+    // Fetch the dictionary JSON from the public/dictionaries folder
+    const response = await fetch(`/dictionaries/${localeCode}.json`);
+    if (!response.ok) {
+      throw new Error(`Failed to load dictionary for ${localeCode}`);
+    }
+    return response.json();
+  } catch (error) {
+    console.error(error);
+    return {}; // Return an empty dictionary on error or fallback
+  }
 }
