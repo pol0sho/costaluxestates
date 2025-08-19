@@ -1,4 +1,3 @@
-// app/[locale]/page.tsx
 "use client";
 
 import { useEffect, useState, useRef, Suspense } from "react";
@@ -24,7 +23,6 @@ type Property = {
   images: { url: string; order: number }[];
 };
 
-// ✅ Props now include dict + locale
 export default function Home({
   params,
   dict,
@@ -104,7 +102,7 @@ export default function Home({
           size="icon"
           onClick={toggleMute}
           className="absolute z-10 bottom-4 right-4 text-white hover:bg-white/20 hover:text-white"
-          aria-label={isMuted ? dict.page.home.unmute : dict.page.home.mute}
+          aria-label={isMuted ? "Unmute" : "Mute"} // ✅ safe fallback
         >
           {isMuted ? (
             <VolumeX className="h-6 w-6" />
@@ -121,10 +119,10 @@ export default function Home({
             className="max-w-6xl mx-auto"
           >
             <h1 className="font-body text-2xl md:text-3xl font-bold mb-4">
-              {dict.page.home.hero.title}
+              {dict.page.home.heroTitle}
             </h1>
             <p className="text-lg md:text-xl max-w-5xl mx-auto mb-8">
-              {dict.page.home.hero.subtitle}
+              {dict.page.home.heroSubtitle}
             </p>
           </motion.div>
         </div>
@@ -136,46 +134,43 @@ export default function Home({
         </div>
       </section>
 
-{/* Featured */}
-<section className="pt-12 md:pt-16 bg-secondary">
-  <div className="container mx-auto px-4 md:px-6">
-    <div className="text-center mb-12">
-      <h2 className="font-headline text-2xl md:text-2xl font-bold">
-        {dict.page.home.featured.title}
-      </h2>
-    </div>
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {featuredProperties.slice(0, 3).map((property) => (
-        <FeaturedPropertyCard 
-          key={property.id} 
-          property={property} 
-          dict={dict}   // ✅ pass translations
-        />
-      ))}
-    </div>
-  </div>
-</section>
-
-{/* Latest */}
-<section className="py-12 md:py-16 bg-secondary">
-  <div className="container mx-auto px-4 md:px-6">
-    <div className="text-center mb-12">
-      <h2 className="font-headline text-2xl md:text-2xl font-bold">
-        {dict.page.home.latest.title}
-      </h2>
-    </div>
-    <div className="flex gap-4 overflow-x-auto">
-      {properties.slice(0, 10).map((property) => (
-        <div key={property.id} className="w-[350px]">
-          <PropertyCard 
-            property={property} 
-            dict={dict}   // ✅ same here
-          />
+      {/* Featured */}
+      <section className="pt-12 md:pt-16 bg-secondary">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="text-center mb-12">
+            <h2 className="font-headline text-2xl md:text-2xl font-bold">
+              {dict.page.home.featuredTitle}
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {featuredProperties.slice(0, 3).map((property) => (
+              <FeaturedPropertyCard
+                key={property.id}
+                property={property}
+                dict={dict}
+              />
+            ))}
+          </div>
         </div>
-      ))}
-    </div>
-  </div>
-</section>
+      </section>
+
+      {/* Latest */}
+      <section className="py-12 md:py-16 bg-secondary">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="text-center mb-12">
+            <h2 className="font-headline text-2xl md:text-2xl font-bold">
+              {dict.page.home.latestTitle}
+            </h2>
+          </div>
+          <div className="flex gap-4 overflow-x-auto">
+            {properties.slice(0, 10).map((property) => (
+              <div key={property.id} className="w-[350px]">
+                <PropertyCard property={property} dict={dict} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* New builds */}
       <section className="pb-12 md:pb-16 bg-secondary">
@@ -190,16 +185,16 @@ export default function Home({
             <div className="absolute inset-0 bg-black/40" />
             <div className="relative z-10 md:w-1/2 text-white">
               <h2 className="font-headline text-2xl md:text-3xl font-bold mb-4">
-                {dict.page.home.newbuilds.title}
+                {dict.page.home.newBuildsTitle}
               </h2>
-              <p className="mb-4">{dict.page.home.newbuilds.subtitle1}</p>
-              <p className="mb-6">{dict.page.home.newbuilds.subtitle2}</p>
+              <p className="mb-4">{dict.page.home.newBuildsSubtitle}</p>
+              <p className="mb-6">{dict.page.home.newBuildsSubtitle2}</p>
               <Link href={`/${locale}/new-builds`}>
                 <Button
                   size="lg"
                   className="text-base font-bold bg-accent hover:bg-accent/90 text-accent-foreground transition-all duration-300 transform hover:scale-105"
                 >
-                  {dict.page.home.newbuilds.cta}
+                  {dict.page.home.newBuildsCta}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
