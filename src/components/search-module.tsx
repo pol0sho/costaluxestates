@@ -14,7 +14,13 @@ const formatPrice = (value: number) => {
   return `€${value}`;
 };
 
-export function SearchModule({ showListingType = true }: { showListingType?: boolean }) {
+export function SearchModule({
+  showListingType = true,
+  dict,
+}: {
+  showListingType?: boolean;
+  dict: any;
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -112,95 +118,119 @@ useEffect(() => {
       <CardContent className="p-4 sm:p-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
 
-          {/* Listing Type */}
-          {showListingType && (
-            <div className="lg:col-span-2">
-              <label className="block text-sm font-medium mb-1">Listing Type</label>
-              <Select value={filters.listingType} onValueChange={(v) => updateFilter("listingType", v)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="properties">Properties</SelectItem>
-                  <SelectItem value="new-builds">New Build Properties</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          )}
+{/* Listing Type */}
+{showListingType && (
+  <div className="lg:col-span-2">
+    <label className="block text-sm font-medium mb-1">
+      {dict.search.listingType.label}
+    </label>
+    <Select
+      value={filters.listingType}
+      onValueChange={(v) => updateFilter("listingType", v)}
+    >
+      <SelectTrigger><SelectValue /></SelectTrigger>
+      <SelectContent>
+        <SelectItem value="properties">
+          {dict.search.listingType.properties}
+        </SelectItem>
+        <SelectItem value="new-builds">
+          {dict.search.listingType.newBuilds}
+        </SelectItem>
+      </SelectContent>
+    </Select>
+  </div>
+)}
 
-                    {/* Location */}
-          <div className="lg:col-span-2">
-            <label className="block text-sm font-medium mb-1">Location</label>
-            <Select value={filters.location} onValueChange={(v) => updateFilter("location", v)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-<SelectContent>
-  <SelectItem value="any">Any Location</SelectItem>
-  {(filters.listingType === "new-builds" ? locations.newbuild : locations.resale).map((loc) => (
-    <SelectItem key={loc} value={loc}>{loc}</SelectItem>
-  ))}
-</SelectContent>
-            </Select>
-          </div>
+{/* Location */}
+<div className="lg:col-span-2">
+  <label className="block text-sm font-medium mb-1">{dict.search.location.label}</label>
+  <Select value={filters.location} onValueChange={(v) => updateFilter("location", v)}>
+    <SelectTrigger><SelectValue /></SelectTrigger>
+    <SelectContent>
+      <SelectItem value="any">{dict.search.anyLocation}</SelectItem>
+      {(filters.listingType === "new-builds"
+        ? locations.newbuild
+        : locations.resale
+      ).map((loc) => (
+        <SelectItem key={loc} value={loc}>
+          {loc}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+</div>
 
-          {/* Property Type */}
-          <div className="lg:col-span-2">
-            <label className="block text-sm font-medium mb-1">Property Type</label>
-            <Select value={filters.type} onValueChange={(v) => updateFilter("type", v)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="any">Any</SelectItem>
-                <SelectItem value="villa">Villa</SelectItem>
-                <SelectItem value="apartment">Apartment</SelectItem>
-                <SelectItem value="townhouse">Townhouse</SelectItem>
-                <SelectItem value="penthouse">Penthouse</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+{/* Property Type */}
+<div className="lg:col-span-2">
+  <label className="block text-sm font-medium mb-1">{dict.search.type.label}</label>
+  <Select value={filters.type} onValueChange={(v) => updateFilter("type", v)}>
+    <SelectTrigger><SelectValue /></SelectTrigger>
+    <SelectContent>
+      <SelectItem value="any">{dict.search.type.any}</SelectItem>
+      <SelectItem value="villa">{dict.search.type.villa}</SelectItem>
+      <SelectItem value="apartment">{dict.search.type.apartment}</SelectItem>
+      <SelectItem value="townhouse">{dict.search.type.townhouse}</SelectItem>
+      <SelectItem value="penthouse">{dict.search.type.penthouse}</SelectItem>
+    </SelectContent>
+  </Select>
+</div>
 
-          {/* Bedrooms */}
-          <div className="lg:col-span-1">
-            <label className="block text-sm font-medium mb-1">Bedrooms</label>
-            <Select value={filters.bedrooms} onValueChange={(v) => updateFilter("bedrooms", v)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="any">Any</SelectItem>
-                {[1,2,3,4,5].map(n => <SelectItem key={n} value={n.toString()}>{n}+</SelectItem>)}
-              </SelectContent>
-            </Select>
-          </div>
+{/* Bedrooms */}
+<div className="lg:col-span-1">
+  <label className="block text-sm font-medium mb-1">{dict.search.bedrooms.label}</label>
+  <Select value={filters.bedrooms} onValueChange={(v) => updateFilter("bedrooms", v)}>
+    <SelectTrigger><SelectValue /></SelectTrigger>
+    <SelectContent>
+      <SelectItem value="any">{dict.search.any}</SelectItem>
+      {[1,2,3,4,5].map((n) => (
+        <SelectItem key={n} value={n.toString()}>{n}+</SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+</div>
 
-          {/* Bathrooms */}
-          <div className="lg:col-span-1">
-            <label className="block text-sm font-medium mb-1">Bathrooms</label>
-            <Select value={filters.bathrooms} onValueChange={(v) => updateFilter("bathrooms", v)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="any">Any</SelectItem>
-                {[1,2,3,4,5].map(n => <SelectItem key={n} value={n.toString()}>{n}+</SelectItem>)}
-              </SelectContent>
-            </Select>
-          </div>
+{/* Bathrooms */}
+<div className="lg:col-span-1">
+  <label className="block text-sm font-medium mb-1">{dict.search.bathrooms.label}</label>
+  <Select value={filters.bathrooms} onValueChange={(v) => updateFilter("bathrooms", v)}>
+    <SelectTrigger><SelectValue /></SelectTrigger>
+    <SelectContent>
+      <SelectItem value="any">{dict.search.any}</SelectItem>
+      {[1,2,3,4,5].map((n) => (
+        <SelectItem key={n} value={n.toString()}>{n}+</SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+</div>
 
-          {/* Price */}
-          <div className="sm:col-span-2 lg:col-span-2 space-y-2">
-            <label className="block text-sm font-medium">Price Range</label>
-            <div className="flex justify-between text-xs">
-              <span>{formatPrice(priceRange[0])}</span>
-              <span>{priceRange[1] === 3000000 ? `${formatPrice(priceRange[1])}+` : formatPrice(priceRange[1])}</span>
-            </div>
-            <Slider
-              value={priceRange}
-              onValueChange={handlePriceChange}
-              min={0}
-              max={3000000}
-              step={50000}
-            />
-          </div>
+{/* Price */}
+<div className="sm:col-span-2 lg:col-span-2 space-y-2">
+  <label className="block text-sm font-medium">
+    {dict.search.priceRange.label}
+  </label>
+  <div className="flex justify-between text-xs">
+    <span>{formatPrice(priceRange[0])}</span>
+    <span>
+      {priceRange[1] === 3000000
+        ? `${formatPrice(priceRange[1])}+`
+        : formatPrice(priceRange[1])}
+    </span>
+  </div>
+  <Slider
+    value={priceRange}
+    onValueChange={handlePriceChange}
+    min={0}
+    max={3000000}
+    step={50000}
+  />
+</div>
 
-          {/* Search Button */}
-          <div className="sm:col-span-2 lg:col-span-2">
-            <Button onClick={handleSearch} className="w-full">
-              <Search className="mr-2 h-5 w-5" /> Search
-            </Button>
-          </div>
+{/* Search Button */}
+<div className="sm:col-span-2 lg:col-span-2">
+  <Button onClick={handleSearch} className="w-full">
+    <Search className="mr-2 h-5 w-5" /> {dict.search.button}
+  </Button>
+</div>
         </div>
       </CardContent>
     </Card>

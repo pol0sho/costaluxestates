@@ -1,13 +1,13 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import NewBuildsClient from "./NewBuildsClient";
 import { motion } from "framer-motion";
-import { Loader2 } from "lucide-react"; // ✅ spinner
+import { Loader2 } from "lucide-react";
+import NewBuildsClient from "./NewBuildsClient";
 
 const PAGE_SIZE = 16;
 
-export default function NewBuildsPage() {
+export default function NewBuildsPageClient({ dict }: { dict: any }) {
   const [properties, setProperties] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -52,6 +52,7 @@ export default function NewBuildsPage() {
       transition={{ duration: 0.5 }}
       className="bg-background"
     >
+      {/* Hero */}
       <section
         className="relative h-[30vh] min-h-[250px] flex items-center justify-center text-center bg-cover bg-center"
         style={{ backgroundImage: "url('/newbuildpage.jpg')" }}
@@ -65,34 +66,38 @@ export default function NewBuildsPage() {
             className="max-w-4xl mx-auto"
           >
             <h1 className="font-headline text-3xl md:text-4xl font-bold mb-4">
-              Discover New Build Projects
+              {dict.newBuildsPage.hero.title}
             </h1>
             <p className="mb-6 text-lg">
-              We offer exclusive access to the latest and most prestigious new build projects on the Costa del Sol.
+              {dict.newBuildsPage.hero.subtitle}
             </p>
           </motion.div>
         </div>
       </section>
 
+      {/* Content */}
       {loading ? (
         <div className="flex justify-center items-center py-20">
           <Loader2 className="h-10 w-10 animate-spin text-primary" />
         </div>
       ) : properties.length > 0 ? (
-        <NewBuildsClient
-          properties={properties}
-          total={total}
-          page={currentPage}
-          pageSize={PAGE_SIZE}
-          onPageChange={setCurrentPage}
-          realestate={realestate}
-        />
+<NewBuildsClient
+  properties={properties}
+  total={total}
+  page={currentPage}
+  pageSize={PAGE_SIZE}
+  onPageChange={setCurrentPage}
+  realestate={realestate}
+  dict={dict}
+/>
       ) : (
         <div className="flex items-center justify-center py-24">
           <div className="text-center">
-            <h2 className="text-2xl font-bold tracking-tight">No New Build Properties Found</h2>
+            <h2 className="text-2xl font-bold tracking-tight">
+              {dict.newBuildsPage.empty.title}
+            </h2>
             <p className="text-muted-foreground">
-              Please check back later for new build projects.
+              {dict.newBuildsPage.empty.subtitle}
             </p>
           </div>
         </div>

@@ -1,3 +1,4 @@
+
 'use client';
 export const dynamic = "force-dynamic";
 
@@ -43,51 +44,51 @@ const FeatureItem = ({ icon: Icon, label, value }: { icon: React.ElementType; la
   </div>
 );
 
-export default function PropertyDetailPage({ params }: { params: { ref: string } }) {
+export default function PropertyDetailPage({ params, dict }: { params: { ref: string }, dict: any }) {
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
 
-useEffect(() => {
-  const fetchProperty = async () => {
-    try {
-      const hostname = window.location.hostname;
-      const domainToRealestate: Record<string, string> = {
-        "localhost": "costalux",
-        "www.costaluxestatesweb.onrender.com": "costalux",
-        "costaluxestatesweb.onrender.com": "costalux",
-        "www.costaluxestates.com": "costalux",
-        "costaluxestates.com": "costalux",
-      };
-      const realestate = domainToRealestate[hostname] || "costalux";
+  useEffect(() => {
+    const fetchProperty = async () => {
+      try {
+        const hostname = window.location.hostname;
+        const domainToRealestate: Record<string, string> = {
+          "localhost": "costalux",
+          "www.costaluxestatesweb.onrender.com": "costalux",
+          "costaluxestatesweb.onrender.com": "costalux",
+          "www.costaluxestates.com": "costalux",
+          "costaluxestates.com": "costalux",
+        };
+        const realestate = domainToRealestate[hostname] || "costalux";
 
-      const res = await fetch(
-        `https://api.habigrid.com/api/public/properties/${params.ref}?realestate=${realestate}`
-      );
+        const res = await fetch(
+          `https://api.habigrid.com/api/public/properties/${params.ref}?realestate=${realestate}`
+        );
 
-      if (!res.ok) throw new Error(`API error: ${res.status}`);
-      const data = await res.json();
+        if (!res.ok) throw new Error(`API error: ${res.status}`);
+        const data = await res.json();
 
-      if (!data) {
-        notFound();
-      } else {
-        setProperty(data);
+        if (!data) {
+          notFound();
+        } else {
+          setProperty(data);
+        }
+      } catch (err) {
+        console.error("Failed to load property:", err);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error("Failed to load property:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  fetchProperty();
-}, [params.ref]);
+    fetchProperty();
+  }, [params.ref]);
 
   if (loading) {
-    return <div className="text-center py-12">Loading property...</div>;
+    return <div className="text-center py-12">{dict.property.loading}</div>;
   }
 
   if (!property) {
-    return <div className="text-center py-12 text-red-500">Property not found.</div>;
+    return <div className="text-center py-12 text-red-500">{dict.property.notFound}</div>;
   }
 
   return (
@@ -98,8 +99,8 @@ useEffect(() => {
       className="bg-secondary font-body"
     >
       <div className="container mx-auto max-w-7xl px-4 md:px-6 py-8 md:py-12">
-        
-        {/* Promotion Video if exists */}
+
+        {/* Promotion Video */}
         {property.promotion_video && (
           <div className="mb-8 aspect-video">
             <iframe
@@ -109,7 +110,7 @@ useEffect(() => {
                   ? property.promotion_video.replace("watch?v=", "embed/")
                   : property.promotion_video
               }
-              title="Promotion Video"
+              title={dict.property.promotionVideo}
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
@@ -117,7 +118,7 @@ useEffect(() => {
           </div>
         )}
 
-        {/* Image Slideshow */}
+        {/* Images */}
         <div className="mb-8">
           <ImageSlideshow
             images={Array.isArray(property.images) ? property.images.map((img) => img.url) : []}
@@ -141,63 +142,61 @@ useEffect(() => {
                   </div>
                   <div className="flex-shrink-0 mt-2 md:mt-0">
                     <Badge className="text-2xl font-bold bg-primary/10 text-primary hover:bg-primary/20 border-primary/20 border-2 py-2 px-4">
-                      {property.priceType === 'from' && 'From '}
+                      {property.priceType === 'from' && dict.property.from + " "}
                       {property.list_price
                         ? `€${Number(property.list_price).toLocaleString('de-DE')}`
-                        : 'Price not available'}
+                        : dict.property.noPrice}
                     </Badge>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="mt-6">
-                  <h2 className="font-headline text-xl font-bold mb-4">Features</h2>
+                  <h2 className="font-headline text-xl font-bold mb-4">{dict.property.features}</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2">
-                    <FeatureItem icon={Ruler} label="Size (m²)" value={property.built_size} />
-                    <FeatureItem icon={BedDouble} label="Bedrooms" value={property.bedrooms} />
-                    <FeatureItem icon={Bath} label="Bathrooms" value={property.bathrooms} />
-                    <FeatureItem icon={Home} label="Property Type" value={property.property_type} />
-                    <FeatureItem icon={LandPlot} label="Plot Size (m²)" value={property.plot_size > 0 ? property.plot_size : 'N/A'} />
-                    <FeatureItem icon={Calendar} label="Build Year" value={property.buildYear ?? 'N/A'} />
-                    <FeatureItem icon={Sun} label="Terrace" value={property.terrace ? 'Yes' : 'No'} />
-                    <FeatureItem icon={MapPin} label="Town" value={property.town} />
-                    <FeatureItem icon={MapPin} label="Area" value={property.province} />
+                    <FeatureItem icon={Ruler} label={dict.property.size} value={property.built_size} />
+                    <FeatureItem icon={BedDouble} label={dict.property.bedrooms} value={property.bedrooms} />
+                    <FeatureItem icon={Bath} label={dict.property.bathrooms} value={property.bathrooms} />
+                    <FeatureItem icon={Home} label={dict.property.type} value={property.property_type} />
+                    <FeatureItem icon={LandPlot} label={dict.property.plotSize} value={property.plot_size > 0 ? property.plot_size : 'N/A'} />
+                    <FeatureItem icon={Calendar} label={dict.property.buildYear} value={property.buildYear ?? 'N/A'} />
+                    <FeatureItem icon={Sun} label={dict.property.terrace} value={property.terrace ? dict.common.yes : dict.common.no} />
+                    <FeatureItem icon={MapPin} label={dict.property.town} value={property.town} />
+                    <FeatureItem icon={MapPin} label={dict.property.area} value={property.province} />
                   </div>
                 </div>
 
                 <Separator className="my-8" />
 
-<div className="mt-6 text-foreground/90 leading-relaxed">
-  <h2 className="font-headline text-xl font-bold mb-4">Description</h2>
-  <p>
-    {Array.isArray(property.description)
-      ? property.description.find((d) => d.lang === "en")?.description || "No English description."
-      : "No description available."}
-  </p>
+                <div className="mt-6 text-foreground/90 leading-relaxed">
+                  <h2 className="font-headline text-xl font-bold mb-4">{dict.property.description}</h2>
+                  <p>
+                    {Array.isArray(property.description)
+                      ? property.description.find((d) => d.lang === "en")?.description || dict.property.noEnglishDesc
+                      : dict.property.noDescription}
+                  </p>
 
-
-    <div className="mt-6">
-      <a
-        href="/cost-of-buying-in-spain"
-        className="text-primary font-semibold underline hover:text-primary/80"
-      >
-        Learn more about the cost of buying in Spain →
-      </a>
-    </div>
-  
-</div>
+                  <div className="mt-6">
+                    <a
+                      href="/cost-of-buying-in-spain"
+                      className="text-primary font-semibold underline hover:text-primary/80"
+                    >
+                      {dict.property.learnMore}
+                    </a>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Contact Form */}
+          {/* Contact */}
           <div className="lg:col-span-1">
             <div className="sticky top-24">
               <ContactForm
-                title="Interested in this property?"
-                description={`Contact us for more information about this property (Ref: ${property.ref})`}
-                buttonText="Send Inquiry"
-                propertyRef={property.ref} 
+                title={dict.property.contactTitle}
+                description={`${dict.property.contactDesc} (Ref: ${property.ref})`}
+                buttonText={dict.property.contactButton}
+                propertyRef={property.ref}
                 propertyTitle={property.title}
               />
             </div>

@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic";
 import pkg from "pg";
 const { Client } = pkg;
 
-export async function POST(request: Request) {
+export async function POST(request) {
   try {
     const { language } = await request.json();
 

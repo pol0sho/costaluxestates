@@ -15,7 +15,13 @@ import {
 
 const PROPERTIES_PER_PAGE = 16;
 
-export default function NewBuildsClient({ realestate }: { realestate: string }) {
+export default function NewBuildsClient({
+  realestate,
+  dict,
+}: {
+  realestate: string;
+  dict: any;
+}) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -42,7 +48,8 @@ export default function NewBuildsClient({ realestate }: { realestate: string }) 
       setLoading(true);
 
       const API_BASE =
-        typeof window !== "undefined" && window.location.hostname.includes("localhost")
+        typeof window !== "undefined" &&
+        window.location.hostname.includes("localhost")
           ? "http://localhost:5000"
           : "https://api.habigrid.com";
 
@@ -60,7 +67,9 @@ export default function NewBuildsClient({ realestate }: { realestate: string }) 
       });
 
       try {
-        const res = await fetch(`${API_BASE}/api/public/properties?${params.toString()}`);
+        const res = await fetch(
+          `${API_BASE}/api/public/properties?${params.toString()}`
+        );
         if (!res.ok) throw new Error(`Request failed: ${res.status}`);
         const data = await res.json();
         setProperties(data.properties || []);
@@ -84,12 +93,17 @@ export default function NewBuildsClient({ realestate }: { realestate: string }) 
     setCurrentPage(1);
 
     const params = new URLSearchParams();
-    if (newFilters.location !== "any") params.set("location", newFilters.location);
+    if (newFilters.location !== "any")
+      params.set("location", newFilters.location);
     if (newFilters.type !== "any") params.set("type", newFilters.type);
-    if (newFilters.bedrooms !== "any") params.set("bedrooms", newFilters.bedrooms);
-    if (newFilters.bathrooms !== "any") params.set("bathrooms", newFilters.bathrooms);
-    if (newFilters.priceMin > 0) params.set("priceMin", String(newFilters.priceMin));
-    if (newFilters.priceMax < 3000000) params.set("priceMax", String(newFilters.priceMax));
+    if (newFilters.bedrooms !== "any")
+      params.set("bedrooms", newFilters.bedrooms);
+    if (newFilters.bathrooms !== "any")
+      params.set("bathrooms", newFilters.bathrooms);
+    if (newFilters.priceMin > 0)
+      params.set("priceMin", String(newFilters.priceMin));
+    if (newFilters.priceMax < 3000000)
+      params.set("priceMax", String(newFilters.priceMax));
     params.set("page", "1");
 
     router.replace(`/new-builds?${params.toString()}`);
@@ -105,13 +119,16 @@ export default function NewBuildsClient({ realestate }: { realestate: string }) 
         />
       </div>
 
-{!loading && properties.length > 0 ? (
-  <>
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-      {properties.map((property) => (
-        <PropertyCard key={`${property.source}-${property.id}`} property={property} />
-      ))}
-    </div>
+      {!loading && properties.length > 0 ? (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {properties.map((property) => (
+              <PropertyCard
+                key={`${property.source}-${property.id}`}
+                property={property}
+              />
+            ))}
+          </div>
 
           {totalPages > 1 && (
             <div className="mt-16">
@@ -119,7 +136,9 @@ export default function NewBuildsClient({ realestate }: { realestate: string }) 
                 <PaginationContent>
                   {currentPage > 1 && (
                     <PaginationItem>
-                      <PaginationPrevious onClick={() => setCurrentPage(p => p - 1)} />
+                      <PaginationPrevious
+                        onClick={() => setCurrentPage((p) => p - 1)}
+                      />
                     </PaginationItem>
                   )}
 
@@ -136,7 +155,9 @@ export default function NewBuildsClient({ realestate }: { realestate: string }) 
 
                   {currentPage < totalPages && (
                     <PaginationItem>
-                      <PaginationNext onClick={() => setCurrentPage(p => p + 1)} />
+                      <PaginationNext
+                        onClick={() => setCurrentPage((p) => p + 1)}
+                      />
                     </PaginationItem>
                   )}
                 </PaginationContent>
@@ -146,16 +167,18 @@ export default function NewBuildsClient({ realestate }: { realestate: string }) 
         </>
       ) : (
         !loading && (
-    <div className="flex items-center justify-center py-24">
-      <div className="text-center">
-        <h2 className="text-2xl font-bold tracking-tight">No New Build Properties Found</h2>
-        <p className="text-muted-foreground">
-          Please check back later for new build projects.
-        </p>
-      </div>
-    </div>
-  )
-)}
+          <div className="flex items-center justify-center py-24">
+            <div className="text-center">
+              <h2 className="text-2xl font-bold tracking-tight">
+                {dict.newBuildsClient.empty.title}
+              </h2>
+              <p className="text-muted-foreground">
+                {dict.newBuildsClient.empty.subtitle}
+              </p>
+            </div>
+          </div>
+        )
+      )}
     </div>
   );
 }

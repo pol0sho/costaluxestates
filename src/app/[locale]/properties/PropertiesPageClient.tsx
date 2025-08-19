@@ -14,11 +14,11 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Loader2 } from "lucide-react"; // ✅ spinner
+import { Loader2 } from "lucide-react";
 
 const PROPERTIES_PER_PAGE = 20;
 
-export default function PropertiesPageClient() {
+export default function PropertiesPageClient({ dict }: { dict: any }) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -255,10 +255,10 @@ export default function PropertiesPageClient() {
           <div className="flex items-center justify-center py-24">
             <div className="text-center">
               <h2 className="text-2xl font-bold tracking-tight">
-                No Properties Found
+                {dict.properties.noResultsTitle}
               </h2>
               <p className="text-muted-foreground">
-                Try adjusting your filters or check back later.
+                {dict.properties.noResultsSubtitle}
               </p>
             </div>
           </div>

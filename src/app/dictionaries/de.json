@@ -1,0 +1,345 @@
+{
+  "header": {
+    "home": "Startseite",
+    "properties": "Immobilien",
+    "newBuilds": "Neubauten",
+    "buyInDubai": "In Dubai und Umgebung kaufen",
+    "contact": "Kontakt"
+  },
+  "footer": {
+    "rights": "Alle Rechte vorbehalten.",
+    "terms": "Allgemeine Geschäftsbedingungen",
+    "privacy": "Datenschutzrichtlinie",
+    "contact": "Kontakt"
+  },
+  "form": {
+    "title": "Schreiben Sie uns eine Nachricht",
+    "description": "Füllen Sie das Formular unten aus und wir werden uns so schnell wie möglich bei Ihnen melden.",
+    "button": "Nachricht senden",
+    "name": "Vollständiger Name",
+    "email": "E-Mail-Adresse",
+    "phone": "Telefonnummer (optional)",
+    "contactMethod": "Bevorzugte Kontaktmethode",
+    "contactOptions": {
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "whatsapp": "WhatsApp"
+    }
+  },
+
+  "newBuildsClient": {
+    "empty": {
+      "title": "Keine Neubauimmobilien gefunden",
+      "subtitle": "Bitte schauen Sie später noch einmal vorbei, um neue Projekte zu entdecken."
+    }
+  },
+
+  "newBuildsPage": {
+    "hero": {
+      "title": "Entdecken Sie Neubauprojekte",
+      "subtitle": "Wir bieten exklusiven Zugang zu den neuesten und prestigeträchtigsten Neubauprojekten an der Costa del Sol."
+    },
+    "empty": {
+      "title": "Keine Neubauimmobilien gefunden",
+      "subtitle": "Bitte schauen Sie später noch einmal vorbei, um neue Projekte zu entdecken."
+    }
+  },
+
+  "buyInDubai": {
+    "title": "Ihr Tor zur Luxusimmobilie in Dubai",
+    "intro": "Willkommen in Dubai, einer globalen Metropole, in der futuristische Visionen auf unvergleichlichen Luxus treffen. Als einer der dynamischsten Immobilienmärkte der Welt bietet Dubai eine einzigartige Kombination aus steuerfreien Erträgen, einem erstklassigen Lebensstil und außergewöhnlichen Investitionsmöglichkeiten. Ob Sie eine renditestarke Mietimmobilie, ein luxuriöses Ferienhaus oder eine sichere langfristige Investition suchen – der Immobilienmarkt in Dubai ist Ihr Schlüssel zum Erfolg.",
+    "whyTitle": "Warum in Dubai investieren?",
+    "benefits": [
+      {
+        "title": "Hohe Rendite",
+        "text": "Dubais Immobilienmarkt ist bekannt für starke Mieterträge und Wertsteigerungspotenzial – eine lukrative Option für Investoren."
+      },
+      {
+        "title": "Steuerfreie Umgebung",
+        "text": "Profitieren Sie von null Einkommensteuer auf Mieterträge und keinen jährlichen Immobiliensteuern, um Ihre Rendite zu maximieren."
+      },
+      {
+        "title": "UAE Golden Visa",
+        "text": "Eine Immobilieninvestition kann Ihnen direkt ein langfristiges Aufenthaltsvisum sichern und Zugang zu den erstklassigen Dienstleistungen der VAE bieten."
+      },
+      {
+        "title": "Unvergleichbarer Lebensstil & Sicherheit",
+        "text": "Genießen Sie ein luxuriöses Leben in einer der sichersten Städte der Welt mit hervorragenden Annehmlichkeiten, Unterhaltung und internationalem Flair."
+      },
+      {
+        "title": "Stabile Wirtschaft & investorenfreundliche Politik",
+        "text": "Die robuste Wirtschaft der VAE und staatliche Schutzmaßnahmen schaffen einen sicheren und transparenten Immobilienmarkt."
+      },
+      {
+        "title": "Globale Drehscheibe",
+        "text": "Strategisch zwischen Europa, Asien und Afrika gelegen, bietet Dubai exzellente globale Verbindungen für Geschäft und Reisen."
+      }
+    ],
+    "processTitle": "Der Kaufprozess",
+    "processIntro": "Der Immobilienkauf in Dubai ist ein einfacher und transparenter Prozess, der speziell für internationale Investoren zugänglich gestaltet ist. Typische Schritte sind:",
+    "processSteps": [
+      {
+        "title": "Erste Vereinbarung",
+        "text": "Sobald Sie eine Immobilie ausgewählt haben, wird ein Memorandum of Understanding (MOU) oder eine Reservierungsvereinbarung unterzeichnet und eine Anzahlung geleistet."
+      },
+      {
+        "title": "No Objection Certificate (NOC)",
+        "text": "Der Entwickler stellt ein NOC aus, um den rechtmäßigen Eigentumsübergang sicherzustellen. Standardverfahren, um offene Forderungen auszuschließen."
+      },
+      {
+        "title": "Immobilienregistrierung",
+        "text": "Der letzte Schritt ist die Registrierung beim Dubai Land Department (DLD). Käufer und Verkäufer (oder deren Vertreter) müssen anwesend sein, um den Vertrag zu unterzeichnen."
+      },
+      {
+        "title": "Titelurkunde",
+        "text": "Nach Abschluss stellt das DLD die neue Eigentumsurkunde auf den Namen des Käufers aus."
+      }
+    ],
+    "costsTitle": "Verbundene Kosten",
+    "costsIntro": "Obwohl Dubai steuerfreundlich ist, gibt es einige Standardgebühren beim Immobilienkauf:",
+    "costsList": [
+      "Dubai Land Department (DLD) Gebühr: 4% des Kaufpreises.",
+      "Registrierungsgebühren: eine geringe Verwaltungsgebühr an das DLD.",
+      "Maklerprovision: typischerweise 2% des Kaufpreises.",
+      "Entwicklergebühren: Für Neubauten können Verwaltungsgebühren für die Ausstellung des NOC anfallen."
+    ],
+    "closingNote": "Unser Expertenteam begleitet Sie bei jedem Schritt Ihrer Immobilienreise in Dubai – von der Auswahl bis zur rechtlichen Abwicklung."
+  },
+
+  "costOfBuying": {
+    "title": "Kaufnebenkosten in Spanien",
+    "intro1": "Die Kosten für den Erwerb einer Immobilie in Spanien variieren je nach Neubau oder Bestandsimmobilie...",
+    "intro2": "Die Kaufnebenkosten liegen in der Regel zwischen <strong>9 und 14 % des Kaufpreises</strong>...",
+    "listIntro": "Nachfolgend alle Kosten und Steuern im Detail:",
+    "list": {
+      "vat": "Mehrwertsteuer (IVA) in Spanien",
+      "itp": "Grunderwerbsteuer (ITP)",
+      "ajd": "Stempelsteuer oder Dokumentensteuer (AJD)",
+      "lawyer": "Anwaltsgebühren",
+      "notary": "Notargebühren",
+      "registry": "Grundbuchamt"
+    },
+    "detailsTitle": "Detaillierte Erklärung der Kosten",
+    "vatTitle": "1. Mehrwertsteuer (IVA) in Spanien",
+    "vatBody": "Ein Neubau ist eine Immobilie, die zuvor noch nie verkauft wurde...",
+    "itpTitle": "2. Grunderwerbsteuer (ITP)",
+    "itpBody": "Beim Kauf einer Bestandsimmobilie fällt die ITP an...",
+    "ajdTitle": "3. Stempelsteuer (AJD)",
+    "ajdBody": "Diese Steuer wird auf alle notariell zu beurkundenden Dokumente erhoben...",
+    "lawyerTitle": "4. Anwaltsgebühren",
+    "lawyerBody1": "Anwälte verlangen in der Regel 1 % + MwSt...",
+    "lawyerBody2": "Besonders, wenn Sie mit einer Immobilienagentur zusammenarbeiten...",
+    "lawyerBody3": "Zusätzlich können Sie Ihrem Anwalt eine Vollmacht erteilen...",
+    "notaryTitle": "5. Notargebühren",
+    "notaryBody": "Die Erstellung der Kaufurkunde verursacht zusätzliche Kosten...",
+    "registryTitle": "6. Grundbuchamt",
+    "registryBody": "Die Eintragung kostet in der Regel ca. 750 €...",
+    "mortgageTitle": "Hypothek für spanische Immobilien",
+    "mortgageBody": "Zusätzlich zu den genannten Kosten können Hypothekengebühren anfallen...",
+    "valuationTitle": "Bewertung",
+    "valuationBody1": "Die Kosten hängen von der Bewertungsagentur ab...",
+    "valuationBody2": "Eine Bewertung ist Voraussetzung für Hypotheken...",
+    "paymentFeesTitle": "Zahlungsgebühren",
+    "paymentFeesBody": "Je nach Bank variieren diese zwischen 0 % und 1 %.",
+    "closingNote": "Die oben genannten Kosten sind Durchschnittswerte und können je nach Region variieren."
+  },
+
+  "search": {
+    "listingType": {
+      "label": "Angebotstyp",
+      "properties": "Immobilien",
+      "newBuilds": "Neubauimmobilien"
+    },
+    "location": { "label": "Ort" },
+    "type": {
+      "label": "Immobilientyp",
+      "any": "Beliebig",
+      "villa": "Villa",
+      "apartment": "Wohnung",
+      "townhouse": "Reihenhaus",
+      "penthouse": "Penthouse"
+    },
+    "bedrooms": { "label": "Schlafzimmer" },
+    "bathrooms": { "label": "Badezimmer" },
+    "any": "Beliebig",
+    "anyLocation": "Beliebiger Ort",
+    "priceRange": { "label": "Preisspanne" },
+    "button": "Suchen"
+  },
+
+  "search2": {
+    "listingType": {
+      "label": "Angebotstyp",
+      "properties": "Immobilien",
+      "newBuilds": "Neubauimmobilien"
+    },
+    "location": { "label": "Ort" },
+    "type": {
+      "label": "Immobilientyp",
+      "any": "Beliebig",
+      "villa": "Villa",
+      "apartment": "Wohnung",
+      "townhouse": "Reihenhaus",
+      "penthouse": "Penthouse"
+    },
+    "bedrooms": { "label": "Schlafzimmer" },
+    "bathrooms": { "label": "Badezimmer" },
+    "priceRange": { "label": "Preisspanne" },
+    "any": "Beliebig",
+    "anyLocation": "Beliebiger Ort"
+  },
+
+  "terms": {
+    "title": "Allgemeine Geschäftsbedingungen",
+    "lastUpdated": "Zuletzt aktualisiert",
+    "intro": "Willkommen bei Costaluxestates. Diese Allgemeinen Geschäftsbedingungen regeln die Nutzung...",
+    "sections": {
+      "definitions": {
+        "title": "Definitionen",
+        "body": "\"Das Unternehmen\", \"Wir\" ... bezieht sich auf costaluxestates.com."
+      },
+      "use": {
+        "title": "Nutzung der Website",
+        "body": "Sie verpflichten sich, diese Website nur rechtmäßig zu nutzen..."
+      },
+      "listings": {
+        "title": "Immobilienanzeigen",
+        "body": "Die Informationen stammen direkt von uns..."
+      },
+      "ip": {
+        "title": "Urheberrechte",
+        "body": "Diese Website enthält Inhalte, die unser Eigentum sind..."
+      },
+      "accounts": {
+        "title": "Benutzerkonten und Inhalte",
+        "body": "Wenn Sie ein Konto erstellen, sind Sie für dessen Sicherheit verantwortlich..."
+      },
+      "liability": {
+        "title": "Haftungsbeschränkung",
+        "body": "Soweit nach spanischem Recht zulässig, übernimmt Costaluxestates keine Haftung..."
+      },
+      "law": {
+        "title": "Anwendbares Recht",
+        "body": "Diese Bedingungen unterliegen dem spanischen Recht..."
+      },
+      "changes": {
+        "title": "Änderungen der Bedingungen",
+        "body": "Wir behalten uns das Recht vor, diese Bedingungen jederzeit zu ändern..."
+      }
+    }
+  },
+
+  "properties": {
+    "noResultsTitle": "Keine Immobilien gefunden",
+    "noResultsSubtitle": "Passen Sie Ihre Filter an oder versuchen Sie es später erneut.",
+    "loading": "Immobilien werden geladen..."
+  },
+
+  "property": {
+    "from": "Ab",
+    "bedrooms": "Schlafzimmer",
+    "bathrooms": "Badezimmer",
+    "builtSize": "Wohnfläche",
+    "plotSize": "Grundstücksgröße",
+    "size": "Größe (m²)",
+    "type": "Immobilientyp",
+    "buildYear": "Baujahr",
+    "terrace": "Terrasse",
+    "town": "Ort",
+    "area": "Region",
+    "description": "Beschreibung",
+    "noEnglishDesc": "Keine englische Beschreibung verfügbar.",
+    "noDescription": "Keine Beschreibung verfügbar.",
+    "learnMore": "Erfahren Sie mehr über die Kaufnebenkosten in Spanien →",
+    "contactTitle": "Interessiert an dieser Immobilie?",
+    "contactDesc": "Kontaktieren Sie uns für weitere Informationen",
+    "contactButton": "Anfrage senden",
+    "promotionVideo": "Promotionsvideo",
+    "noPrice": "Preis nicht verfügbar",
+    "loading": "Immobilie wird geladen...",
+    "notFound": "Immobilie nicht gefunden."
+  },
+
+  "propertyCard": {
+    "from": "Ab",
+    "bedrooms": "Schlafzimmer",
+    "bathrooms": "Badezimmer",
+    "builtSize": "Wohnfläche",
+    "plotSize": "Grundstücksgröße"
+  },
+
+"privacy": {
+  "title": "Datenschutzerklärung",
+  "lastUpdated": "Zuletzt aktualisiert",
+  "intro": "Costaluxestates (\"wir\", \"uns\" oder \"unser\") betreibt die Website costaluxestates.com. Diese Seite informiert Sie über unsere Richtlinien zur Erhebung, Nutzung und Offenlegung personenbezogener Daten in Übereinstimmung mit der DSGVO.",
+  "sections": {
+    "collection": {
+      "title": "Erhebung und Nutzung von Informationen",
+      "body": "Wir erfassen verschiedene Arten von Informationen für unterschiedliche Zwecke, um unseren Service bereitzustellen und zu verbessern.",
+      "typesTitle": "Arten der erfassten Daten:",
+      "personalTitle": "Personenbezogene Daten",
+      "personalBody": "Dazu gehören Informationen wie E-Mail-Adresse, Name, Telefonnummer und Immobilienpräferenzen.",
+      "usageTitle": "Nutzungsdaten",
+      "usageBody": "Umfasst IP-Adresse, Browsertyp, besuchte Seiten, Datum/Uhrzeit und andere diagnostische Daten."
+    },
+    "use": {
+      "title": "Verwendung der Daten",
+      "body": "Costaluxestates verwendet die erhobenen Daten für folgende Zwecke:",
+      "points": [
+        "Um unseren Service bereitzustellen und zu pflegen",
+        "Um Sie über Immobilien zu informieren, die Ihren Kriterien entsprechen",
+        "Um Anfragen zu beantworten und Support zu leisten",
+        "Um unseren Service durch Analysen zu verbessern",
+        "Um die Nutzung unseres Service zu überwachen",
+        "Um technische Probleme zu erkennen, zu verhindern und zu beheben"
+      ]
+    },
+    "legal": {
+      "title": "Rechtsgrundlage der Verarbeitung",
+      "body": "Wenn Sie aus dem EWR stammen, hängt unsere Rechtsgrundlage von den erfassten Daten ab: Vertragserfüllung, Einwilligung, berechtigte Interessen oder Einhaltung gesetzlicher Vorschriften."
+    },
+    "rights": {
+      "title": "Ihre Datenschutzrechte",
+      "body": "Wenn Sie Einwohner des EWR sind, haben Sie das Recht, Ihre Daten einzusehen, zu aktualisieren, zu löschen, die Nutzung einzuschränken, sie zu übertragen sowie der Verarbeitung zu widersprechen."
+    },
+    "security": {
+      "title": "Datensicherheit",
+      "body": "Wir verwenden branchenübliche Maßnahmen zum Schutz Ihrer Daten, können jedoch keine absolute Sicherheit garantieren."
+    },
+    "providers": {
+      "title": "Dienstleister",
+      "body": "Wir können Drittunternehmen beauftragen, unseren Service zu unterstützen. Diese haben nur Zugriff auf Daten, um Aufgaben in unserem Auftrag auszuführen."
+    },
+    "contact": {
+      "title": "Kontakt",
+      "body": "Wenn Sie Fragen zu dieser Datenschutzerklärung haben, kontaktieren Sie uns bitte über",
+      "link": "unsere Kontaktseite"
+    }
+  }
+},
+
+  "page": {
+    "home": {
+      "heroTitle": "Willkommen bei CostaLux Estates",
+      "heroSubtitle": "Ihr vertrauensvoller Partner für exklusive Immobilien an der Costa del Sol.",
+      "heroMore": "Wir sprechen 5 Sprachen (Englisch, Spanisch, Niederländisch, Französisch und Deutsch), damit Sie sich von Anfang an zu Hause fühlen.",
+      "featuredTitle": "Ausgewählte Immobilien",
+      "latestTitle": "Neueste Immobilien",
+      "newBuildsTitle": "Entdecken Sie Neubauprojekte",
+      "newBuildsSubtitle": "Wir bieten exklusiven Zugang zu den neuesten und prestigeträchtigsten Neubauprojekten an der Costa del Sol.",
+      "newBuildsSubtitle2": "Von modernen Villen bis hin zu luxuriösen Apartmentanlagen – wir helfen Ihnen, Ihr neues Zuhause an der Sonne zu finden.",
+      "newBuildsCta": "Alle Neubauten ansehen"
+    }
+  },
+
+  "contactForm": {
+    "subject": "Betreff",
+    "subjectPlaceholder": "Anfrage zur Immobilie...",
+    "message": "Nachricht",
+    "messagePlaceholder": "Ich hätte gerne mehr Informationen über...",
+    "toastSuccessTitle": "Nachricht gesendet!",
+    "toastSuccessDescription": "Vielen Dank für Ihre Anfrage. Wir melden uns in Kürze.",
+    "toastErrorTitle": "Fehler",
+    "toastErrorDescription": "Ihre Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es später erneut."
+  }
+}

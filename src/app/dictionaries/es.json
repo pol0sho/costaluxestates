@@ -1,0 +1,344 @@
+{
+  "header": {
+    "home": "Inicio",
+    "properties": "Propiedades",
+    "newBuilds": "Obra Nueva",
+    "buyInDubai": "Comprar en Dubái y alrededores",
+    "contact": "Contacto"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados.",
+    "terms": "Términos y Condiciones",
+    "privacy": "Política de Privacidad",
+    "contact": "Contacto"
+  },
+  "form": {
+    "title": "Envíanos un Mensaje",
+    "description": "Rellena el siguiente formulario y nos pondremos en contacto contigo lo antes posible.",
+    "button": "Enviar Mensaje",
+    "name": "Nombre Completo",
+    "email": "Correo Electrónico",
+    "phone": "Número de Teléfono (Opcional)",
+    "contactMethod": "Método de contacto preferido",
+    "contactOptions": {
+      "email": "Correo Electrónico",
+      "phone": "Teléfono",
+      "whatsapp": "WhatsApp"
+    }
+  },
+
+  "newBuildsClient": {
+    "empty": {
+      "title": "No se han encontrado propiedades de obra nueva",
+      "subtitle": "Por favor, vuelve a consultar más adelante."
+    }
+  },
+
+  "newBuildsPage": {
+    "hero": {
+      "title": "Descubre Proyectos de Obra Nueva",
+      "subtitle": "Ofrecemos acceso exclusivo a los proyectos de obra nueva más recientes y prestigiosos en la Costa del Sol."
+    },
+    "empty": {
+      "title": "No se han encontrado propiedades de obra nueva",
+      "subtitle": "Por favor, vuelve a consultar más adelante."
+    }
+  },
+
+  "buyInDubai": {
+    "title": "Tu puerta de entrada al lujo inmobiliario en Dubái",
+    "intro": "Bienvenido a Dubái, una metrópolis global donde la visión futurista se encuentra con un lujo inigualable. Como uno de los mercados inmobiliarios más dinámicos del mundo, Dubái ofrece una combinación única de rentabilidad libre de impuestos, un estilo de vida de primer nivel y oportunidades de inversión excepcionales. Ya sea que busques una propiedad de alquiler con alta rentabilidad, una lujosa casa de vacaciones o una inversión segura a largo plazo, el mercado inmobiliario de Dubái es tu puerta de entrada al éxito.",
+    "whyTitle": "¿Por qué invertir en propiedades en Dubái?",
+    "benefits": [
+      {
+        "title": "Alta Rentabilidad",
+        "text": "El mercado inmobiliario de Dubái es conocido por sus altos rendimientos en alquileres y el potencial de apreciación del capital, lo que lo convierte en una opción muy atractiva para inversores."
+      },
+      {
+        "title": "Entorno Libre de Impuestos",
+        "text": "Disfruta de los beneficios de no pagar impuestos sobre los ingresos por alquiler ni impuestos anuales sobre la propiedad, maximizando la rentabilidad de tu inversión."
+      },
+      {
+        "title": "Visa Dorada de los EAU",
+        "text": "La inversión en propiedades puede ser una vía directa para obtener una visa de residencia a largo plazo, que brinda estabilidad y acceso a servicios de primer nivel en los EAU."
+      },
+      {
+        "title": "Estilo de Vida y Seguridad Incomparables",
+        "text": "Vive un estilo de vida de lujo en una de las ciudades más seguras del mundo, con servicios inigualables, entretenimiento y un entorno multicultural."
+      },
+      {
+        "title": "Economía Estable y Políticas Pro-Inversión",
+        "text": "La sólida economía de los EAU y las iniciativas gubernamentales que protegen a los inversores crean un mercado inmobiliario seguro y transparente."
+      },
+      {
+        "title": "Ubicación Estratégica Global",
+        "text": "Ubicado en el cruce entre Europa, Asia y África, Dubái ofrece una excelente conectividad global tanto para negocios como para viajes."
+      }
+    ],
+    "processTitle": "El Proceso de Compra",
+    "processIntro": "Comprar una propiedad en Dubái es un proceso sencillo y transparente, diseñado para ser accesible a inversores internacionales. Estos son los pasos habituales:",
+    "processSteps": [
+      {
+        "title": "Acuerdo Inicial",
+        "text": "Una vez elegida la propiedad, se firma un Memorando de Entendimiento (MOU) o contrato de reserva, y se paga un depósito."
+      },
+      {
+        "title": "Certificado de No Objeción (NOC)",
+        "text": "El promotor emite un NOC para transferir legalmente la propiedad. Este es un procedimiento estándar que garantiza que no haya deudas pendientes."
+      },
+      {
+        "title": "Registro de la Propiedad",
+        "text": "El paso final es registrar la propiedad en el Departamento de Tierras de Dubái (DLD). Tanto comprador como vendedor (o sus representantes legales) deben estar presentes para firmar el contrato y completar la transferencia."
+      },
+      {
+        "title": "Emisión de la Escritura",
+        "text": "Una vez completado el proceso, el DLD emite la nueva escritura de propiedad a nombre del comprador, confirmando la titularidad legal."
+      }
+    ],
+    "costsTitle": "Costes Asociados",
+    "costsIntro": "Aunque Dubái es fiscalmente atractivo, hay algunas tasas estándar asociadas con la compra de una propiedad:",
+    "costsList": [
+      "Tasa del Departamento de Tierras de Dubái (DLD): 4% del precio de compra.",
+      "Tasas de Registro: una tasa administrativa nominal pagada al DLD.",
+      "Honorarios de la Agencia Inmobiliaria: normalmente 2% del precio de compra.",
+      "Tasas del Promotor: en propiedades de obra nueva, los promotores pueden cobrar una tasa administrativa por emitir el NOC."
+    ],
+    "closingNote": "Nuestro equipo experto está aquí para guiarte en cada paso de tu camino inmobiliario en Dubái. Ofrecemos apoyo integral, desde la selección de la propiedad hasta los aspectos legales, asegurando una experiencia de inversión fluida y gratificante."
+  },
+
+  "costOfBuying": {
+    "title": "Costes de compra de una propiedad en España",
+    "intro1": "Los costes de adquirir una propiedad en España varían en función de si compras una vivienda de obra nueva o de segunda mano...",
+    "intro2": "Los costes de compra de una propiedad en España suelen oscilar entre el <strong>9 y el 14% del precio de venta</strong>...",
+    "listIntro": "A continuación se detallan todos los costes e impuestos:",
+    "list": {
+      "vat": "IVA en España",
+      "itp": "Impuesto de Transmisiones Patrimoniales (ITP)",
+      "ajd": "Impuesto de Actos Jurídicos Documentados (AJD)",
+      "lawyer": "Honorarios de abogado",
+      "notary": "Honorarios de notario",
+      "registry": "Registro de la Propiedad"
+    },
+    "detailsTitle": "Explicación detallada de costes y honorarios",
+    "vatTitle": "1. IVA en España",
+    "vatBody": "Una propiedad de obra nueva es aquella que nunca se ha vendido antes...",
+    "itpTitle": "2. Impuesto de Transmisiones Patrimoniales (ITP)",
+    "itpBody": "Si compras una vivienda de segunda mano, tendrás que pagar el ITP...",
+    "ajdTitle": "3. Impuesto de Actos Jurídicos Documentados (AJD)",
+    "ajdBody": "Este es un impuesto que pagas por todos los documentos que deben ser notariados...",
+    "lawyerTitle": "4. Honorarios de Abogado",
+    "lawyerBody1": "Los abogados suelen cobrar el 1% + IVA...",
+    "lawyerBody2": "Especialmente si trabajas con una agencia inmobiliaria...",
+    "lawyerBody3": "Además, puedes otorgarles un poder notarial...",
+    "notaryTitle": "5. Honorarios de Notario",
+    "notaryBody": "Al redactar la escritura de compraventa...",
+    "registryTitle": "6. Registro de la Propiedad",
+    "registryBody": "Registrar una escritura suele costar unos 750 €...",
+    "mortgageTitle": "Obtener una hipoteca en España",
+    "mortgageBody": "Además de todos los costes mencionados anteriormente...",
+    "valuationTitle": "Tasación",
+    "valuationBody1": "Los costes dependen de la sociedad de tasación...",
+    "valuationBody2": "La tasación de la vivienda es imprescindible...",
+    "paymentFeesTitle": "Comisiones de pago",
+    "paymentFeesBody": "Dependiendo del banco, puede variar del 0% al 1%.",
+    "closingNote": "Los costes anteriores para comprar una propiedad en España son promedios..."
+  },
+
+  "search": {
+    "listingType": {
+      "label": "Tipo de Anuncio",
+      "properties": "Propiedades",
+      "newBuilds": "Propiedades de Obra Nueva"
+    },
+    "location": { "label": "Ubicación" },
+    "type": {
+      "label": "Tipo de Propiedad",
+      "any": "Cualquiera",
+      "villa": "Villa",
+      "apartment": "Apartamento",
+      "townhouse": "Adosado",
+      "penthouse": "Ático"
+    },
+    "bedrooms": { "label": "Dormitorios" },
+    "bathrooms": { "label": "Baños" },
+    "any": "Cualquiera",
+    "anyLocation": "Cualquier Ubicación",
+    "priceRange": { "label": "Rango de Precio" },
+    "button": "Buscar"
+  },
+  "search2": {
+    "listingType": {
+      "label": "Tipo de Anuncio",
+      "properties": "Propiedades",
+      "newBuilds": "Propiedades de Obra Nueva"
+    },
+    "location": { "label": "Ubicación" },
+    "type": {
+      "label": "Tipo de Propiedad",
+      "any": "Cualquiera",
+      "villa": "Villa",
+      "apartment": "Apartamento",
+      "townhouse": "Adosado",
+      "penthouse": "Ático"
+    },
+    "bedrooms": { "label": "Dormitorios" },
+    "bathrooms": { "label": "Baños" },
+    "priceRange": { "label": "Rango de Precio" },
+    "any": "Cualquiera",
+    "anyLocation": "Cualquier Ubicación"
+  },
+
+  "terms": {
+    "title": "Términos y Condiciones",
+    "lastUpdated": "Última Actualización",
+    "intro": "Bienvenido a Costaluxestates. Estos Términos y Condiciones establecen las normas...",
+    "sections": {
+      "definitions": {
+        "title": "Definiciones",
+        "body": "\"La Compañía\", \"Nosotros\", ... se refiere a costaluxestates.com."
+      },
+      "use": {
+        "title": "Uso del Sitio Web",
+        "body": "Usted se compromete a utilizar este sitio web únicamente con fines legales..."
+      },
+      "listings": {
+        "title": "Anuncios de Propiedades",
+        "body": "La información de las propiedades en este sitio web es proporcionada por nosotros..."
+      },
+      "ip": {
+        "title": "Propiedad Intelectual",
+        "body": "Este sitio web contiene material que es de nuestra propiedad o con licencia..."
+      },
+      "accounts": {
+        "title": "Cuentas de Usuario y Contenido",
+        "body": "Si crea una cuenta en nuestro sitio web, usted es responsable..."
+      },
+      "liability": {
+        "title": "Limitación de Responsabilidad",
+        "body": "En la máxima medida permitida por la ley española, Costaluxestates no será responsable..."
+      },
+      "law": {
+        "title": "Ley Aplicable",
+        "body": "Estos términos y condiciones se regirán e interpretarán de acuerdo con la legislación española..."
+      },
+      "changes": {
+        "title": "Cambios en los Términos",
+        "body": "Nos reservamos el derecho a modificar estos términos y condiciones en cualquier momento..."
+      }
+    }
+  },
+
+  "properties": {
+    "noResultsTitle": "No se encontraron propiedades",
+    "noResultsSubtitle": "Intenta ajustar tus filtros o vuelve más tarde.",
+    "loading": "Cargando propiedades..."
+  },
+
+  "property": {
+    "from": "Desde",
+    "bedrooms": "Dormitorios",
+    "bathrooms": "Baños",
+    "builtSize": "Superficie Construida",
+    "plotSize": "Parcela",
+    "size": "Tamaño (m²)",
+    "type": "Tipo de Propiedad",
+    "buildYear": "Año de Construcción",
+    "terrace": "Terraza",
+    "town": "Ciudad",
+    "area": "Zona",
+    "description": "Descripción",
+    "noEnglishDesc": "No hay descripción en inglés.",
+    "noDescription": "No hay descripción disponible.",
+    "learnMore": "Más información sobre los costes de compra en España →",
+    "contactTitle": "¿Interesado en esta propiedad?",
+    "contactDesc": "Contáctanos para más información sobre esta propiedad",
+    "contactButton": "Enviar Consulta",
+    "promotionVideo": "Vídeo Promocional",
+    "noPrice": "Precio no disponible",
+    "loading": "Cargando propiedad...",
+    "notFound": "Propiedad no encontrada."
+  },
+
+  "propertyCard": {
+    "from": "Desde",
+    "bedrooms": "Dormitorios",
+    "bathrooms": "Baños",
+    "builtSize": "Superficie Construida",
+    "plotSize": "Parcela"
+  },
+
+  "privacy": {
+  "title": "Política de Privacidad",
+  "lastUpdated": "Última actualización",
+  "intro": "Costaluxestates (\"nosotros\", \"nuestro\" o \"nos\") opera el sitio web costaluxestates.com. Esta página le informa sobre nuestras políticas respecto a la recopilación, uso y divulgación de datos personales en cumplimiento con el RGPD.",
+  "sections": {
+    "collection": {
+      "title": "Recopilación y Uso de la Información",
+      "body": "Recopilamos varios tipos de información para distintos fines con el objetivo de proporcionar y mejorar nuestro Servicio.",
+      "typesTitle": "Tipos de datos recopilados:",
+      "personalTitle": "Datos Personales",
+      "personalBody": "Incluye información como dirección de correo electrónico, nombre, número de teléfono y preferencias de propiedades.",
+      "usageTitle": "Datos de Uso",
+      "usageBody": "Incluye dirección IP, tipo de navegador, páginas visitadas, fecha/hora y otros datos de diagnóstico."
+    },
+    "use": {
+      "title": "Uso de los Datos",
+      "body": "Costaluxestates utiliza los datos recopilados para los siguientes fines:",
+      "points": [
+        "Proporcionar y mantener nuestro Servicio",
+        "Notificarle sobre propiedades que coincidan con sus criterios",
+        "Responder a consultas y ofrecer soporte",
+        "Mejorar nuestro Servicio mediante análisis",
+        "Supervisar el uso del Servicio",
+        "Detectar, prevenir y resolver problemas técnicos"
+      ]
+    },
+    "legal": {
+      "title": "Base Legal para el Tratamiento",
+      "body": "Si usted se encuentra en el EEE, nuestra base legal depende de los datos recopilados: ejecución de un contrato, consentimiento, intereses legítimos o cumplimiento de la ley."
+    },
+    "rights": {
+      "title": "Sus Derechos de Protección de Datos",
+      "body": "Si usted reside en el EEE, tiene derecho a acceder, actualizar, eliminar, restringir y transferir sus datos, así como a oponerse a su tratamiento."
+    },
+    "security": {
+      "title": "Seguridad de los Datos",
+      "body": "Utilizamos medios comercialmente aceptables para proteger sus datos, pero no podemos garantizar una seguridad absoluta."
+    },
+    "providers": {
+      "title": "Proveedores de Servicios",
+      "body": "Podemos emplear empresas de terceros para facilitar nuestro Servicio. Solo acceden a los datos para realizar tareas en nuestro nombre."
+    },
+    "contact": {
+      "title": "Contáctenos",
+      "body": "Si tiene preguntas sobre esta Política de Privacidad, por favor contáctenos a través de",
+      "link": "nuestra página de contacto"
+    }
+  }
+},
+
+  "page": {
+    "home": {
+      "heroTitle": "Bienvenido a CostaLux Estates",
+      "heroSubtitle": "Tu socio de confianza para propiedades exclusivas en la Costa del Sol.",
+      "heroMore": "Hablamos 5 idiomas (inglés, español, neerlandés, francés y alemán) para que te sientas como en casa desde la primera conversación.",
+      "featuredTitle": "Propiedades Destacadas",
+      "latestTitle": "Últimas Propiedades",
+      "newBuildsTitle": "Descubre Proyectos de Obra Nueva",
+      "newBuildsSubtitle": "Ofrecemos acceso exclusivo a los proyectos más recientes y prestigiosos de obra nueva en la Costa del Sol. Explora diseños modernos, comodidades de última generación y ubicaciones privilegiadas.",
+      "newBuildsSubtitle2": "Desde villas contemporáneas hasta complejos de apartamentos de lujo, déjanos ayudarte a encontrar tu hogar nuevo ideal bajo el sol.",
+      "newBuildsCta": "Ver todas las Obras Nuevas"
+    }
+  },
+
+  "contactForm": {
+    "subject": "Asunto",
+    "subjectPlaceholder": "Consulta sobre una propiedad...",
+    "message": "Mensaje",
+    "messagePlaceholder": "Me gustaría recibir más información sobre...",
+    "toastSuccessTitle": "¡Mensaje Enviado!",
+    "toastSuccessDescription": "Gracias por contactarnos. Te responderemos en breve.",
+    "toastErrorTitle": "Error",
+    "toastErrorDescription": "No se pudo enviar tu mensaje. Por favor, inténtalo de nuevo más tarde."
+  }
+}

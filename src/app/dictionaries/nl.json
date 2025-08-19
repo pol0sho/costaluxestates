@@ -1,0 +1,333 @@
+{
+  "header": {
+    "home": "Home",
+    "properties": "Eigenschappen",
+    "newBuilds": "Nieuwbouw",
+    "buyInDubai": "Kopen in Dubai en omgeving",
+    "contact": "Contact"
+  },
+  "footer": {
+    "rights": "Alle rechten voorbehouden.",
+    "terms": "Algemene Voorwaarden",
+    "privacy": "Privacybeleid",
+    "contact": "Contact"
+  },
+  "form": {
+    "title": "Stuur ons een bericht",
+    "description": "Vul het onderstaande formulier in en we nemen zo snel mogelijk contact met je op.",
+    "button": "Bericht verzenden",
+    "name": "Volledige naam",
+    "email": "E-mailadres",
+    "phone": "Telefoonnummer (optioneel)",
+    "contactMethod": "Voorkeursmethode van contact",
+    "contactOptions": {
+      "email": "E-mail",
+      "phone": "Telefoon",
+      "whatsapp": "WhatsApp"
+    }
+  },
+  "newBuildsClient": {
+    "empty": {
+      "title": "Geen nieuwbouwprojecten gevonden",
+      "subtitle": "Kom later terug voor nieuwe projecten."
+    }
+  },
+  "newBuildsPage": {
+    "hero": {
+      "title": "Ontdek nieuwbouwprojecten",
+      "subtitle": "Wij bieden exclusieve toegang tot de nieuwste en meest prestigieuze nieuwbouwprojecten aan de Costa del Sol."
+    },
+    "empty": {
+      "title": "Geen nieuwbouwprojecten gevonden",
+      "subtitle": "Kom later terug voor nieuwe projecten."
+    }
+  },
+  "buyInDubai": {
+    "title": "Uw toegangspoort tot luxe vastgoed in Dubai",
+    "intro": "Welkom in Dubai, een wereldstad waar toekomstvisie en ongeëvenaarde luxe samenkomen. Als een van 's werelds meest dynamische vastgoedmarkten biedt Dubai een unieke combinatie van belastingvrije opbrengsten, een levensstijl van wereldklasse en uitzonderlijke investeringsmogelijkheden. Of u nu op zoek bent naar een hoogrenderend verhuurobject, een luxe vakantiehuis of een veilige langetermijninvestering, de vastgoedmarkt van Dubai is uw sleutel tot succes.",
+    "whyTitle": "Waarom investeren in vastgoed in Dubai?",
+    "benefits": [
+      {
+        "title": "Hoge investeringsopbrengst",
+        "text": "De vastgoedmarkt van Dubai staat bekend om sterke huuropbrengsten en waardestijging, waardoor het een lucratieve optie is voor investeerders."
+      },
+      {
+        "title": "Belastingvrije omgeving",
+        "text": "Profiteer van nul inkomstenbelasting op huurinkomsten en geen jaarlijkse onroerendgoedbelasting, wat de winstgevendheid van uw investering maximaliseert."
+      },
+      {
+        "title": "UAE Gouden Visum",
+        "text": "Vastgoedinvesteringen kunnen een directe weg zijn naar een verblijfsvergunning voor de lange termijn, met toegang tot wereldklasse diensten van de VAE."
+      },
+      {
+        "title": "Ongeëvenaarde levensstijl & veiligheid",
+        "text": "Geniet van een luxe levensstijl in een van de veiligste steden ter wereld, met ongekende voorzieningen, entertainment en een multiculturele omgeving."
+      },
+      {
+        "title": "Stabiele economie & investeerdersvriendelijk beleid",
+        "text": "De robuuste economie van de VAE en overheidsinitiatieven om investeerders te beschermen, creëren een veilige en transparante vastgoedmarkt."
+      },
+      {
+        "title": "Wereldwijde hub-locatie",
+        "text": "Strategisch gelegen op het kruispunt van Europa, Azië en Afrika, biedt Dubai uitstekende wereldwijde connectiviteit voor zaken en reizen."
+      }
+    ],
+    "processTitle": "Het aankoopproces",
+    "processIntro": "Een woning kopen in Dubai is een eenvoudig en transparant proces, ontworpen voor internationale investeerders. De typische stappen zijn:",
+    "processSteps": [
+      {
+        "title": "Initiële overeenkomst",
+        "text": "Zodra u een woning heeft gekozen, wordt er een intentieverklaring (MOU) of reserveringsovereenkomst getekend en een aanbetaling gedaan."
+      },
+      {
+        "title": "Geen-bezwaar certificaat (NOC)",
+        "text": "De ontwikkelaar geeft een NOC af om de eigendomsoverdracht juridisch mogelijk te maken. Dit is een standaardprocedure om zeker te stellen dat er geen openstaande schulden zijn."
+      },
+      {
+        "title": "Eigendomregistratie",
+        "text": "De laatste stap is de registratie bij de Dubai Land Department (DLD). Zowel koper als verkoper (of hun vertegenwoordigers) moeten aanwezig zijn om het contract te tekenen."
+      },
+      {
+        "title": "Uitgifte eigendomsakte",
+        "text": "Na voltooiing geeft de DLD de eigendomsakte uit op naam van de koper, waarmee het eigendom juridisch wordt bevestigd."
+      }
+    ],
+    "costsTitle": "Verwante kosten",
+    "costsIntro": "Hoewel Dubai belastingvriendelijk is, zijn er enkele standaardkosten verbonden aan een aankoop:",
+    "costsList": [
+      "Dubai Land Department (DLD) vergoeding: 4% van de aankoopprijs.",
+      "Registratierechten: een administratieve vergoeding aan de DLD.",
+      "Makelaarscourtage: meestal 2% van de aankoopprijs.",
+      "Ontwikkelaarskosten: voor nieuwbouwprojecten kan de ontwikkelaar administratiekosten rekenen voor de NOC."
+    ],
+    "closingNote": "Ons ervaren team begeleidt u bij elke stap van uw vastgoedreis in Dubai. Van selectie tot juridische zaken, wij zorgen voor een soepel en succesvol aankoopproces."
+  },
+  "costOfBuying": {
+    "title": "Aankoopkosten voor vastgoed in Spanje",
+    "intro1": "De kosten voor het kopen van een woning in Spanje verschillen afhankelijk van of u een nieuwbouw of een bestaande woning koopt...",
+    "intro2": "De aankoopkosten liggen meestal tussen de <strong>9 en 14% van de verkoopprijs</strong>...",
+    "listIntro": "Hieronder een overzicht van alle kosten en belastingen:",
+    "list": {
+      "vat": "BTW (IVA) in Spanje",
+      "itp": "Overdrachtsbelasting (ITP)",
+      "ajd": "Zegelrecht of Documentatiebelasting (AJD)",
+      "lawyer": "Advocaatkosten",
+      "notary": "Notariskosten",
+      "registry": "Kadasterkosten"
+    },
+    "detailsTitle": "Gedetailleerde uitleg van kosten en vergoedingen",
+    "vatTitle": "1. BTW (IVA) in Spanje",
+    "vatBody": "Een nieuwbouwwoning is een woning die nog nooit eerder is verkocht...",
+    "itpTitle": "2. Overdrachtsbelasting (ITP)",
+    "itpBody": "Bij aankoop van een bestaande woning moet u ITP betalen...",
+    "ajdTitle": "3. Zegelrecht of Documentatiebelasting (AJD)",
+    "ajdBody": "Dit is een belasting op alle documenten die notarieel moeten worden vastgelegd...",
+    "lawyerTitle": "4. Advocaatkosten",
+    "lawyerBody1": "Advocaten rekenen meestal 1% + BTW...",
+    "lawyerBody2": "Vooral als u met een makelaar werkt...",
+    "lawyerBody3": "Bovendien kunt u hen volmacht geven...",
+    "notaryTitle": "5. Notariskosten",
+    "notaryBody": "Bij het opstellen van een koopakte...",
+    "registryTitle": "6. Kadasterkosten",
+    "registryBody": "De inschrijving van de eigendomsakte kost doorgaans ongeveer €750...",
+    "mortgageTitle": "Hypotheek verkrijgen voor Spaans vastgoed",
+    "mortgageBody": "Naast bovengenoemde kosten komen er extra kosten bij voor een hypotheek...",
+    "valuationTitle": "Taxatie",
+    "valuationBody1": "De kosten worden bepaald door het taxatiebureau...",
+    "valuationBody2": "Een taxatie is verplicht...",
+    "paymentFeesTitle": "Betalingskosten",
+    "paymentFeesBody": "Afhankelijk van de bank kan dit variëren van 0% tot 1%.",
+    "closingNote": "De bovengenoemde kosten zijn gemiddelden en kunnen variëren per regio."
+  },
+  "search": {
+    "listingType": {
+      "label": "Soort listing",
+      "properties": "Eigenschappen",
+      "newBuilds": "Nieuwbouw"
+    },
+    "location": { "label": "Locatie" },
+    "type": {
+      "label": "Soort woning",
+      "any": "Alle",
+      "villa": "Villa",
+      "apartment": "Appartement",
+      "townhouse": "Herenhuis",
+      "penthouse": "Penthouse"
+    },
+    "bedrooms": { "label": "Slaapkamers" },
+    "bathrooms": { "label": "Badkamers" },
+    "any": "Alle",
+    "anyLocation": "Elke locatie",
+    "priceRange": { "label": "Prijsklasse" },
+    "button": "Zoeken"
+  },
+  "search2": {
+    "listingType": {
+      "label": "Soort listing",
+      "properties": "Eigenschappen",
+      "newBuilds": "Nieuwbouw"
+    },
+    "location": { "label": "Locatie" },
+    "type": {
+      "label": "Soort woning",
+      "any": "Alle",
+      "villa": "Villa",
+      "apartment": "Appartement",
+      "townhouse": "Herenhuis",
+      "penthouse": "Penthouse"
+    },
+    "bedrooms": { "label": "Slaapkamers" },
+    "bathrooms": { "label": "Badkamers" },
+    "priceRange": { "label": "Prijsklasse" },
+    "any": "Alle",
+    "anyLocation": "Elke locatie"
+  },
+  "terms": {
+    "title": "Algemene Voorwaarden",
+    "lastUpdated": "Laatst bijgewerkt",
+    "intro": "Welkom bij Costaluxestates. Deze voorwaarden beschrijven de regels...",
+    "sections": {
+      "definitions": {
+        "title": "Definities",
+        "body": "\"Het Bedrijf\", \"Wij\" ... verwijst naar costaluxestates.com."
+      },
+      "use": {
+        "title": "Gebruik van de website",
+        "body": "U stemt ermee in deze website alleen voor legitieme doeleinden te gebruiken..."
+      },
+      "listings": {
+        "title": "Vastgoedadvertenties",
+        "body": "De vastgoedinformatie op deze site is door ons verstrekt..."
+      },
+      "ip": {
+        "title": "Intellectueel eigendom",
+        "body": "Deze website bevat materiaal dat eigendom is van of in licentie is gegeven aan ons..."
+      },
+      "accounts": {
+        "title": "Gebruikersaccounts en inhoud",
+        "body": "Als u een account aanmaakt, bent u verantwoordelijk..."
+      },
+      "liability": {
+        "title": "Beperking van aansprakelijkheid",
+        "body": "Voor zover toegestaan door de Spaanse wet is Costaluxestates niet aansprakelijk..."
+      },
+      "law": {
+        "title": "Toepasselijk recht",
+        "body": "Deze voorwaarden vallen onder het recht van Spanje..."
+      },
+      "changes": {
+        "title": "Wijzigingen in de voorwaarden",
+        "body": "We behouden ons het recht voor deze voorwaarden op elk moment te wijzigen..."
+      }
+    }
+  },
+  "properties": {
+    "noResultsTitle": "Geen woningen gevonden",
+    "noResultsSubtitle": "Pas uw filters aan of kom later terug.",
+    "loading": "Woningen laden..."
+  },
+  "property": {
+    "from": "Vanaf",
+    "bedrooms": "Slaapkamers",
+    "bathrooms": "Badkamers",
+    "builtSize": "Bebouwde oppervlakte",
+    "plotSize": "Perceelgrootte",
+    "size": "Oppervlakte (m²)",
+    "type": "Soort woning",
+    "buildYear": "Bouwjaar",
+    "terrace": "Terras",
+    "town": "Stad",
+    "area": "Gebied",
+    "description": "Beschrijving",
+    "noEnglishDesc": "Geen Engelse beschrijving beschikbaar.",
+    "noDescription": "Geen beschrijving beschikbaar.",
+    "learnMore": "Lees meer over de aankoopkosten in Spanje →",
+    "contactTitle": "Geïnteresseerd in deze woning?",
+    "contactDesc": "Neem contact met ons op voor meer informatie over deze woning.",
+    "contactButton": "Verstuur aanvraag",
+    "promotionVideo": "Promotievideo",
+    "noPrice": "Prijs niet beschikbaar",
+    "loading": "Woning laden...",
+    "notFound": "Woning niet gevonden."
+  },
+  "propertyCard": {
+    "from": "Vanaf",
+    "bedrooms": "Slaapkamers",
+    "bathrooms": "Badkamers",
+    "builtSize": "Bebouwde oppervlakte",
+    "plotSize": "Perceelgrootte"
+  },
+
+  "privacy": {
+  "title": "Privacybeleid",
+  "lastUpdated": "Laatst bijgewerkt",
+  "intro": "Costaluxestates (\"wij\", \"ons\" of \"onze\") beheert de website costaluxestates.com. Deze pagina informeert u over ons beleid met betrekking tot het verzamelen, gebruiken en openbaar maken van persoonlijke gegevens in overeenstemming met de AVG.",
+  "sections": {
+    "collection": {
+      "title": "Verzameling en Gebruik van Informatie",
+      "body": "Wij verzamelen verschillende soorten informatie voor diverse doeleinden om onze Dienst te leveren en te verbeteren.",
+      "typesTitle": "Soorten verzamelde gegevens:",
+      "personalTitle": "Persoonsgegevens",
+      "personalBody": "Omvat informatie zoals e-mailadres, naam, telefoonnummer en vastgoedvoorkeuren.",
+      "usageTitle": "Gebruiksgegevens",
+      "usageBody": "Omvat IP-adres, browsertype, bezochte pagina’s, datum/tijd en andere diagnostische gegevens."
+    },
+    "use": {
+      "title": "Gebruik van Gegevens",
+      "body": "Costaluxestates gebruikt de verzamelde gegevens voor de volgende doeleinden:",
+      "points": [
+        "Om onze Dienst te leveren en te onderhouden",
+        "Om u te informeren over woningen die aan uw criteria voldoen",
+        "Om te reageren op vragen en ondersteuning te bieden",
+        "Om onze Dienst te verbeteren door middel van analyses",
+        "Om het gebruik van onze Dienst te monitoren",
+        "Om technische problemen te detecteren, voorkomen en oplossen"
+      ]
+    },
+    "legal": {
+      "title": "Wettelijke Grondslag voor Verwerking",
+      "body": "Als u zich in de EER bevindt, hangt onze wettelijke grondslag af van de verzamelde gegevens: uitvoering van een contract, toestemming, gerechtvaardigde belangen of naleving van de wet."
+    },
+    "rights": {
+      "title": "Uw Rechten inzake Gegevensbescherming",
+      "body": "Als u een inwoner bent van de EER, heeft u het recht om uw gegevens in te zien, bij te werken, te verwijderen, te beperken en over te dragen, evenals het recht om bezwaar te maken tegen verwerking."
+    },
+    "security": {
+      "title": "Gegevensbeveiliging",
+      "body": "Wij gebruiken commercieel aanvaardbare middelen om uw gegevens te beschermen, maar kunnen geen absolute veiligheid garanderen."
+    },
+    "providers": {
+      "title": "Dienstverleners",
+      "body": "Wij kunnen externe bedrijven inschakelen om onze Dienst te ondersteunen. Zij hebben alleen toegang tot gegevens om taken namens ons uit te voeren."
+    },
+    "contact": {
+      "title": "Contact opnemen",
+      "body": "Als u vragen heeft over dit Privacybeleid, neem dan contact met ons op via",
+      "link": "onze contactpagina"
+    }
+  }
+},
+  "page": {
+    "home": {
+      "heroTitle": "Welkom bij CostaLux Estates",
+      "heroSubtitle": "Uw betrouwbare partner voor exclusief vastgoed aan de Costa del Sol.",
+      "heroMore": "Wij spreken 5 talen (Engels, Spaans, Nederlands, Frans en Duits) om ervoor te zorgen dat u zich meteen thuis voelt.",
+      "featuredTitle": "Aanbevolen woningen",
+      "latestTitle": "Laatste woningen",
+      "newBuildsTitle": "Ontdek nieuwbouwprojecten",
+      "newBuildsSubtitle": "Wij bieden exclusieve toegang tot de nieuwste en meest prestigieuze nieuwbouwprojecten aan de Costa del Sol. Ontdek moderne ontwerpen, state-of-the-art voorzieningen en toplocaties.",
+      "newBuildsSubtitle2": "Van eigentijdse villa's tot luxe appartementencomplexen, wij helpen u uw perfecte nieuwe woning in de zon te vinden.",
+      "newBuildsCta": "Bekijk alle nieuwbouw"
+    }
+  },
+  "contactForm": {
+    "subject": "Onderwerp",
+    "subjectPlaceholder": "Vraag over woning...",
+    "message": "Bericht",
+    "messagePlaceholder": "Ik zou graag meer informatie willen over...",
+    "toastSuccessTitle": "Bericht verzonden!",
+    "toastSuccessDescription": "Bedankt voor uw bericht. Wij nemen spoedig contact met u op.",
+    "toastErrorTitle": "Fout",
+    "toastErrorDescription": "Uw bericht kon niet worden verzonden. Probeer het later opnieuw."
+  }
+}

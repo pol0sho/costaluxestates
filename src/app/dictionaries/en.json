@@ -1,0 +1,336 @@
+{
+  "header": {
+    "home": "Home",
+    "properties": "Properties",
+    "newBuilds": "New Builds",
+    "buyInDubai": "Buy in Dubai and surroundings",
+    "contact": "Contact"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "terms": "Terms & Conditions",
+    "privacy": "Privacy Policy",
+    "contact": "Contact"
+  },
+  "form": {
+    "title": "Send us a Message",
+    "description": "Fill out the form below and we'll get back to you as soon as possible.",
+    "button": "Send Message",
+    "name": "Full Name",
+    "email": "Email Address",
+    "phone": "Phone Number (Optional)",
+    "contactMethod": "Preferred method of contact",
+    "contactOptions": {
+      "email": "Email",
+      "phone": "Phone",
+      "whatsapp": "WhatsApp"
+    }
+  },
+
+"newBuildsClient": {
+  "empty": {
+    "title": "No New Build Properties Found",
+    "subtitle": "Please check back later for new build projects."
+  }
+},
+
+"newBuildsPage": {
+  "hero": {
+    "title": "Discover New Build Projects",
+    "subtitle": "We offer exclusive access to the latest and most prestigious new build projects on the Costa del Sol."
+  },
+  "empty": {
+    "title": "No New Build Properties Found",
+    "subtitle": "Please check back later for new build projects."
+  }
+},
+
+  "buyInDubai": {
+  "title": "Your Gateway to Luxury Real Estate in Dubai",
+  "intro": "Welcome to Dubai, a global metropolis where futuristic vision meets unparalleled luxury. As one of the world's most dynamic real estate markets, Dubai offers a unique combination of tax-free returns, a world-class lifestyle, and exceptional investment opportunities. Whether you're seeking a high-yield rental property, a luxury holiday home, or a secure long-term investment, Dubai's property market is your gateway to success.",
+  "whyTitle": "Why Invest in Dubai Property?",
+  "benefits": [
+    {
+      "title": "High Return on Investment",
+      "text": "Dubai's property market is known for its strong rental yields and potential for capital appreciation, making it a lucrative option for investors."
+    },
+    {
+      "title": "Tax-Free Environment",
+      "text": "Enjoy the benefits of zero income tax on rental returns and no annual property taxes, maximizing your investment's profitability."
+    },
+    {
+      "title": "UAE Golden Visa",
+      "text": "Property investment can be a direct pathway to securing a long-term residency visa, offering stability and access to the UAE's world-class services."
+    },
+    {
+      "title": "Unmatched Lifestyle & Safety",
+      "text": "Experience a luxurious lifestyle in one of the world's safest cities, with unparalleled amenities, entertainment, and a multicultural environment."
+    },
+    {
+      "title": "Stable Economy & Pro-Investor Policies",
+      "text": "The UAE's robust economy and government initiatives to protect investors create a secure and transparent real estate market."
+    },
+    {
+      "title": "Global Hub Location",
+      "text": "Strategically located at the crossroads of Europe, Asia, and Africa, Dubai offers excellent global connectivity for business and travel."
+    }
+  ],
+  "processTitle": "The Purchasing Process",
+  "processIntro": "Buying property in Dubai is a straightforward and transparent process, designed to be accessible for international investors. Here are the typical steps:",
+  "processSteps": [
+    {
+      "title": "Initial Agreement",
+      "text": "Once you've chosen a property, a Memorandum of Understanding (MOU) or reservation agreement is signed, and a deposit is paid."
+    },
+    {
+      "title": "No Objection Certificate (NOC)",
+      "text": "The developer issues an NOC to legally transfer ownership. This is a standard procedure to ensure there are no outstanding dues on the property."
+    },
+    {
+      "title": "Property Registration",
+      "text": "The final step is to register the property with the Dubai Land Department (DLD). Both buyer and seller (or their legal representatives) must be present to sign the contract and complete the transfer."
+    },
+    {
+      "title": "Title Deed Issuance",
+      "text": "Upon completion, the DLD issues the new Title Deed in the buyer's name, confirming legal ownership."
+    }
+  ],
+  "costsTitle": "Associated Costs",
+  "costsIntro": "While Dubai is tax-friendly, there are some standard fees associated with a property purchase:",
+  "costsList": [
+    "Dubai Land Department (DLD) Fee: 4% of the property's purchase price.",
+    "Registration Fees: A nominal administrative fee paid to the DLD.",
+    "Real Estate Agency Fee: Typically 2% of the purchase price.",
+    "Developer Fees: For new-build properties, developers may charge an administration fee for issuing the NOC."
+  ],
+  "closingNote": "Our expert team is here to guide you through every step of your Dubai property journey. We provide comprehensive support, from property selection to legalities, ensuring a seamless and rewarding investment experience."
+},
+  "costOfBuying": {
+  "title": "Purchase costs for property in Spain",
+  "intro1": "The costs of purchasing a property in Spain vary depending on whether you are buying a brand new or an existing property...",
+  "intro2": "The purchase costs of Spanish property typically range from <strong>9 to 14% of the sale price</strong>...",
+  "listIntro": "Below are all the costs and taxes listed in detail:",
+  "list": {
+    "vat": "VAT (IVA) in Spain",
+    "itp": "Transfer tax (ITP)",
+    "ajd": "Stamp duty or Legal Documentation Tax (AJD)",
+    "lawyer": "Lawyer's fees",
+    "notary": "Notary fees",
+    "registry": "Land registry"
+  },
+  "detailsTitle": "Detailed explanation of costs and fees",
+  "vatTitle": "1. VAT (IVA) in Spain",
+  "vatBody": "A brand new property is one that has never been sold before...",
+  "itpTitle": "2. Transfer tax (ITP)",
+  "itpBody": "If you buy a second-hand home, you will have to pay ITP tax...",
+  "ajdTitle": "3. Stamp duty or Legal Documentation Tax (AJD)",
+  "ajdBody": "This is a tax you pay on all documents that must be notarised...",
+  "lawyerTitle": "4. Solicitor's fees",
+  "lawyerBody1": "Solicitors usually charge 1% + VAT...",
+  "lawyerBody2": "Especially if you work with a real estate company...",
+  "lawyerBody3": "In addition, you can give them power of attorney...",
+  "notaryTitle": "5. Notary fees",
+  "notaryBody": "When drawing up a purchase agreement...",
+  "registryTitle": "6. Land Registry",
+  "registryBody": "A title deed registration usually costs around €750...",
+  "mortgageTitle": "Obtaining a mortgage for Spanish property",
+  "mortgageBody": "In addition to all the above-mentioned costs...",
+  "valuationTitle": "Valuation",
+  "valuationBody1": "The costs are determined by the valuation agency...",
+  "valuationBody2": "A property valuation is a must...",
+  "paymentFeesTitle": "Payment fees",
+  "paymentFeesBody": "Depending on the bank, this can vary from 0% to 1%.",
+  "closingNote": "The above-mentioned costs for purchasing property in Spain are averages..."
+},
+  "search": {
+    "listingType": {
+      "label": "Listing Type",
+      "properties": "Properties",
+      "newBuilds": "New Build Properties"
+    },
+    "location": { "label": "Location" },
+    "type": {
+      "label": "Property Type",
+      "any": "Any",
+      "villa": "Villa",
+      "apartment": "Apartment",
+      "townhouse": "Townhouse",
+      "penthouse": "Penthouse"
+    },
+    "bedrooms": { "label": "Bedrooms" },
+    "bathrooms": { "label": "Bathrooms" },
+    "any": "Any",
+    "anyLocation": "Any Location",
+    "priceRange": { "label": "Price Range" },
+    "button": "Search"
+  },
+  "search2": {
+    "listingType": {
+      "label": "Listing Type",
+      "properties": "Properties",
+      "newBuilds": "New Build Properties"
+    },
+    "location": { "label": "Location" },
+    "type": {
+      "label": "Property Type",
+      "any": "Any",
+      "villa": "Villa",
+      "apartment": "Apartment",
+      "townhouse": "Townhouse",
+      "penthouse": "Penthouse"
+    },
+    "bedrooms": { "label": "Bedrooms" },
+    "bathrooms": { "label": "Bathrooms" },
+    "priceRange": { "label": "Price Range" },
+    "any": "Any",
+    "anyLocation": "Any Location"
+  },
+  "terms": {
+    "title": "Terms & Conditions",
+    "lastUpdated": "Last Updated",
+    "intro": "Welcome to Costaluxestates. These Terms and Conditions outline the rules...",
+    "sections": {
+      "definitions": {
+        "title": "Definitions",
+        "body": "\"The Company\", \"Ourselves\", \"We\", ... refers to costaluxestates.com."
+      },
+      "use": {
+        "title": "Use of the Website",
+        "body": "You agree to use this Website for lawful purposes only..."
+      },
+      "listings": {
+        "title": "Property Listings",
+        "body": "The property information on this website is provided by us..."
+      },
+      "ip": {
+        "title": "Intellectual Property",
+        "body": "This website contains material which is owned by or licensed to us..."
+      },
+      "accounts": {
+        "title": "User Accounts and Content",
+        "body": "If you create an account on our website, you are responsible..."
+      },
+      "liability": {
+        "title": "Limitation of Liability",
+        "body": "To the fullest extent permitted by Spanish law, Costaluxestates will not be liable..."
+      },
+      "law": {
+        "title": "Governing Law",
+        "body": "These terms and conditions shall be governed by and construed in accordance with the law of Spain..."
+      },
+      "changes": {
+        "title": "Changes to Terms",
+        "body": "We reserve the right to change these terms and conditions at any time..."
+      }
+    }
+  },
+  "properties": {
+    "noResultsTitle": "No Properties Found",
+    "noResultsSubtitle": "Try adjusting your filters or check back later.",
+    "loading": "Loading properties..."
+  },
+  "property": {
+    "from": "From",
+    "bedrooms": "Bedrooms",
+    "bathrooms": "Bathrooms",
+    "builtSize": "Built Size",
+    "plotSize": "Plot Size",
+    "size": "Size (m²)",
+    "type": "Property Type",
+    "buildYear": "Build Year",
+    "terrace": "Terrace",
+    "town": "Town",
+    "area": "Area",
+    "description": "Description",
+    "noEnglishDesc": "No English description.",
+    "noDescription": "No description available.",
+    "learnMore": "Learn more about the cost of buying in Spain →",
+    "contactTitle": "Interested in this property?",
+    "contactDesc": "Contact us for more information about this property",
+    "contactButton": "Send Inquiry",
+    "promotionVideo": "Promotion Video",
+    "noPrice": "Price not available",
+    "loading": "Loading property...",
+    "notFound": "Property not found."
+  },
+  "propertyCard": {
+    "from": "From",
+    "bedrooms": "Bedrooms",
+    "bathrooms": "Bathrooms",
+    "builtSize": "Built Size",
+    "plotSize": "Plot Size"
+  },
+
+    "privacy": {
+  "title": "Privacy Policy",
+  "lastUpdated": "Last Updated",
+  "intro": "Costaluxestates (\"us\", \"we\", or \"our\") operates the costaluxestates.com website. This page informs you of our policies regarding the collection, use, and disclosure of personal data in compliance with GDPR.",
+  "sections": {
+    "collection": {
+      "title": "Information Collection and Use",
+      "body": "We collect several different types of information for various purposes to provide and improve our Service.",
+      "typesTitle": "Types of Data Collected:",
+      "personalTitle": "Personal Data",
+      "personalBody": "Includes information such as email address, name, phone number, and property preferences.",
+      "usageTitle": "Usage Data",
+      "usageBody": "Includes IP address, browser type, pages visited, date/time, and other diagnostic data."
+    },
+    "use": {
+      "title": "Use of Data",
+      "body": "Costaluxestates uses collected data for the following purposes:",
+      "points": [
+        "To provide and maintain our Service",
+        "To notify you about properties that match your criteria",
+        "To respond to inquiries and provide support",
+        "To improve our Service through analysis",
+        "To monitor usage",
+        "To detect, prevent, and address technical issues"
+      ]
+    },
+    "legal": {
+      "title": "Legal Basis for Processing",
+      "body": "If you are from the EEA, our legal basis depends on the data collected: performance of a contract, consent, legitimate interests, or compliance with law."
+    },
+    "rights": {
+      "title": "Your Data Protection Rights",
+      "body": "If you are a resident of the EEA, you have rights to access, update, delete, restrict, and transfer your data, as well as object to processing."
+    },
+    "security": {
+      "title": "Data Security",
+      "body": "We use commercially acceptable means to protect your data but cannot guarantee absolute security."
+    },
+    "providers": {
+      "title": "Service Providers",
+      "body": "We may employ third-party companies to facilitate our Service. They only access data to perform tasks on our behalf."
+    },
+    "contact": {
+      "title": "Contact Us",
+      "body": "If you have questions about this Privacy Policy, please contact us via",
+      "link": "our contact page"
+    }
+  }
+},
+  "page": {
+    "home": {
+      "heroTitle": "Welcome to CostaLux Estates",
+      "heroSubtitle": "Your trusted partner for exclusive real estate on the Costa del Sol.",
+      "heroMore": "We speak 5 languages (English, Spanish, Dutch, French and German) to make sure you feel at home from the very first conversation.",
+      "featuredTitle": "Featured Properties",
+      "latestTitle": "Latest Properties",
+      "newBuildsTitle": "Discover New Build Projects",
+      "newBuildsSubtitle": "We offer exclusive access to the latest and most prestigious new build projects on the Costa del Sol. Explore modern designs, state-of-the-art amenities, and prime locations.",
+      "newBuildsSubtitle2": "From contemporary villas to luxury apartment complexes, let us help you find your perfect, brand-new home in the sun.",
+      "newBuildsCta": "See all New Builds"
+    }
+  },
+  "contactForm": {
+    "subject": "Subject",
+    "subjectPlaceholder": "Inquiry about property...",
+    "message": "Message",
+    "messagePlaceholder": "I would like more information about...",
+    "toastSuccessTitle": "Message Sent!",
+    "toastSuccessDescription": "Thank you for contacting us. We will get back to you shortly.",
+    "toastErrorTitle": "Error",
+    "toastErrorDescription": "Could not send your message. Please try again later."
+  }
+}

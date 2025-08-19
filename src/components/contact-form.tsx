@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -15,42 +15,43 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 import { Phone } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 
 const formSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  email: z.string().email({ message: "Please enter a valid email address." }),
+  name: z.string().min(2),
+  email: z.string().email(),
   phone: z.string().optional(),
-  subject: z.string().min(5, { message: "Subject must be at least 5 characters." }),
-  message: z.string().min(10, { message: "Message must be at least 10 characters." }),
+  subject: z.string().min(5),
+  message: z.string().min(10),
   contactMethod: z.enum(["email", "phone", "whatsapp"]),
 });
 
 type ContactFormProps = {
-  title?: string;
-  description?: string;
-  buttonText?: string;
-  propertyRef?: string;   // ✅ added
-  propertyTitle?: string; // ✅ optional, can be included in email
+  dict: any; // ✅ pass dictionary
+  propertyRef?: string;
+  propertyTitle?: string;
 };
 
-export function ContactForm({
-  title = "Send us a Message",
-  description = "Fill out the form below and we'll get back to you as soon as possible.",
-  buttonText = "Send Message",
-  propertyRef,
-  propertyTitle,
-}: ContactFormProps) {
+export function ContactForm({ dict, propertyRef, propertyTitle }: ContactFormProps) {
   const { toast } = useToast();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       email: "",
       phone: "",
-      subject: propertyRef ? `Inquiry about property ${propertyRef}` : "", // ✅ auto-fill subject
+      subject: propertyRef
+        ? `${dict.form.subject} ${propertyRef}`
+        : "",
       message: "",
       contactMethod: "email",
     },
@@ -63,23 +64,23 @@ export function ContactForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...values,
-          propertyRef,   // ✅ include in payload
-          propertyTitle, // ✅ optional
+          propertyRef,
+          propertyTitle,
         }),
       });
 
       if (!res.ok) throw new Error("Failed to send");
 
       toast({
-        title: "Message Sent!",
-        description: "Thank you for contacting us. We will get back to you shortly.",
+        title: dict.form.toastSuccessTitle,
+        description: dict.form.toastSuccessDescription,
       });
 
       form.reset();
     } catch (err) {
       toast({
-        title: "Error",
-        description: "Could not send your message. Please try again later.",
+        title: dict.form.toastErrorTitle,
+        description: dict.form.toastErrorDescription,
         variant: "destructive",
       });
     }
@@ -88,8 +89,8 @@ export function ContactForm({
   return (
     <Card className="shadow-lg border-none h-full">
       <CardHeader>
-        <CardTitle className="font-headline text-xl">{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        <CardTitle className="font-headline text-xl">{dict.form.title}</CardTitle>
+        <CardDescription>{dict.form.description}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -100,7 +101,7 @@ export function ContactForm({
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Full Name</FormLabel>
+                    <FormLabel>{dict.form.name}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -113,7 +114,7 @@ export function ContactForm({
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email Address</FormLabel>
+                    <FormLabel>{dict.form.email}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -128,7 +129,7 @@ export function ContactForm({
               name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Phone Number (Optional)</FormLabel>
+                  <FormLabel>{dict.form.phone}</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -145,7 +146,7 @@ export function ContactForm({
               name="contactMethod"
               render={({ field }) => (
                 <FormItem className="space-y-3">
-                  <FormLabel>Preferred method of contact</FormLabel>
+                  <FormLabel>{dict.form.contactMethod}</FormLabel>
                   <FormControl>
                     <RadioGroup
                       onValueChange={field.onChange}
@@ -156,19 +157,19 @@ export function ContactForm({
                         <FormControl>
                           <RadioGroupItem value="email" />
                         </FormControl>
-                        <FormLabel className="font-normal">Email</FormLabel>
+                        <FormLabel className="font-normal">{dict.form.contactOptions.email}</FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
                           <RadioGroupItem value="phone" />
                         </FormControl>
-                        <FormLabel className="font-normal">Phone</FormLabel>
+                        <FormLabel className="font-normal">{dict.form.contactOptions.phone}</FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
                           <RadioGroupItem value="whatsapp" />
                         </FormControl>
-                        <FormLabel className="font-normal">WhatsApp</FormLabel>
+                        <FormLabel className="font-normal">{dict.form.contactOptions.whatsapp}</FormLabel>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
@@ -182,9 +183,9 @@ export function ContactForm({
               name="subject"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Subject</FormLabel>
+                  <FormLabel>{dict.form.subject}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Inquiry about property..." {...field} />
+                    <Input placeholder={dict.form.subjectPlaceholder} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -196,10 +197,10 @@ export function ContactForm({
               name="message"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Message</FormLabel>
+                  <FormLabel>{dict.form.message}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="I would like more information about..."
+                      placeholder={dict.form.messagePlaceholder}
                       className="min-h-[120px]"
                       {...field}
                     />
@@ -209,8 +210,12 @@ export function ContactForm({
               )}
             />
 
-            <Button type="submit" size="lg" className="w-full text-base font-bold bg-primary hover:bg-primary/90">
-              {buttonText}
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full text-base font-bold bg-primary hover:bg-primary/90"
+            >
+              {dict.form.button}
             </Button>
           </form>
         </Form>
