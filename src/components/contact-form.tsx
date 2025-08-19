@@ -35,7 +35,7 @@ const formSchema = z.object({
 });
 
 type ContactFormProps = {
-  dict: any; // ✅ pass dictionary
+  dict: any; // translations
   propertyRef?: string;
   propertyTitle?: string;
 };
@@ -50,7 +50,7 @@ export function ContactForm({ dict, propertyRef, propertyTitle }: ContactFormPro
       email: "",
       phone: "",
       subject: propertyRef
-        ? `${dict.form.subject} ${propertyRef}`
+        ? `${dict.contactForm.subject} ${propertyRef}`
         : "",
       message: "",
       contactMethod: "email",
@@ -72,15 +72,15 @@ export function ContactForm({ dict, propertyRef, propertyTitle }: ContactFormPro
       if (!res.ok) throw new Error("Failed to send");
 
       toast({
-        title: dict.form.toastSuccessTitle,
-        description: dict.form.toastSuccessDescription,
+        title: dict.contactForm.toastSuccessTitle,
+        description: dict.contactForm.toastSuccessDescription,
       });
 
       form.reset();
     } catch (err) {
       toast({
-        title: dict.form.toastErrorTitle,
-        description: dict.form.toastErrorDescription,
+        title: dict.contactForm.toastErrorTitle,
+        description: dict.contactForm.toastErrorDescription,
         variant: "destructive",
       });
     }
@@ -157,19 +157,25 @@ export function ContactForm({ dict, propertyRef, propertyTitle }: ContactFormPro
                         <FormControl>
                           <RadioGroupItem value="email" />
                         </FormControl>
-                        <FormLabel className="font-normal">{dict.form.contactOptions.email}</FormLabel>
+                        <FormLabel className="font-normal">
+                          {dict.form.contactOptions.email}
+                        </FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
                           <RadioGroupItem value="phone" />
                         </FormControl>
-                        <FormLabel className="font-normal">{dict.form.contactOptions.phone}</FormLabel>
+                        <FormLabel className="font-normal">
+                          {dict.form.contactOptions.phone}
+                        </FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
                           <RadioGroupItem value="whatsapp" />
                         </FormControl>
-                        <FormLabel className="font-normal">{dict.form.contactOptions.whatsapp}</FormLabel>
+                        <FormLabel className="font-normal">
+                          {dict.form.contactOptions.whatsapp}
+                        </FormLabel>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
@@ -183,9 +189,12 @@ export function ContactForm({ dict, propertyRef, propertyTitle }: ContactFormPro
               name="subject"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{dict.form.subject}</FormLabel>
+                  <FormLabel>{dict.contactForm.subject}</FormLabel>
                   <FormControl>
-                    <Input placeholder={dict.form.subjectPlaceholder} {...field} />
+                    <Input
+                      placeholder={dict.contactForm.subjectPlaceholder}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -197,10 +206,10 @@ export function ContactForm({ dict, propertyRef, propertyTitle }: ContactFormPro
               name="message"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{dict.form.message}</FormLabel>
+                  <FormLabel>{dict.contactForm.message}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder={dict.form.messagePlaceholder}
+                      placeholder={dict.contactForm.messagePlaceholder}
                       className="min-h-[120px]"
                       {...field}
                     />

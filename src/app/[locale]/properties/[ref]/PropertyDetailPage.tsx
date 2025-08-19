@@ -192,13 +192,11 @@ export default function PropertyDetailPage({ params, dict }: { params: { ref: st
           {/* Contact */}
           <div className="lg:col-span-1">
             <div className="sticky top-24">
-              <ContactForm
-                title={dict.property.contactTitle}
-                description={`${dict.property.contactDesc} (Ref: ${property.ref})`}
-                buttonText={dict.property.contactButton}
-                propertyRef={property.ref}
-                propertyTitle={property.title}
-              />
+<ContactForm 
+  dict={dict}
+  propertyRef={property.ref}
+  propertyTitle={property.title}
+/>
             </div>
           </div>
         </div>
