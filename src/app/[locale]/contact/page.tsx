@@ -1,5 +1,5 @@
 'use client'
-import { ContactForm } from "../components/contact-form";
+import { ContactForm } from "../../components/contact-form";
 import { motion } from "framer-motion";
 import { Phone, Mail, MapPin, Facebook, Instagram } from "lucide-react";
 import Link from "next/link";
