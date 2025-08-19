@@ -4,6 +4,8 @@ import { useEffect, useState, useRef, Suspense } from "react";
 import { FeaturedPropertyCard } from "@/components/featured-property-card";
 import { PropertyCard } from "@/components/property-card";
 import { SearchModule } from "@/components/search-module";
+import { Header } from "@/components/header"; 
+import { Footer } from "@/components/footer"; 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, VolumeX, Volume2 } from "lucide-react";
