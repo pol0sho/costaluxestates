@@ -86,7 +86,7 @@ const handlePriceChange = (range: [number, number]) => {
 {/* Location Dropdown */}
 <div className="lg:col-span-2">
   <label htmlFor="location" className="block text-sm font-medium text-foreground mb-1 font-body">
-    {dict.search2.location.label}
+    {dict.search.location.label}
   </label>
   <Select
     value={filters.location}
@@ -94,11 +94,11 @@ const handlePriceChange = (range: [number, number]) => {
   >
     <SelectTrigger id="location" className="font-body">
       <SelectValue>
-        {filters.location === "any" ? dict.search2.anyLocation : filters.location}
+        {filters.location === "any" ? dict.search.anyLocation : filters.location}
       </SelectValue>
     </SelectTrigger>
     <SelectContent>
-      <SelectItem value="any">{dict.search2.anyLocation}</SelectItem>
+      <SelectItem value="any">{dict.search.anyLocation}</SelectItem>
       {locations.map((loc) => (
         <SelectItem key={loc} value={loc}>{loc}</SelectItem>
       ))}
@@ -110,15 +110,15 @@ const handlePriceChange = (range: [number, number]) => {
 {showListingType && (
   <div className="lg:col-span-2">
     <label htmlFor="listing-type" className="block text-sm font-medium text-foreground mb-1 font-body">
-      {dict.search2.listingType.label}
+      {dict.search.listingType.label}
     </label>
     <Select defaultValue="properties">
       <SelectTrigger id="listing-type" className="font-body">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="properties">{dict.search2.listingType.properties}</SelectItem>
-        <SelectItem value="new-builds">{dict.search2.listingType.newBuilds}</SelectItem>
+        <SelectItem value="properties">{dict.search.listingType.properties}</SelectItem>
+        <SelectItem value="new-builds">{dict.search.listingType.newBuilds}</SelectItem>
       </SelectContent>
     </Select>
   </div>
@@ -127,7 +127,7 @@ const handlePriceChange = (range: [number, number]) => {
 {/* Property Type */}
 <div className="lg:col-span-2">
   <label htmlFor="type" className="block text-sm font-medium text-foreground mb-1 font-body">
-    {dict.search2.type.label}
+    {dict.search.type.label}
   </label>
   <Select
     value={filters.type}
@@ -137,11 +137,11 @@ const handlePriceChange = (range: [number, number]) => {
       <SelectValue />
     </SelectTrigger>
     <SelectContent>
-      <SelectItem value="any">{dict.search2.type.any}</SelectItem>
-      <SelectItem value="villa">{dict.search2.type.villa}</SelectItem>
-      <SelectItem value="apartment">{dict.search2.type.apartment}</SelectItem>
-      <SelectItem value="townhouse">{dict.search2.type.townhouse}</SelectItem>
-      <SelectItem value="penthouse">{dict.search2.type.penthouse}</SelectItem>
+      <SelectItem value="any">{dict.search.type.any}</SelectItem>
+      <SelectItem value="villa">{dict.search.type.villa}</SelectItem>
+      <SelectItem value="apartment">{dict.search.type.apartment}</SelectItem>
+      <SelectItem value="townhouse">{dict.search.type.townhouse}</SelectItem>
+      <SelectItem value="penthouse">{dict.search.type.penthouse}</SelectItem>
     </SelectContent>
   </Select>
 </div>
@@ -149,7 +149,7 @@ const handlePriceChange = (range: [number, number]) => {
 {/* Bedrooms */}
 <div className="lg:col-span-1">
   <label htmlFor="bedrooms" className="block text-sm font-medium text-foreground mb-1 font-body">
-    {dict.search2.bedrooms.label}
+    {dict.search.bedrooms.label}
   </label>
   <Select
     value={filters.bedrooms}
@@ -159,7 +159,7 @@ const handlePriceChange = (range: [number, number]) => {
       <SelectValue />
     </SelectTrigger>
     <SelectContent>
-      <SelectItem value="any">{dict.search2.any}</SelectItem>
+      <SelectItem value="any">{dict.search.any}</SelectItem>
       {[1,2,3,4,5].map((n) => (
         <SelectItem key={n} value={n.toString()}>{n}+</SelectItem>
       ))}
@@ -170,7 +170,7 @@ const handlePriceChange = (range: [number, number]) => {
 {/* Bathrooms */}
 <div className="lg:col-span-1">
   <label htmlFor="bathrooms" className="block text-sm font-medium text-foreground mb-1 font-body">
-    {dict.search2.bathrooms.label}
+    {dict.search.bathrooms.label}
   </label>
   <Select
     value={filters.bathrooms}
@@ -180,7 +180,7 @@ const handlePriceChange = (range: [number, number]) => {
       <SelectValue />
     </SelectTrigger>
     <SelectContent>
-      <SelectItem value="any">{dict.search2.any}</SelectItem>
+      <SelectItem value="any">{dict.search.any}</SelectItem>
       {[1,2,3,4,5].map((n) => (
         <SelectItem key={n} value={n.toString()}>{n}+</SelectItem>
       ))}
@@ -191,7 +191,7 @@ const handlePriceChange = (range: [number, number]) => {
 {/* Price Range */}
 <div className="sm:col-span-2 lg:col-span-2 space-y-2 pb-1">
   <label className="block text-sm font-medium text-foreground mb-1 font-body">
-    {dict.search2.priceRange.label}
+    {dict.search.priceRange.label}
   </label>
   <div className="flex justify-between text-xs text-foreground font-body">
     <span>{formatPrice(priceRange[0])}</span>

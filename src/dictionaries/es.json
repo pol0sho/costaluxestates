@@ -144,50 +144,28 @@
     "closingNote": "Los costes anteriores para comprar una propiedad en España son promedios..."
   },
 
-  "search": {
-    "listingType": {
-      "label": "Tipo de Anuncio",
-      "properties": "Propiedades",
-      "newBuilds": "Propiedades de Obra Nueva"
-    },
-    "location": { "label": "Ubicación" },
-    "type": {
-      "label": "Tipo de Propiedad",
-      "any": "Cualquiera",
-      "villa": "Villa",
-      "apartment": "Apartamento",
-      "townhouse": "Adosado",
-      "penthouse": "Ático"
-    },
-    "bedrooms": { "label": "Dormitorios" },
-    "bathrooms": { "label": "Baños" },
-    "any": "Cualquiera",
-    "anyLocation": "Cualquier Ubicación",
-    "priceRange": { "label": "Rango de Precio" },
-    "button": "Buscar"
+"search": {
+  "listingType": {
+    "label": "Listing Type",
+    "properties": "Properties",
+    "newBuilds": "New Build Properties"
   },
-  "search2": {
-    "listingType": {
-      "label": "Tipo de Anuncio",
-      "properties": "Propiedades",
-      "newBuilds": "Propiedades de Obra Nueva"
-    },
-    "location": { "label": "Ubicación" },
-    "type": {
-      "label": "Tipo de Propiedad",
-      "any": "Cualquiera",
-      "villa": "Villa",
-      "apartment": "Apartamento",
-      "townhouse": "Adosado",
-      "penthouse": "Ático"
-    },
-    "bedrooms": { "label": "Dormitorios" },
-    "bathrooms": { "label": "Baños" },
-    "priceRange": { "label": "Rango de Precio" },
-    "any": "Cualquiera",
-    "anyLocation": "Cualquier Ubicación"
+  "location": { "label": "Location" },
+  "type": {
+    "label": "Property Type",
+    "any": "Any",
+    "villa": "Villa",
+    "apartment": "Apartment",
+    "townhouse": "Townhouse",
+    "penthouse": "Penthouse"
   },
-
+  "bedrooms": { "label": "Bedrooms" },
+  "bathrooms": { "label": "Bathrooms" },
+  "priceRange": { "label": "Price Range" },
+  "any": "Any",
+  "anyLocation": "Any Location",
+  "button": "Search"
+},
   "terms": {
     "title": "Términos y Condiciones",
     "lastUpdated": "Última Actualización",

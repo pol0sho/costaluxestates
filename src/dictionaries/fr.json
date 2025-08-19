@@ -144,50 +144,28 @@
     "closingNote": "Les coûts mentionnés ci-dessus sont des moyennes et varient selon la région."
   },
 
-  "search": {
-    "listingType": {
-      "label": "Type d’annonce",
-      "properties": "Propriétés",
-      "newBuilds": "Programmes neufs"
-    },
-    "location": { "label": "Lieu" },
-    "type": {
-      "label": "Type de bien",
-      "any": "Indifférent",
-      "villa": "Villa",
-      "apartment": "Appartement",
-      "townhouse": "Maison mitoyenne",
-      "penthouse": "Penthouse"
-    },
-    "bedrooms": { "label": "Chambres" },
-    "bathrooms": { "label": "Salles de bain" },
-    "any": "Indifférent",
-    "anyLocation": "Tous les lieux",
-    "priceRange": { "label": "Fourchette de prix" },
-    "button": "Rechercher"
+"search": {
+  "listingType": {
+    "label": "Listing Type",
+    "properties": "Properties",
+    "newBuilds": "New Build Properties"
   },
-
-  "search2": {
-    "listingType": {
-      "label": "Type d’annonce",
-      "properties": "Propriétés",
-      "newBuilds": "Programmes neufs"
-    },
-    "location": { "label": "Lieu" },
-    "type": {
-      "label": "Type de bien",
-      "any": "Indifférent",
-      "villa": "Villa",
-      "apartment": "Appartement",
-      "townhouse": "Maison mitoyenne",
-      "penthouse": "Penthouse"
-    },
-    "bedrooms": { "label": "Chambres" },
-    "bathrooms": { "label": "Salles de bain" },
-    "priceRange": { "label": "Fourchette de prix" },
-    "any": "Indifférent",
-    "anyLocation": "Tous les lieux"
+  "location": { "label": "Location" },
+  "type": {
+    "label": "Property Type",
+    "any": "Any",
+    "villa": "Villa",
+    "apartment": "Apartment",
+    "townhouse": "Townhouse",
+    "penthouse": "Penthouse"
   },
+  "bedrooms": { "label": "Bedrooms" },
+  "bathrooms": { "label": "Bathrooms" },
+  "priceRange": { "label": "Price Range" },
+  "any": "Any",
+  "anyLocation": "Any Location",
+  "button": "Search"
+},
 
   "terms": {
     "title": "Conditions générales",

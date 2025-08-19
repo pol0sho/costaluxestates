@@ -145,49 +145,27 @@
   },
 
   "search": {
-    "listingType": {
-      "label": "Angebotstyp",
-      "properties": "Immobilien",
-      "newBuilds": "Neubauimmobilien"
-    },
-    "location": { "label": "Ort" },
-    "type": {
-      "label": "Immobilientyp",
-      "any": "Beliebig",
-      "villa": "Villa",
-      "apartment": "Wohnung",
-      "townhouse": "Reihenhaus",
-      "penthouse": "Penthouse"
-    },
-    "bedrooms": { "label": "Schlafzimmer" },
-    "bathrooms": { "label": "Badezimmer" },
-    "any": "Beliebig",
-    "anyLocation": "Beliebiger Ort",
-    "priceRange": { "label": "Preisspanne" },
-    "button": "Suchen"
+  "listingType": {
+    "label": "Listing Type",
+    "properties": "Properties",
+    "newBuilds": "New Build Properties"
   },
-
-  "search2": {
-    "listingType": {
-      "label": "Angebotstyp",
-      "properties": "Immobilien",
-      "newBuilds": "Neubauimmobilien"
-    },
-    "location": { "label": "Ort" },
-    "type": {
-      "label": "Immobilientyp",
-      "any": "Beliebig",
-      "villa": "Villa",
-      "apartment": "Wohnung",
-      "townhouse": "Reihenhaus",
-      "penthouse": "Penthouse"
-    },
-    "bedrooms": { "label": "Schlafzimmer" },
-    "bathrooms": { "label": "Badezimmer" },
-    "priceRange": { "label": "Preisspanne" },
-    "any": "Beliebig",
-    "anyLocation": "Beliebiger Ort"
+  "location": { "label": "Location" },
+  "type": {
+    "label": "Property Type",
+    "any": "Any",
+    "villa": "Villa",
+    "apartment": "Apartment",
+    "townhouse": "Townhouse",
+    "penthouse": "Penthouse"
   },
+  "bedrooms": { "label": "Bedrooms" },
+  "bathrooms": { "label": "Bathrooms" },
+  "priceRange": { "label": "Price Range" },
+  "any": "Any",
+  "anyLocation": "Any Location",
+  "button": "Search"
+},
 
   "terms": {
     "title": "Allgemeine Geschäftsbedingungen",

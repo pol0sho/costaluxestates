@@ -140,48 +140,27 @@
     "closingNote": "De bovengenoemde kosten zijn gemiddelden en kunnen variëren per regio."
   },
   "search": {
-    "listingType": {
-      "label": "Soort listing",
-      "properties": "Eigenschappen",
-      "newBuilds": "Nieuwbouw"
-    },
-    "location": { "label": "Locatie" },
-    "type": {
-      "label": "Soort woning",
-      "any": "Alle",
-      "villa": "Villa",
-      "apartment": "Appartement",
-      "townhouse": "Herenhuis",
-      "penthouse": "Penthouse"
-    },
-    "bedrooms": { "label": "Slaapkamers" },
-    "bathrooms": { "label": "Badkamers" },
-    "any": "Alle",
-    "anyLocation": "Elke locatie",
-    "priceRange": { "label": "Prijsklasse" },
-    "button": "Zoeken"
+  "listingType": {
+    "label": "Listing Type",
+    "properties": "Properties",
+    "newBuilds": "New Build Properties"
   },
-  "search2": {
-    "listingType": {
-      "label": "Soort listing",
-      "properties": "Eigenschappen",
-      "newBuilds": "Nieuwbouw"
-    },
-    "location": { "label": "Locatie" },
-    "type": {
-      "label": "Soort woning",
-      "any": "Alle",
-      "villa": "Villa",
-      "apartment": "Appartement",
-      "townhouse": "Herenhuis",
-      "penthouse": "Penthouse"
-    },
-    "bedrooms": { "label": "Slaapkamers" },
-    "bathrooms": { "label": "Badkamers" },
-    "priceRange": { "label": "Prijsklasse" },
-    "any": "Alle",
-    "anyLocation": "Elke locatie"
+  "location": { "label": "Location" },
+  "type": {
+    "label": "Property Type",
+    "any": "Any",
+    "villa": "Villa",
+    "apartment": "Apartment",
+    "townhouse": "Townhouse",
+    "penthouse": "Penthouse"
   },
+  "bedrooms": { "label": "Bedrooms" },
+  "bathrooms": { "label": "Bathrooms" },
+  "priceRange": { "label": "Price Range" },
+  "any": "Any",
+  "anyLocation": "Any Location",
+  "button": "Search"
+},
   "terms": {
     "title": "Algemene Voorwaarden",
     "lastUpdated": "Laatst bijgewerkt",

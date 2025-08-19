@@ -142,49 +142,28 @@
   "paymentFeesBody": "Depending on the bank, this can vary from 0% to 1%.",
   "closingNote": "The above-mentioned costs for purchasing property in Spain are averages..."
 },
-  "search": {
-    "listingType": {
-      "label": "Listing Type",
-      "properties": "Properties",
-      "newBuilds": "New Build Properties"
-    },
-    "location": { "label": "Location" },
-    "type": {
-      "label": "Property Type",
-      "any": "Any",
-      "villa": "Villa",
-      "apartment": "Apartment",
-      "townhouse": "Townhouse",
-      "penthouse": "Penthouse"
-    },
-    "bedrooms": { "label": "Bedrooms" },
-    "bathrooms": { "label": "Bathrooms" },
-    "any": "Any",
-    "anyLocation": "Any Location",
-    "priceRange": { "label": "Price Range" },
-    "button": "Search"
+"search": {
+  "listingType": {
+    "label": "Listing Type",
+    "properties": "Properties",
+    "newBuilds": "New Build Properties"
   },
-  "search2": {
-    "listingType": {
-      "label": "Listing Type",
-      "properties": "Properties",
-      "newBuilds": "New Build Properties"
-    },
-    "location": { "label": "Location" },
-    "type": {
-      "label": "Property Type",
-      "any": "Any",
-      "villa": "Villa",
-      "apartment": "Apartment",
-      "townhouse": "Townhouse",
-      "penthouse": "Penthouse"
-    },
-    "bedrooms": { "label": "Bedrooms" },
-    "bathrooms": { "label": "Bathrooms" },
-    "priceRange": { "label": "Price Range" },
+  "location": { "label": "Location" },
+  "type": {
+    "label": "Property Type",
     "any": "Any",
-    "anyLocation": "Any Location"
+    "villa": "Villa",
+    "apartment": "Apartment",
+    "townhouse": "Townhouse",
+    "penthouse": "Penthouse"
   },
+  "bedrooms": { "label": "Bedrooms" },
+  "bathrooms": { "label": "Bathrooms" },
+  "priceRange": { "label": "Price Range" },
+  "any": "Any",
+  "anyLocation": "Any Location",
+  "button": "Search"
+},
   "terms": {
     "title": "Terms & Conditions",
     "lastUpdated": "Last Updated",
