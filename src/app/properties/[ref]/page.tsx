@@ -176,7 +176,6 @@ useEffect(() => {
   </p>
 
 
-  {property.listingtype === "newbuild" && (
     <div className="mt-6">
       <a
         href="/cost-of-buying-in-spain"
@@ -185,7 +184,7 @@ useEffect(() => {
         Learn more about the cost of buying in Spain →
       </a>
     </div>
-  )}
+  
 </div>
               </CardContent>
             </Card>

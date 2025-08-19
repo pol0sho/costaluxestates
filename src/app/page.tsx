@@ -210,7 +210,6 @@ setFeaturedProperties(featured);
         </div>
       </section>
 
-{/* Featured Properties */}
 <AnimatedSection className="pt-12 md:pt-16 bg-secondary">
   <div className="container mx-auto px-4 md:px-6">
     <div className="text-center mb-12">
@@ -232,7 +231,6 @@ setFeaturedProperties(featured);
   </div>
 </AnimatedSection>
 
-      {/* Latest Properties */}
       <AnimatedSection direction="right" className="py-12 md:py-16 bg-secondary">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-12">
@@ -250,7 +248,7 @@ setFeaturedProperties(featured);
         </div>
       </AnimatedSection>
 
-      {/* New Build Projects */}
+     
       <section className="pb-12 md:pb-16 bg-secondary">
         <div className="container mx-auto px-4 md:px-6">
           <AnimatedSection direction="left">
