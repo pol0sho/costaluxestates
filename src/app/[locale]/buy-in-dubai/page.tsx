@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { CheckCircle } from "lucide-react";
-import { getDictionary } from "@/lib/dictionaries";
+import { getDictionary } from "../../../lib/dictionaries";
 
 const BenefitCard = ({ title, text, icon: Icon }: { title: string, text: string, icon: React.ElementType }) => (
   <div className="flex items-start gap-4">

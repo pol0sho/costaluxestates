@@ -1,7 +1,7 @@
 'use client'
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { getDictionary } from "@/lib/dictionaries"; // adjust import to your setup
+import { getDictionary } from "../../../lib/dictionaries";
 
 export default async function CostOfBuyingInSpainPage({ params }: { params: { lang: string } }) {
   const dict = await getDictionary(params.lang);
