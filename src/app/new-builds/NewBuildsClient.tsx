@@ -112,37 +112,42 @@ export default function NewBuildsClient({ realestate }: { realestate: string }) 
         <PropertyCard key={`${property.source}-${property.id}`} property={property} />
       ))}
     </div>
+{totalPages > 1 && (
+  <div className="mt-16 flex justify-center">
+    <Pagination>
+      <PaginationContent className="flex flex-wrap justify-center gap-2">
+        {currentPage > 1 && (
+          <PaginationItem>
+            <PaginationPrevious onClick={() => setCurrentPage(p => p - 1)} />
+          </PaginationItem>
+        )}
 
-          {totalPages > 1 && (
-            <div className="mt-16">
-              <Pagination>
-                <PaginationContent>
-                  {currentPage > 1 && (
-                    <PaginationItem>
-                      <PaginationPrevious onClick={() => setCurrentPage(p => p - 1)} />
-                    </PaginationItem>
-                  )}
+        {[...Array(totalPages)].map((_, i) => (
+          <PaginationItem key={i}>
+            <PaginationLink
+              onClick={() => setCurrentPage(i + 1)}
+              isActive={i + 1 === currentPage}
+              className={`px-4 py-2 rounded-md ${
+                i + 1 === currentPage
+                  ? "bg-[hsl(var(--accent))] text-white font-bold"
+                  : "hover:bg-muted"
+              }`}
+            >
+              {i + 1}
+            </PaginationLink>
+          </PaginationItem>
+        ))}
 
-                  {[...Array(totalPages)].map((_, i) => (
-                    <PaginationItem key={i}>
-                      <PaginationLink
-                        onClick={() => setCurrentPage(i + 1)}
-                        isActive={i + 1 === currentPage}
-                      >
-                        {i + 1}
-                      </PaginationLink>
-                    </PaginationItem>
-                  ))}
+        {currentPage < totalPages && (
+          <PaginationItem>
+            <PaginationNext onClick={() => setCurrentPage(p => p + 1)} />
+          </PaginationItem>
+        )}
+      </PaginationContent>
+    </Pagination>
+  </div>
+)}
 
-                  {currentPage < totalPages && (
-                    <PaginationItem>
-                      <PaginationNext onClick={() => setCurrentPage(p => p + 1)} />
-                    </PaginationItem>
-                  )}
-                </PaginationContent>
-              </Pagination>
-            </div>
-          )}
         </>
       ) : (
         !loading && (
