@@ -113,9 +113,9 @@ export default function NewBuildsClient({ realestate }: { realestate: string }) 
       ))}
     </div>
 {totalPages > 1 && (
-  <div className="mt-16 flex justify-center">
+  <div className="mt-16 flex justify-center overflow-x-auto">
     <Pagination>
-      <PaginationContent className="flex flex-wrap justify-center gap-2">
+      <PaginationContent className="flex flex-nowrap justify-center gap-2 whitespace-nowrap">
         {currentPage > 1 && (
           <PaginationItem>
             <PaginationPrevious
@@ -139,7 +139,7 @@ export default function NewBuildsClient({ realestate }: { realestate: string }) 
             if (prev && page - prev > 1) {
               return (
                 <PaginationItem key={`ellipsis-${page}`}>
-                  <span className="px-3">…</span>
+                  <span className="px-3 text-muted-foreground select-none">…</span>
                 </PaginationItem>
               );
             }
