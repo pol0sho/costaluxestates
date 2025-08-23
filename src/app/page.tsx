@@ -168,7 +168,7 @@ setFeaturedProperties(featured);
             Your browser does not support the video tag.
           </video>
         </div>
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-black/20" />
         <Button
           variant="ghost"
           size="icon"
