@@ -107,11 +107,16 @@ export default function NewBuildsClient({ realestate }: { realestate: string }) 
 
 {!loading && properties.length > 0 ? (
   <>
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-      {properties.map((property) => (
-        <PropertyCard key={`${property.source}-${property.id}`} property={property} />
-      ))}
-    </div>
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+  {properties
+    .slice(0, PROPERTIES_PER_PAGE) // 👈 enforce max 16
+    .map((property) => (
+      <PropertyCard
+        key={`${property.source}-${property.id}`}
+        property={property}
+      />
+  ))}
+</div>
 {totalPages > 1 && (
   <div className="mt-16 flex justify-center overflow-x-auto">
     <Pagination>
