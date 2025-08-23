@@ -260,7 +260,7 @@ setFeaturedProperties(featured);
               }}
               data-ai-hint="modern architecture sketch"
             >
-              <div className="absolute inset-0 bg-black/40" />
+              <div className="absolute inset-0 bg-black/10" />
               <div className="relative z-10 md:w-1/2 text-white">
                 <h2 className="font-headline text-2xl md:text-3xl font-bold mb-4">
                   Discover New Build Projects
@@ -294,7 +294,7 @@ setFeaturedProperties(featured);
         <div className="container mx-auto px-4 md:px-6">
           <AnimatedSection direction="right">
             <div className="relative rounded-lg overflow-hidden bg-cover bg-center p-8 md:p-12 min-h-[400px] flex items-center justify-end" style={{backgroundImage: "url('/buyindubai.png')"}} data-ai-hint="Dubai skyline night">
-                <div className="absolute inset-0 bg-black/40" />
+                <div className="absolute inset-0 bg-black/10" />
                 <div className="relative z-10 md:w-1/2 text-white text-right">
                   <h2 className="font-headline text-2xl md:text-3xl font-bold mb-4">Explore Opportunities in Dubai</h2>
                   <p className="mb-4">
