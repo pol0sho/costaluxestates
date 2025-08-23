@@ -139,9 +139,18 @@ const handlePriceChange = (range: [number, number]) => {
               <SelectContent>
                 <SelectItem value="any">Any</SelectItem>
                 <SelectItem value="villa">Villa</SelectItem>
-                <SelectItem value="apartment">Apartment</SelectItem>
                 <SelectItem value="townhouse">Townhouse</SelectItem>
                 <SelectItem value="penthouse">Penthouse</SelectItem>
+                <SelectItem value="penthouseduplex">Penthouse Duplex</SelectItem>
+                <SelectItem value="finca">Finca</SelectItem>
+                <SelectItem value="cortijo">Cortijo</SelectItem>
+                <SelectItem value="countryhouse">Country House</SelectItem>
+                <SelectItem value="semidetached">Semi-Detached House</SelectItem>
+                <SelectItem value="groundfloorapartment">Ground floor apartment</SelectItem>
+                <SelectItem value="apartment">Middle floor apartment</SelectItem>
+                <SelectItem value="apartment">Top floor apartment</SelectItem>
+                <SelectItem value="bungalow">Bungalow</SelectItem>
+                <SelectItem value="studio">Studio</SelectItem>
               </SelectContent>
             </Select>
           </div>
