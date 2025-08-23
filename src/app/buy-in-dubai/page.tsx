@@ -31,7 +31,7 @@ export default function BuyInDubaiPage() {
       transition={{ duration: 0.5 }}
       className="bg-background">
       <div className="bg-secondary py-16 md:py-24">
-        <div className="container mx-auto px-4 md:px-6 max-w-4xl">
+        <div className="container mx-auto px-4 md:px-6 max-w-6xl">
             <div className="prose prose-lg mx-auto">
                 <h3 className="font-headline text-3xl md:text-4xl font-bold text-center mb-8">Your Gateway to Luxury Real Estate in Dubai</h3>
 
