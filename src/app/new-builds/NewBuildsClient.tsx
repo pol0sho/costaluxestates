@@ -118,36 +118,61 @@ export default function NewBuildsClient({ realestate }: { realestate: string }) 
       <PaginationContent className="flex flex-wrap justify-center gap-2">
         {currentPage > 1 && (
           <PaginationItem>
-            <PaginationPrevious onClick={() => setCurrentPage(p => p - 1)} />
+            <PaginationPrevious
+              onClick={() => setCurrentPage(p => p - 1)}
+              className="cursor-pointer"
+            />
           </PaginationItem>
         )}
 
-        {[...Array(totalPages)].map((_, i) => (
-          <PaginationItem key={i}>
-            <PaginationLink
-              onClick={() => setCurrentPage(i + 1)}
-              isActive={i + 1 === currentPage}
-              className={`px-4 py-2 rounded-md ${
-                i + 1 === currentPage
-                  ? "bg-[hsl(var(--accent))] text-white font-bold"
-                  : "hover:bg-muted"
-              }`}
-            >
-              {i + 1}
-            </PaginationLink>
-          </PaginationItem>
-        ))}
+        {Array.from({ length: totalPages }, (_, i) => i + 1)
+          .filter((page) => {
+            // Always show first and last
+            if (page === 1 || page === totalPages) return true;
+            // Show a window around the current page
+            if (Math.abs(page - currentPage) <= 1) return true;
+            return false;
+          })
+          .map((page, idx, arr) => {
+            // Insert ellipsis when skipping pages
+            const prev = arr[idx - 1];
+            if (prev && page - prev > 1) {
+              return (
+                <PaginationItem key={`ellipsis-${page}`}>
+                  <span className="px-3">…</span>
+                </PaginationItem>
+              );
+            }
+
+            return (
+              <PaginationItem key={page}>
+                <PaginationLink
+                  onClick={() => setCurrentPage(page)}
+                  isActive={page === currentPage}
+                  className={`px-4 py-2 rounded-md cursor-pointer select-none ${
+                    page === currentPage
+                      ? "bg-[hsl(var(--accent))] text-white font-bold"
+                      : "hover:bg-muted"
+                  }`}
+                >
+                  {page}
+                </PaginationLink>
+              </PaginationItem>
+            );
+          })}
 
         {currentPage < totalPages && (
           <PaginationItem>
-            <PaginationNext onClick={() => setCurrentPage(p => p + 1)} />
+            <PaginationNext
+              onClick={() => setCurrentPage(p => p + 1)}
+              className="cursor-pointer"
+            />
           </PaginationItem>
         )}
       </PaginationContent>
     </Pagination>
   </div>
 )}
-
         </>
       ) : (
         !loading && (
