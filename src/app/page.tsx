@@ -288,6 +288,32 @@ setFeaturedProperties(featured);
           </AnimatedSection>
         </div>
       </section>
+
+            {/* Buy in Dubai Section */}
+      <section className="pb-12 md:pb-16 bg-secondary">
+        <div className="container mx-auto px-4 md:px-6">
+          <AnimatedSection direction="right">
+            <div className="relative rounded-lg overflow-hidden bg-cover bg-center p-8 md:p-12 min-h-[400px] flex items-center justify-end" style={{backgroundImage: "url('/buyindubai.png')"}} data-ai-hint="Dubai skyline night">
+                <div className="absolute inset-0 bg-black/40" />
+                <div className="relative z-10 md:w-1/2 text-white text-right">
+                  <h2 className="font-headline text-2xl md:text-3xl font-bold mb-4">Explore Opportunities in Dubai</h2>
+                  <p className="mb-4">
+                    Discover a world of luxury and investment in one of the world's most dynamic real estate markets. High ROI, tax-free returns, and a golden visa await.
+                  </p>
+                  <p className="mb-6">
+                    Let us guide you through the process of finding your perfect property in Dubai, from stunning apartments to lavish villas.
+                  </p>
+                  <Link href="/buy-in-dubai">
+                    <Button size="lg" className="text-base font-bold bg-accent hover:bg-accent/90 text-accent-foreground transition-all duration-300 transform hover:scale-105">
+                      Learn More about Dubai
+                      <ArrowRight className="ml-2 h-5 w-5"/>
+                    </Button>
+                  </Link>
+                </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
     </motion.div>
   );
 }

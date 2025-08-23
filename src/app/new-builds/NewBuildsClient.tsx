@@ -19,7 +19,7 @@ export default function NewBuildsClient({ realestate }: { realestate: string }) 
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // ✅ Initialize filters from URL
+
   const [filters, setFilters] = useState({
     location: searchParams.get("location") || "any",
     type: searchParams.get("type") || "any",
