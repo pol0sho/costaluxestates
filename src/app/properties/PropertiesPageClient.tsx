@@ -56,14 +56,11 @@ async function fetchProperties(searchParams: Record<string, string | undefined>,
 
 // ✅ Server Component
 export default async function PropertiesPage({
-  searchParams,
+  searchParams = {},
 }: {
-  searchParams: Record<string, string | undefined>;
+  searchParams?: Record<string, string | undefined>;
 }) {
-  const host =
-    typeof window === "undefined" && process.env.NEXT_PUBLIC_VERCEL_URL
-      ? process.env.NEXT_PUBLIC_VERCEL_URL
-      : "localhost";
+const host = process.env.NEXT_PUBLIC_VERCEL_URL || "localhost";
 
   const data = await fetchProperties(searchParams, host);
   const properties = Array.isArray(data?.properties) ? data.properties : [];
