@@ -3,44 +3,55 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "./ui/slider";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const formatPrice = (value: number) => {
-  if (value >= 1000000) return `€${(value / 1000000).toFixed(1)}M`;
-  if (value >= 1000) return `€${(value / 1000)}k`;
+  if (value >= 1_000_000) return `€${(value / 1_000_000).toFixed(1)}M`;
+  if (value >= 1_000) return `€${value / 1_000}k`;
   return `€${value}`;
 };
 
+type Filters = {
+  location: string;
+  type: string;
+  bedrooms: string;
+  bathrooms: string;
+  priceMin: number;
+  priceMax: number;
+};
+
 export function SearchModule({
-  showListingType = true,
+  showListingType = true, // kept for layout parity (doesn't affect location list)
   onFiltersChange,
   initialFilters,
-  properties // ✅ now passed from parent
+  properties, // used as a fallback to derive locations if API fails
 }: {
   showListingType?: boolean;
-  onFiltersChange?: (filters: any) => void;
-  initialFilters?: {
-    location: string;
-    type: string;
-    bedrooms: string;
-    bathrooms: string;
-    priceMin: number;
-    priceMax: number;
-  };
-  properties: any[]; // ✅ new prop
+  onFiltersChange?: (filters: Filters) => void;
+  initialFilters?: Filters;
+  properties: any[];
 }) {
-  const [filters, setFilters] = useState({
+  const pathname = usePathname();
+  const isNewBuildsPage = pathname?.startsWith("/new-builds");
+
+  const [filters, setFilters] = useState<Filters>({
     location: "any",
     type: "any",
     bedrooms: "any",
     bathrooms: "any",
     priceMin: 0,
-    priceMax: 3000000,
+    priceMax: 3_000_000,
   });
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 3000000]);
-  const [locations, setLocations] = useState<string[]>([]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 3_000_000]);
 
-  // ✅ Load initial filters from props
+  // locations from API (same shape as your first component)
+  const [locations, setLocations] = useState<{ resale: string[]; newbuild: string[] }>({
+    resale: [],
+    newbuild: [],
+  });
+
+  // 1) Load initial filters if provided
   useEffect(() => {
     if (initialFilters) {
       setFilters(initialFilters);
@@ -48,29 +59,65 @@ export function SearchModule({
     }
   }, [initialFilters]);
 
-  // ✅ Get unique locations from the already-loaded properties
+  // 2) Fetch locations from your public API based on hostname -> realestate
   useEffect(() => {
-    if (Array.isArray(properties) && properties.length > 0) {
-      const towns = properties
-        .map((p) => (p.town ?? "").trim())
-        .filter((t) => t.length > 0);
+    const fetchLocations = async () => {
+      try {
+        const hostname = window.location.hostname;
+        const domainToRealestate: Record<string, string> = {
+          localhost: "costalux",
+          "www.costaluxestatesweb.onrender.com": "costalux",
+          "costaluxestatesweb.onrender.com": "costalux",
+          "www.costaluxestates.com": "costalux",
+          "costaluxestates.com": "costalux",
+        };
+        const realestate = domainToRealestate[hostname] || "costalux";
 
-      const unique = Array.from(
-        new Map(towns.map((t) => [t.toLowerCase(), t])).values()
-      ).sort((a, b) => a.localeCompare(b));
+        const res = await fetch(
+          `https://api.habigrid.com/api/public/locations?realestate=${realestate}`
+        );
+        if (!res.ok) throw new Error("Failed to fetch locations");
+        const data = await res.json();
 
-      setLocations(unique);
-    }
+        setLocations({
+          resale: data.resale || [],
+          newbuild: data.newbuild || [],
+        });
+      } catch (err) {
+        console.error("Error loading locations:", err);
+      }
+    };
+
+    fetchLocations();
+  }, []);
+
+  // 3) Derive a fallback list from the already-loaded properties if API came up empty
+  const fallbackLocations = useMemo(() => {
+    if (!Array.isArray(properties) || properties.length === 0) return [];
+    const towns = properties
+      .map((p) => (p.town ?? "").trim())
+      .filter((t) => t.length > 0);
+
+    // unique, case-insensitive, keep original capitalization
+    return Array.from(new Map(towns.map((t) => [t.toLowerCase(), t])).values())
+      .sort((a, b) => a.localeCompare(b));
   }, [properties]);
 
-const handlePriceChange = (range: [number, number]) => {
-  setPriceRange(range);
-  const updated = { ...filters, priceMin: range[0], priceMax: range[1] }; // 👈 keep max as 3,000,000
-  setFilters(updated);
-  onFiltersChange?.(updated);
-};
+  // 4) Decide the active list based on the page
+  const activeLocations: string[] = useMemo(() => {
+    const list = isNewBuildsPage ? locations.newbuild : locations.resale;
+    return list && list.length > 0 ? list : fallbackLocations;
+  }, [isNewBuildsPage, locations, fallbackLocations]);
 
-  const handleChange = (key: keyof typeof filters, value: string) => {
+  // Handlers
+  const handlePriceChange = (range: [number, number]) => {
+    setPriceRange(range);
+    const updated = { ...filters, priceMin: range[0], priceMax: range[1] };
+    setFilters(updated);
+    onFiltersChange?.(updated);
+  };
+
+  const handleChange = (key: keyof Filters, value: string) => {
     const updated = { ...filters, [key]: value };
     setFilters(updated);
     onFiltersChange?.(updated);
@@ -81,7 +128,7 @@ const handlePriceChange = (range: [number, number]) => {
       <CardContent className="p-4 sm:p-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 items-end justify-center">
 
-          {/* Location Dropdown */}
+          {/* Location (switches automatically by page) */}
           <div className="lg:col-span-2">
             <label htmlFor="location" className="block text-sm font-medium text-foreground mb-1 font-body">
               Location
@@ -97,7 +144,7 @@ const handlePriceChange = (range: [number, number]) => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="any">Any Location</SelectItem>
-                {locations.map((loc) => (
+                {activeLocations.map((loc) => (
                   <SelectItem key={loc} value={loc}>
                     {loc}
                   </SelectItem>
@@ -106,13 +153,13 @@ const handlePriceChange = (range: [number, number]) => {
             </Select>
           </div>
 
-          {/* Listing Type */}
+          {/* Listing Type (kept for UI parity; doesn't affect which locations show) */}
           {showListingType && (
             <div className="lg:col-span-2">
               <label htmlFor="listing-type" className="block text-sm font-medium text-foreground mb-1 font-body">
                 Listing Type
               </label>
-              <Select defaultValue="properties">
+              <Select defaultValue={isNewBuildsPage ? "new-builds" : "properties"}>
                 <SelectTrigger id="listing-type" className="font-body">
                   <SelectValue />
                 </SelectTrigger>
@@ -201,28 +248,26 @@ const handlePriceChange = (range: [number, number]) => {
             </Select>
           </div>
 
-{/* Price Range */}
-<div className="sm:col-span-2 lg:col-span-2 space-y-2 pb-1">
-  <label className="block text-sm font-medium text-foreground mb-1 font-body">
-    Price Range
-  </label>
-  <div className="flex justify-between text-xs text-foreground font-body">
-    <span>{formatPrice(priceRange[0])}</span>
-    <span>
-      {priceRange[1] === 3000000
-        ? `${formatPrice(priceRange[1])}+`
-        : formatPrice(priceRange[1])}
-    </span>
-  </div>
-  <Slider
-    value={priceRange}
-    onValueChange={handlePriceChange}
-    min={0}
-    max={3000000}
-    step={50000}
-    className="[&>span>span]:bg-accent [&>span>span]:border-accent-foreground"
-  />
-</div>
+          {/* Price Range */}
+          <div className="sm:col-span-2 lg:col-span-2 space-y-2 pb-1">
+            <label className="block text-sm font-medium text-foreground mb-1 font-body">
+              Price Range
+            </label>
+            <div className="flex justify-between text-xs text-foreground font-body">
+              <span>{formatPrice(priceRange[0])}</span>
+              <span>
+                {priceRange[1] === 3_000_000 ? `${formatPrice(priceRange[1])}+` : formatPrice(priceRange[1])}
+              </span>
+            </div>
+            <Slider
+              value={priceRange}
+              onValueChange={handlePriceChange}
+              min={0}
+              max={3_000_000}
+              step={50_000}
+              className="[&>span>span]:bg-accent [&>span>span]:border-accent-foreground"
+            />
+          </div>
         </div>
       </CardContent>
     </Card>
