@@ -22,10 +22,10 @@ type Filters = {
 };
 
 export function SearchModule({
-  showListingType = true, // kept for layout parity (doesn't affect location list)
+  showListingType = true,
   onFiltersChange,
   initialFilters,
-  properties, // used as a fallback to derive locations if API fails
+  properties,
 }: {
   showListingType?: boolean;
   onFiltersChange?: (filters: Filters) => void;
@@ -35,42 +35,48 @@ export function SearchModule({
   const pathname = usePathname();
   const isNewBuildsPage = pathname?.startsWith("/new-builds");
 
-const [filters, setFilters] = useState<Filters>({
-  location: "any",
-  type: "any",
-  bedrooms: "any",
-  bathrooms: "any",
-  priceMin: 300_000,   // ✅ start at 300k
-  priceMax: 3_000_000,
-});
+  const [filters, setFilters] = useState<Filters>({
+    location: "any",
+    type: "any",
+    bedrooms: "any",
+    bathrooms: "any",
+    priceMin: 300_000,
+    priceMax: 3_000_000,
+  });
 
-const [priceRange, setPriceRange] = useState<[number, number]>([300_000, 3_000_000]); // ✅ start range at 300k
+  const [priceRange, setPriceRange] = useState<[number, number]>([300_000, 3_000_000]);
 
-  // locations from API (same shape as your first component)
+  // ✅ NEW: property types from API
+  const [propertyTypes, setPropertyTypes] = useState<{ resale: string[]; newbuild: string[] }>({
+    resale: [],
+    newbuild: [],
+  });
+
+  // ✅ Locations from API
   const [locations, setLocations] = useState<{ resale: string[]; newbuild: string[] }>({
     resale: [],
     newbuild: [],
   });
 
-  // 1) Load initial filters if provided
-useEffect(() => {
-  if (initialFilters) {
-    const safeMin = Math.max(initialFilters.priceMin, 300_000);
-    const safeMax = initialFilters.priceMax || 3_000_000;
-
-    setFilters({
-      ...initialFilters,
-      priceMin: safeMin,
-      priceMax: safeMax,
-    });
-
-    setPriceRange([safeMin, safeMax]);
-  }
-}, [initialFilters]);
-
-  // 2) Fetch locations from your public API based on hostname -> realestate
+  // 1) Load initial filters
   useEffect(() => {
-    const fetchLocations = async () => {
+    if (initialFilters) {
+      const safeMin = Math.max(initialFilters.priceMin, 300_000);
+      const safeMax = initialFilters.priceMax || 3_000_000;
+
+      setFilters({
+        ...initialFilters,
+        priceMin: safeMin,
+        priceMax: safeMax,
+      });
+
+      setPriceRange([safeMin, safeMax]);
+    }
+  }, [initialFilters]);
+
+  // 2) Fetch locations + property types
+  useEffect(() => {
+    const fetchFilters = async () => {
       try {
         const hostname = window.location.hostname;
         const domainToRealestate: Record<string, string> = {
@@ -82,54 +88,59 @@ useEffect(() => {
         };
         const realestate = domainToRealestate[hostname] || "costalux";
 
-        const res = await fetch(
-          `https://api.habigrid.com/api/public/locations?realestate=${realestate}`
-        );
-        if (!res.ok) throw new Error("Failed to fetch locations");
-        const data = await res.json();
+        // Fetch both in parallel
+        const [locRes, typeRes] = await Promise.all([
+          fetch(`https://api.habigrid.com/api/public/locations?realestate=${realestate}`),
+          fetch(`https://api.habigrid.com/api/public/property-types?realestate=${realestate}`),
+        ]);
+
+        const [locData, typeData] = await Promise.all([locRes.json(), typeRes.json()]);
 
         setLocations({
-          resale: data.resale || [],
-          newbuild: data.newbuild || [],
+          resale: locData.resale || [],
+          newbuild: locData.newbuild || [],
+        });
+
+        setPropertyTypes({
+          resale: typeData.resale || [],
+          newbuild: typeData.newbuild || [],
         });
       } catch (err) {
-        console.error("Error loading locations:", err);
+        console.error("Error loading filters:", err);
       }
     };
 
-    fetchLocations();
+    fetchFilters();
   }, []);
 
-  // 3) Derive a fallback list from the already-loaded properties if API came up empty
+  // 3) Fallback locations from properties if API empty
   const fallbackLocations = useMemo(() => {
     if (!Array.isArray(properties) || properties.length === 0) return [];
-    const towns = properties
-      .map((p) => (p.town ?? "").trim())
-      .filter((t) => t.length > 0);
+    const towns = properties.map((p) => (p.town ?? "").trim()).filter((t) => t.length > 0);
 
-    // unique, case-insensitive, keep original capitalization
-    return Array.from(new Map(towns.map((t) => [t.toLowerCase(), t])).values())
-      .sort((a, b) => a.localeCompare(b));
+    return Array.from(new Map(towns.map((t) => [t.toLowerCase(), t])).values()).sort((a, b) =>
+      a.localeCompare(b)
+    );
   }, [properties]);
 
-  // 4) Decide the active list based on the page
+  // 4) Decide active lists
   const activeLocations: string[] = useMemo(() => {
     const list = isNewBuildsPage ? locations.newbuild : locations.resale;
     return list && list.length > 0 ? list : fallbackLocations;
   }, [isNewBuildsPage, locations, fallbackLocations]);
 
-  // Handlers
-const handlePriceChange = (range: [number, number]) => {
-  const safeRange: [number, number] = [
-    Math.max(range[0], 300_000),
-    range[1],
-  ];
+  const activeTypes: string[] = useMemo(() => {
+    return isNewBuildsPage ? propertyTypes.newbuild : propertyTypes.resale;
+  }, [isNewBuildsPage, propertyTypes]);
 
-  setPriceRange(safeRange);
-  const updated = { ...filters, priceMin: safeRange[0], priceMax: safeRange[1] };
-  setFilters(updated);
-  onFiltersChange?.(updated);
-};
+  // Handlers
+  const handlePriceChange = (range: [number, number]) => {
+    const safeRange: [number, number] = [Math.max(range[0], 300_000), range[1]];
+    setPriceRange(safeRange);
+    const updated = { ...filters, priceMin: safeRange[0], priceMax: safeRange[1] };
+    setFilters(updated);
+    onFiltersChange?.(updated);
+  };
 
   const handleChange = (key: keyof Filters, value: string) => {
     const updated = { ...filters, [key]: value };
@@ -141,20 +152,12 @@ const handlePriceChange = (range: [number, number]) => {
     <Card className="shadow-lg border-none bg-background/20 backdrop-blur-sm w-full max-w-7xl mx-auto">
       <CardContent className="p-4 sm:p-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 items-end justify-center">
-
-          {/* Location (switches automatically by page) */}
+          {/* Location */}
           <div className="lg:col-span-2">
-            <label htmlFor="location" className="block text-sm font-medium text-foreground mb-1 font-body">
-              Location
-            </label>
-            <Select
-              value={filters.location}
-              onValueChange={(val) => handleChange("location", val)}
-            >
-              <SelectTrigger id="location" className="font-body">
-                <SelectValue>
-                  {filters.location === "any" ? "Any Location" : filters.location}
-                </SelectValue>
+            <label className="block text-sm font-medium mb-1">Location</label>
+            <Select value={filters.location} onValueChange={(val) => handleChange("location", val)}>
+              <SelectTrigger id="location">
+                <SelectValue>{filters.location === "any" ? "Any Location" : filters.location}</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="any">Any Location</SelectItem>
@@ -167,51 +170,20 @@ const handlePriceChange = (range: [number, number]) => {
             </Select>
           </div>
 
-          {/* Listing Type (kept for UI parity; doesn't affect which locations show) */}
-          {showListingType && (
-            <div className="lg:col-span-2">
-              <label htmlFor="listing-type" className="block text-sm font-medium text-foreground mb-1 font-body">
-                Listing Type
-              </label>
-              <Select defaultValue={isNewBuildsPage ? "new-builds" : "properties"}>
-                <SelectTrigger id="listing-type" className="font-body">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="properties">Properties</SelectItem>
-                  <SelectItem value="new-builds">New Build Properties</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-
           {/* Property Type */}
           <div className="lg:col-span-2">
-            <label htmlFor="type" className="block text-sm font-medium text-foreground mb-1 font-body">
-              Property Type
-            </label>
-            <Select
-              value={filters.type}
-              onValueChange={(val) => handleChange("type", val)}
-            >
-              <SelectTrigger id="type" className="font-body">
-                <SelectValue />
+            <label className="block text-sm font-medium mb-1">Property Type</label>
+            <Select value={filters.type} onValueChange={(val) => handleChange("type", val)}>
+              <SelectTrigger id="type">
+                <SelectValue>{filters.type === "any" ? "Any" : filters.type}</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="any">Any</SelectItem>
-                <SelectItem value="villa">Villa</SelectItem>
-                <SelectItem value="townhouse">Townhouse</SelectItem>
-                <SelectItem value="penthouse">Penthouse</SelectItem>
-                <SelectItem value="penthouseduplex">Penthouse Duplex</SelectItem>
-                <SelectItem value="finca">Finca</SelectItem>
-                <SelectItem value="cortijo">Cortijo</SelectItem>
-                <SelectItem value="countryhouse">Country House</SelectItem>
-                <SelectItem value="semidetached">Semi-Detached House</SelectItem>
-                <SelectItem value="groundfloorapartment">Ground floor apartment</SelectItem>
-                <SelectItem value="apartment">Middle floor apartment</SelectItem>
-                <SelectItem value="apartment">Top floor apartment</SelectItem>
-                <SelectItem value="bungalow">Bungalow</SelectItem>
-                <SelectItem value="studio">Studio</SelectItem>
+                {activeTypes.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {type}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

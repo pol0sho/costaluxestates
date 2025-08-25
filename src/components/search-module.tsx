@@ -18,7 +18,10 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
   const router = useRouter();
   const searchParams = useSearchParams();
 
-
+const [propertyTypes, setPropertyTypes] = useState<{ resale: string[]; newbuild: string[] }>({
+  resale: [],
+  newbuild: [],
+});
 
 
 const [locations, setLocations] = useState<{ resale: string[]; newbuild: string[] }>({
@@ -58,7 +61,35 @@ useEffect(() => {
   fetchLocations();
 }, []);
 
+useEffect(() => {
+  const fetchPropertyTypes = async () => {
+    try {
+      const hostname = window.location.hostname;
+      const domainToRealestate: Record<string, string> = {
+        localhost: "costalux",
+        "www.costaluxestatesweb.onrender.com": "costalux",
+        "costaluxestatesweb.onrender.com": "costalux",
+        "www.costaluxestates.com": "costalux",
+        "costaluxestates.com": "costalux",
+      };
+      const realestate = domainToRealestate[hostname] || "costalux";
 
+      const res = await fetch(
+        `https://api.habigrid.com/api/public/property-types?realestate=${realestate}`
+      );
+      if (!res.ok) throw new Error("Failed to fetch property types");
+      const data = await res.json();
+      setPropertyTypes({
+        resale: data.resale || [],
+        newbuild: data.newbuild || []
+      });
+    } catch (err) {
+      console.error("Error loading property types:", err);
+    }
+  };
+
+  fetchPropertyTypes();
+}, []);
  
   const [filters, setFilters] = useState({
     location: searchParams.get("location") || "any",
@@ -143,25 +174,20 @@ useEffect(() => {
           {/* Property Type */}
           <div className="lg:col-span-2">
             <label className="block text-sm font-medium mb-1">Property Type</label>
-            <Select value={filters.type} onValueChange={(v) => updateFilter("type", v)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="any">Any</SelectItem>
-                <SelectItem value="villa">Villa</SelectItem>
-                <SelectItem value="townhouse">Townhouse</SelectItem>
-                <SelectItem value="penthouse">Penthouse</SelectItem>
-                <SelectItem value="penthouseduplex">Penthouse Duplex</SelectItem>
-                <SelectItem value="finca">Finca</SelectItem>
-                <SelectItem value="cortijo">Cortijo</SelectItem>
-                <SelectItem value="countryhouse">Country House</SelectItem>
-                <SelectItem value="semidetached">Semi-Detached House</SelectItem>
-                <SelectItem value="groundfloorapartment">Ground floor apartment</SelectItem>
-                <SelectItem value="apartment">Middle floor apartment</SelectItem>
-                <SelectItem value="apartment">Top floor apartment</SelectItem>
-                <SelectItem value="bungalow">Bungalow</SelectItem>
-                <SelectItem value="studio">Studio</SelectItem>
-              </SelectContent>
-            </Select>
+<Select value={filters.type} onValueChange={(v) => updateFilter("type", v)}>
+  <SelectTrigger><SelectValue /></SelectTrigger>
+  <SelectContent>
+    <SelectItem value="any">Any</SelectItem>
+    {(filters.listingType === "new-builds"
+      ? propertyTypes.newbuild
+      : propertyTypes.resale
+    ).map((type) => (
+      <SelectItem key={type} value={type}>
+        {type}
+      </SelectItem>
+    ))}
+  </SelectContent>
+</Select>
           </div>
 
           {/* Bedrooms */}
