@@ -1,7 +1,4 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+// app/properties/page.tsx
 import { PropertyCard } from "@/components/property-card";
 import { SearchModule } from "@/components/search-module-pages";
 import {
@@ -13,121 +10,91 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Loader2 } from "lucide-react";
+import { Suspense } from "react";
 
+// API constants
 const PROPERTIES_PER_PAGE = 16;
+const API_BASE =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:5000"
+    : "https://api.habigrid.com";
 
-export default function PropertiesPageClient() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
+function getRealestateFromHost(hostname: string): string {
+  const map: Record<string, string> = {
+    "localhost": "costalux",
+    "www.costaluxestatesweb.onrender.com": "costalux",
+    "costaluxestatesweb.onrender.com": "costalux",
+    "www.costaluxestates.com": "costalux",
+    "costaluxestates.com": "costalux",
+  };
+  return map[hostname] || "costalux";
+}
 
-  const [filters, setFilters] = useState({
-    location: searchParams.get("location") || "any",
-    type: searchParams.get("type") || "any",
-    bedrooms: searchParams.get("bedrooms") || "any",
-    bathrooms: searchParams.get("bathrooms") || "any",
-    priceMin: Number(searchParams.get("priceMin")) || 0,
-    priceMax: Number(searchParams.get("priceMax")) || 3000000,
+// 🔁 Fetch data on the server
+async function fetchProperties(searchParams: Record<string, string | undefined>, host: string) {
+  const params = new URLSearchParams({
+    realestate: getRealestateFromHost(host),
+    page: searchParams.page ?? "1",
+    limit: String(PROPERTIES_PER_PAGE),
+    location: searchParams.location ?? "any",
+    type: searchParams.type ?? "any",
+    bedrooms: searchParams.bedrooms ?? "any",
+    bathrooms: searchParams.bathrooms ?? "any",
+    priceMin: searchParams.priceMin ?? "0",
+    priceMax: searchParams.priceMax ?? "3000000",
+    listingtype: "resale",
   });
 
-  const [currentPage, setCurrentPage] = useState<number>(
-    Number(searchParams.get("page")) || 1
-  );
+  const res = await fetch(`${API_BASE}/api/public/properties?${params.toString()}`, {
+    // ✅ cache busting disabled to always get fresh (tune as needed)
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error(`Failed to fetch properties: ${res.status}`);
 
-  const [properties, setProperties] = useState<any[]>([]);
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(false);
+  return res.json();
+}
 
-  const getRealestateFromHost = () => {
-    if (typeof window === "undefined") return "costalux";
-    const hostname = window.location.hostname;
-    const map: Record<string, string> = {
-      localhost: "costalux",
-      "www.costaluxestatesweb.onrender.com": "costalux",
-      "costaluxestatesweb.onrender.com": "costalux",
-      "www.costaluxestates.com": "costalux",
-      "costaluxestates.com": "costalux",
-    };
-    return map[hostname] || "costalux";
-  };
+// ✅ Server Component
+export default async function PropertiesPage({
+  searchParams,
+}: {
+  searchParams: Record<string, string | undefined>;
+}) {
+  const host =
+    typeof window === "undefined" && process.env.NEXT_PUBLIC_VERCEL_URL
+      ? process.env.NEXT_PUBLIC_VERCEL_URL
+      : "localhost";
 
-  // 🔁 Fetch properties (resale only)
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-
-      const API_BASE =
-        typeof window !== "undefined" && window.location.hostname.includes("localhost")
-          ? "http://localhost:5000"
-          : "https://api.habigrid.com";
-
-      const params = new URLSearchParams({
-        realestate: getRealestateFromHost(),
-        page: String(currentPage),
-        limit: String(PROPERTIES_PER_PAGE),
-        location: filters.location,
-        type: filters.type,
-        bedrooms: filters.bedrooms,
-        bathrooms: filters.bathrooms,
-        priceMin: String(filters.priceMin),
-        priceMax: String(filters.priceMax),
-        listingtype: "resale", // ✅ force resale only
-      });
-
-      try {
-        const res = await fetch(`${API_BASE}/api/public/properties?${params.toString()}`);
-        if (!res.ok) throw new Error(`Request failed: ${res.status}`);
-        const data = await res.json();
-
-        setProperties(Array.isArray(data?.properties) ? data.properties : []);
-        setTotal(Number(data?.total || 0));
-      } catch (err) {
-        console.error("Failed to fetch properties:", err);
-        setProperties([]);
-        setTotal(0);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [filters, currentPage]);
-
+  const data = await fetchProperties(searchParams, host);
+  const properties = Array.isArray(data?.properties) ? data.properties : [];
+  const total = Number(data?.total || 0);
+  const currentPage = Number(searchParams.page ?? 1);
   const totalPages = Math.ceil(total / PROPERTIES_PER_PAGE);
-
-  const handleFiltersChange = (newFilters: typeof filters) => {
-    setFilters(newFilters);
-    setCurrentPage(1);
-
-    const params = new URLSearchParams();
-    if (newFilters.location !== "any") params.set("location", newFilters.location);
-    if (newFilters.type !== "any") params.set("type", newFilters.type);
-    if (newFilters.bedrooms !== "any") params.set("bedrooms", newFilters.bedrooms);
-    if (newFilters.bathrooms !== "any") params.set("bathrooms", newFilters.bathrooms);
-    if (newFilters.priceMin > 0) params.set("priceMin", String(newFilters.priceMin));
-    if (newFilters.priceMax < 3000000) params.set("priceMax", String(newFilters.priceMax));
-    params.set("page", "1");
-
-    router.replace(`/properties?${params.toString()}`);
-  };
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-12">
+      {/* Filters */}
       <div className="mb-12 flex justify-center">
+        {/* ⬇️ SearchModule stays client-side, but we pass filters as props */}
         <SearchModule
           showListingType={false}
-          onFiltersChange={handleFiltersChange}
-          initialFilters={filters}
+          onFiltersChange={() => {}}
+          initialFilters={{
+            location: searchParams.location ?? "any",
+            type: searchParams.type ?? "any",
+            bedrooms: searchParams.bedrooms ?? "any",
+            bathrooms: searchParams.bathrooms ?? "any",
+            priceMin: Number(searchParams.priceMin ?? 0),
+            priceMax: Number(searchParams.priceMax ?? 3000000),
+          }}
         />
       </div>
 
-      {loading ? (
-        <div className="flex items-center justify-center py-32">
-          <Loader2 className="h-10 w-10 animate-spin text-primary" />
-        </div>
-      ) : properties.length > 0 ? (
+      {/* Properties grid */}
+      {properties.length > 0 ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {properties.map((property) => (
+            {properties.map((property: any) => (
               <PropertyCard
                 key={`${property.source ?? "prop"}-${property.id}`}
                 property={property}
@@ -135,6 +102,7 @@ export default function PropertiesPageClient() {
             ))}
           </div>
 
+          {/* Pagination */}
           {totalPages > 1 && (
             <div className="mt-16 flex justify-center overflow-x-auto">
               <Pagination>
@@ -142,7 +110,10 @@ export default function PropertiesPageClient() {
                   {currentPage > 1 && (
                     <PaginationItem>
                       <PaginationPrevious
-                        onClick={() => setCurrentPage((p) => p - 1)}
+                        href={`/properties?${new URLSearchParams({
+                          ...searchParams,
+                          page: String(currentPage - 1),
+                        })}`}
                         className="cursor-pointer"
                       />
                     </PaginationItem>
@@ -166,7 +137,10 @@ export default function PropertiesPageClient() {
                       return (
                         <PaginationItem key={page}>
                           <PaginationLink
-                            onClick={() => setCurrentPage(page)}
+                            href={`/properties?${new URLSearchParams({
+                              ...searchParams,
+                              page: String(page),
+                            })}`}
                             isActive={page === currentPage}
                             className={`px-4 py-2 rounded-md cursor-pointer select-none ${
                               page === currentPage
@@ -183,7 +157,10 @@ export default function PropertiesPageClient() {
                   {currentPage < totalPages && (
                     <PaginationItem>
                       <PaginationNext
-                        onClick={() => setCurrentPage((p) => p + 1)}
+                        href={`/properties?${new URLSearchParams({
+                          ...searchParams,
+                          page: String(currentPage + 1),
+                        })}`}
                         className="cursor-pointer"
                       />
                     </PaginationItem>
