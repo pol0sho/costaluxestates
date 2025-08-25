@@ -53,12 +53,20 @@ const [priceRange, setPriceRange] = useState<[number, number]>([300_000, 3_000_0
   });
 
   // 1) Load initial filters if provided
-  useEffect(() => {
-    if (initialFilters) {
-      setFilters(initialFilters);
-      setPriceRange([initialFilters.priceMin, initialFilters.priceMax]);
-    }
-  }, [initialFilters]);
+useEffect(() => {
+  if (initialFilters) {
+    const safeMin = Math.max(initialFilters.priceMin, 300_000);
+    const safeMax = initialFilters.priceMax || 3_000_000;
+
+    setFilters({
+      ...initialFilters,
+      priceMin: safeMin,
+      priceMax: safeMax,
+    });
+
+    setPriceRange([safeMin, safeMax]);
+  }
+}, [initialFilters]);
 
   // 2) Fetch locations from your public API based on hostname -> realestate
   useEffect(() => {
@@ -111,12 +119,17 @@ const [priceRange, setPriceRange] = useState<[number, number]>([300_000, 3_000_0
   }, [isNewBuildsPage, locations, fallbackLocations]);
 
   // Handlers
-  const handlePriceChange = (range: [number, number]) => {
-    setPriceRange(range);
-    const updated = { ...filters, priceMin: range[0], priceMax: range[1] };
-    setFilters(updated);
-    onFiltersChange?.(updated);
-  };
+const handlePriceChange = (range: [number, number]) => {
+  const safeRange: [number, number] = [
+    Math.max(range[0], 300_000),
+    range[1],
+  ];
+
+  setPriceRange(safeRange);
+  const updated = { ...filters, priceMin: safeRange[0], priceMax: safeRange[1] };
+  setFilters(updated);
+  onFiltersChange?.(updated);
+};
 
   const handleChange = (key: keyof Filters, value: string) => {
     const updated = { ...filters, [key]: value };
