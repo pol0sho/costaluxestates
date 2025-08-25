@@ -35,15 +35,16 @@ export function SearchModule({
   const pathname = usePathname();
   const isNewBuildsPage = pathname?.startsWith("/new-builds");
 
-  const [filters, setFilters] = useState<Filters>({
-    location: "any",
-    type: "any",
-    bedrooms: "any",
-    bathrooms: "any",
-    priceMin: 0,
-    priceMax: 3_000_000,
-  });
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 3_000_000]);
+const [filters, setFilters] = useState<Filters>({
+  location: "any",
+  type: "any",
+  bedrooms: "any",
+  bathrooms: "any",
+  priceMin: 300_000,   // ✅ start at 300k
+  priceMax: 3_000_000,
+});
+
+const [priceRange, setPriceRange] = useState<[number, number]>([300_000, 3_000_000]); // ✅ start range at 300k
 
   // locations from API (same shape as your first component)
   const [locations, setLocations] = useState<{ resale: string[]; newbuild: string[] }>({
@@ -259,14 +260,14 @@ export function SearchModule({
                 {priceRange[1] === 3_000_000 ? `${formatPrice(priceRange[1])}+` : formatPrice(priceRange[1])}
               </span>
             </div>
-            <Slider
-              value={priceRange}
-              onValueChange={handlePriceChange}
-              min={0}
-              max={3_000_000}
-              step={50_000}
-              className="[&>span>span]:bg-accent [&>span>span]:border-accent-foreground"
-            />
+<Slider
+  value={priceRange}
+  onValueChange={handlePriceChange}
+  min={300_000}          // ✅ lower bound 300k
+  max={3_000_000}
+  step={50_000}
+  className="[&>span>span]:bg-accent [&>span>span]:border-accent-foreground"
+/>
           </div>
         </div>
       </CardContent>
