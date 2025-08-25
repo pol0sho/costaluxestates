@@ -1,4 +1,4 @@
-// app/properties/page.tsx
+export const dynamic = "force-dynamic";
 import { PropertyCard } from "@/components/property-card";
 import { SearchModule } from "@/components/search-module-pages";
 import {
