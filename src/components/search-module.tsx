@@ -65,9 +65,9 @@ useEffect(() => {
     type: searchParams.get("type") || "any",
     bedrooms: searchParams.get("bedrooms") || "any",
     bathrooms: searchParams.get("bathrooms") || "any",
-    priceMin: Number(searchParams.get("priceMin")) || 0,
+    priceMin: Number(searchParams.get("priceMin")) || 300000,
     priceMax: Number(searchParams.get("priceMax")) || 3000000,
-      listingType: searchParams.get("listingType") || "new-builds",
+    listingType: searchParams.get("listingType") || "properties",
   });
 
   const [priceRange, setPriceRange] = useState<[number, number]>([
@@ -198,7 +198,7 @@ useEffect(() => {
             <Slider
               value={priceRange}
               onValueChange={handlePriceChange}
-              min={0}
+                min={300000} 
               max={3000000}
               step={50000}
             />
