@@ -1,189 +1,99 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { PropertyCard } from "@/components/property-card";
 import { SearchModule } from "@/components/search-module-pages";
-import { motion } from "framer-motion";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Loader2 } from "lucide-react"; // ✅ spinner
+import { Loader2 } from "lucide-react";
 
-const PROPERTIES_PER_PAGE = 20;
+const PROPERTIES_PER_PAGE = 16;
 
 export default function PropertiesPageClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [properties, setProperties] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
   const [filters, setFilters] = useState({
-    location: "any",
-    type: "any",
-    bedrooms: "any",
-    bathrooms: "any",
-    priceMin: 0,
-    priceMax: 3000000,
+    location: searchParams.get("location") || "any",
+    type: searchParams.get("type") || "any",
+    bedrooms: searchParams.get("bedrooms") || "any",
+    bathrooms: searchParams.get("bathrooms") || "any",
+    priceMin: Number(searchParams.get("priceMin")) || 0,
+    priceMax: Number(searchParams.get("priceMax")) || 3000000,
   });
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState<number>(
+    Number(searchParams.get("page")) || 1
+  );
 
-  // 1️⃣ Initialize filters from URL
-  useEffect(() => {
-    const initialFilters = {
-      location: searchParams.get("location") || "any",
-      type: searchParams.get("type") || "any",
-      bedrooms: searchParams.get("bedrooms") || "any",
-      bathrooms: searchParams.get("bathrooms") || "any",
-      priceMin: Number(searchParams.get("priceMin") || 0),
-      priceMax: Number(searchParams.get("priceMax") || 3000000),
+  const [properties, setProperties] = useState<any[]>([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  const getRealestateFromHost = () => {
+    if (typeof window === "undefined") return "costalux";
+    const hostname = window.location.hostname;
+    const map: Record<string, string> = {
+      localhost: "costalux",
+      "www.costaluxestatesweb.onrender.com": "costalux",
+      "costaluxestatesweb.onrender.com": "costalux",
+      "www.costaluxestates.com": "costalux",
+      "costaluxestates.com": "costalux",
     };
-    setFilters(initialFilters);
-  }, [searchParams]);
+    return map[hostname] || "costalux";
+  };
 
-  // 2️⃣ Fetch properties
+  // 🔁 Fetch properties (resale only)
   useEffect(() => {
-    const fetchProperties = async () => {
+    const fetchData = async () => {
+      setLoading(true);
+
+      const API_BASE =
+        typeof window !== "undefined" && window.location.hostname.includes("localhost")
+          ? "http://localhost:5000"
+          : "https://api.habigrid.com";
+
+      const params = new URLSearchParams({
+        realestate: getRealestateFromHost(),
+        page: String(currentPage),
+        limit: String(PROPERTIES_PER_PAGE),
+        location: filters.location,
+        type: filters.type,
+        bedrooms: filters.bedrooms,
+        bathrooms: filters.bathrooms,
+        priceMin: String(filters.priceMin),
+        priceMax: String(filters.priceMax),
+        listingtype: "resale", // ✅ force resale only
+      });
+
       try {
-        const hostname = window.location.hostname;
-        const domainToRealestate: Record<string, string> = {
-          localhost: "costalux",
-          "www.costaluxestatesweb.onrender.com": "costalux",
-          "costaluxestatesweb.onrender.com": "costalux",
-          "www.costaluxestates.com": "costalux",
-          "costaluxestates.com": "costalux",
-        };
-
-        const realestate = domainToRealestate[hostname] || "costalux";
-        const res = await fetch(
-          `https://api.habigrid.com/api/public/properties?realestate=${realestate}`
-        );
-
-        if (!res.ok) throw new Error(`API error ${res.status}`);
-
+        const res = await fetch(`${API_BASE}/api/public/properties?${params.toString()}`);
+        if (!res.ok) throw new Error(`Request failed: ${res.status}`);
         const data = await res.json();
 
-        let rawProperties = [];
-        if (Array.isArray(data)) {
-          rawProperties = data;
-        } else if (Array.isArray(data.properties)) {
-          rawProperties = data.properties;
-        } else {
-          console.warn("Unexpected API format", data);
-          rawProperties = [];
-        }
-
-        setProperties(
-          rawProperties.filter((p) => p.listingtype?.toLowerCase() === "resale")
-        );
+        setProperties(Array.isArray(data?.properties) ? data.properties : []);
+        setTotal(Number(data?.total || 0));
       } catch (err) {
         console.error("Failed to fetch properties:", err);
         setProperties([]);
+        setTotal(0);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProperties();
-  }, []);
+    fetchData();
+  }, [filters, currentPage]);
 
-  // 3️⃣ Filter in memory
-  const filtered = properties
-    .filter(
-      (p) =>
-        filters.location === "any" ||
-        p.town?.toLowerCase() === filters.location.toLowerCase()
-    )
-    .filter(
-      (p) =>
-        filters.type === "any" ||
-        p.property_type?.toLowerCase() === filters.type.toLowerCase()
-    )
-    .filter(
-      (p) =>
-        filters.bedrooms === "any" ||
-        Number(p.bedrooms) >= Number(filters.bedrooms)
-    )
-    .filter(
-      (p) =>
-        filters.bathrooms === "any" ||
-        Number(p.bathrooms) >= Number(filters.bathrooms)
-    )
-    .filter(
-      (p) =>
-        Number(p.list_price) >= filters.priceMin &&
-        (filters.priceMax < 3000000
-          ? Number(p.list_price) <= filters.priceMax
-          : true)
-    );
+  const totalPages = Math.ceil(total / PROPERTIES_PER_PAGE);
 
-  const totalProperties = filtered.length;
-  const totalPages = Math.ceil(totalProperties / PROPERTIES_PER_PAGE);
-
-  const paginatedProperties = filtered.slice(
-    (currentPage - 1) * PROPERTIES_PER_PAGE,
-    currentPage * PROPERTIES_PER_PAGE
-  );
-
-  const renderPaginationLinks = () => {
-    const pageNumbers = [];
-    const visiblePages = 5;
-    let startPage = Math.max(1, currentPage - Math.floor(visiblePages / 2));
-    let endPage = Math.min(totalPages, startPage + visiblePages - 1);
-
-    if (endPage - startPage + 1 < visiblePages) {
-      startPage = Math.max(1, endPage - visiblePages + 1);
-    }
-
-    if (startPage > 1) {
-      pageNumbers.push(
-        <PaginationItem key="1">
-          <PaginationLink onClick={() => setCurrentPage(1)}>1</PaginationLink>
-        </PaginationItem>
-      );
-      if (startPage > 2) {
-        pageNumbers.push(<PaginationEllipsis key="start-ellipsis" />);
-      }
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-      pageNumbers.push(
-        <PaginationItem key={i}>
-          <PaginationLink
-            onClick={() => setCurrentPage(i)}
-            isActive={i === currentPage}
-          >
-            {i}
-          </PaginationLink>
-        </PaginationItem>
-      );
-    }
-
-    if (endPage < totalPages) {
-      if (endPage < totalPages - 1) {
-        pageNumbers.push(<PaginationEllipsis key="end-ellipsis" />);
-      }
-      pageNumbers.push(
-        <PaginationItem key={totalPages}>
-          <PaginationLink onClick={() => setCurrentPage(totalPages)}>
-            {totalPages}
-          </PaginationLink>
-        </PaginationItem>
-      );
-    }
-
-    return pageNumbers;
-  };
-
-  // 4️⃣ Handle filter changes + URL sync
   const handleFiltersChange = (newFilters: typeof filters) => {
     setFilters(newFilters);
     setCurrentPage(1);
@@ -193,115 +103,106 @@ export default function PropertiesPageClient() {
     if (newFilters.type !== "any") params.set("type", newFilters.type);
     if (newFilters.bedrooms !== "any") params.set("bedrooms", newFilters.bedrooms);
     if (newFilters.bathrooms !== "any") params.set("bathrooms", newFilters.bathrooms);
-    if (newFilters.priceMin !== 0) params.set("priceMin", String(newFilters.priceMin));
-    if (newFilters.priceMax !== 3000000) params.set("priceMax", String(newFilters.priceMax));
+    if (newFilters.priceMin > 0) params.set("priceMin", String(newFilters.priceMin));
+    if (newFilters.priceMax < 3000000) params.set("priceMax", String(newFilters.priceMax));
+    params.set("page", "1");
 
-    router.replace(`${window.location.pathname}?${params.toString()}`);
+    router.replace(`/properties?${params.toString()}`);
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="bg-background"
-    >
-      <div className="container mx-auto px-4 md:px-6 py-12">
-        <div className="mb-8 flex justify-center">
-          <SearchModule
-            showListingType={false}
-            onFiltersChange={handleFiltersChange}
-            initialFilters={filters}
-          />
-        </div>
-
-        {loading ? (
-          <div className="flex items-center justify-center py-32">
-            <Loader2 className="h-10 w-10 animate-spin text-primary" />
-          </div>
-        ) : paginatedProperties.length > 0 ? (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-              {paginatedProperties.map((property) => (
-                <PropertyCard key={property.id} property={property} />
-              ))}
-            </div>
-
-{totalPages > 1 && (
-  <div className="mt-16 flex justify-center overflow-x-auto">
-    <Pagination>
-      <PaginationContent className="flex flex-nowrap justify-center gap-2 whitespace-nowrap">
-        {currentPage > 1 && (
-          <PaginationItem>
-            <PaginationPrevious
-              onClick={() => setCurrentPage(p => p - 1)}
-              className="cursor-pointer"
-            />
-          </PaginationItem>
-        )}
-
-        {Array.from({ length: totalPages }, (_, i) => i + 1)
-          .filter((page) => {
-            // Always show first and last
-            if (page === 1 || page === totalPages) return true;
-            // Show a window around the current page
-            if (Math.abs(page - currentPage) <= 1) return true;
-            return false;
-          })
-          .map((page, idx, arr) => {
-            // Insert ellipsis when skipping pages
-            const prev = arr[idx - 1];
-            if (prev && page - prev > 1) {
-              return (
-                <PaginationItem key={`ellipsis-${page}`}>
-                  <span className="px-3 text-muted-foreground select-none">…</span>
-                </PaginationItem>
-              );
-            }
-
-            return (
-              <PaginationItem key={page}>
-                <PaginationLink
-                  onClick={() => setCurrentPage(page)}
-                  isActive={page === currentPage}
-                  className={`px-4 py-2 rounded-md cursor-pointer select-none ${
-                    page === currentPage
-                      ? "bg-[hsl(var(--accent))] text-white font-bold"
-                      : "hover:bg-muted"
-                  }`}
-                >
-                  {page}
-                </PaginationLink>
-              </PaginationItem>
-            );
-          })}
-
-        {currentPage < totalPages && (
-          <PaginationItem>
-            <PaginationNext
-              onClick={() => setCurrentPage(p => p + 1)}
-              className="cursor-pointer"
-            />
-          </PaginationItem>
-        )}
-      </PaginationContent>
-    </Pagination>
-  </div>
-)}
-          </>
-        ) : (
-          <div className="flex items-center justify-center py-24">
-            <div className="text-center">
-              <h2 className="text-2xl font-bold tracking-tight">
-                No Properties Found
-              </h2>
-              <p className="text-muted-foreground">
-                Try adjusting your filters or check back later.
-              </p>
-            </div>
-          </div>
-        )}
+    <div className="container mx-auto px-4 md:px-6 py-12">
+      <div className="mb-12 flex justify-center">
+        <SearchModule
+          showListingType={false}
+          onFiltersChange={handleFiltersChange}
+          initialFilters={filters}
+        />
       </div>
-    </motion.div>
+
+      {loading ? (
+        <div className="flex items-center justify-center py-32">
+          <Loader2 className="h-10 w-10 animate-spin text-primary" />
+        </div>
+      ) : properties.length > 0 ? (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {properties.map((property) => (
+              <PropertyCard
+                key={`${property.source ?? "prop"}-${property.id}`}
+                property={property}
+              />
+            ))}
+          </div>
+
+          {totalPages > 1 && (
+            <div className="mt-16 flex justify-center overflow-x-auto">
+              <Pagination>
+                <PaginationContent className="flex flex-nowrap justify-center gap-2 whitespace-nowrap">
+                  {currentPage > 1 && (
+                    <PaginationItem>
+                      <PaginationPrevious
+                        onClick={() => setCurrentPage((p) => p - 1)}
+                        className="cursor-pointer"
+                      />
+                    </PaginationItem>
+                  )}
+
+                  {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .filter((page) => {
+                      if (page === 1 || page === totalPages) return true;
+                      if (Math.abs(page - currentPage) <= 1) return true;
+                      return false;
+                    })
+                    .map((page, idx, arr) => {
+                      const prev = arr[idx - 1];
+                      if (prev && page - prev > 1) {
+                        return (
+                          <PaginationItem key={`ellipsis-${page}`}>
+                            <span className="px-3 text-muted-foreground select-none">…</span>
+                          </PaginationItem>
+                        );
+                      }
+                      return (
+                        <PaginationItem key={page}>
+                          <PaginationLink
+                            onClick={() => setCurrentPage(page)}
+                            isActive={page === currentPage}
+                            className={`px-4 py-2 rounded-md cursor-pointer select-none ${
+                              page === currentPage
+                                ? "bg-[hsl(var(--accent))] text-white font-bold"
+                                : "hover:bg-muted"
+                            }`}
+                          >
+                            {page}
+                          </PaginationLink>
+                        </PaginationItem>
+                      );
+                    })}
+
+                  {currentPage < totalPages && (
+                    <PaginationItem>
+                      <PaginationNext
+                        onClick={() => setCurrentPage((p) => p + 1)}
+                        className="cursor-pointer"
+                      />
+                    </PaginationItem>
+                  )}
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="flex items-center justify-center py-24">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold tracking-tight">No Resale Properties Found</h2>
+            <p className="text-muted-foreground">
+              Try adjusting your filters or check back later.
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
