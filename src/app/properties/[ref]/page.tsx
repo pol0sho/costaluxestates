@@ -99,24 +99,37 @@ useEffect(() => {
     >
       <div className="container mx-auto max-w-7xl px-4 md:px-6 py-8 md:py-12">
         
-        {/* Promotion Video if exists */}
-        {property.promotion_video && (
-          <div className="mb-8 aspect-video">
-            <iframe
-              className="w-full h-full rounded-lg shadow-lg"
-              src={
-                property.promotion_video.includes("youtube.com") || property.promotion_video.includes("youtu.be")
-                  ? property.promotion_video.replace("watch?v=", "embed/")
-                  : property.promotion_video
-              }
-              title="Promotion Video"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
-          </div>
-        )}
+{/* Promotion Video if exists */}
+{property.promotion_video && (
+  <div className="mb-8 aspect-video">
+    <iframe
+      className="w-full h-full rounded-lg shadow-lg"
+      src={(() => {
+        let url = property.promotion_video.trim();
 
+        // ✅ Handle YouTube short links (youtu.be/VIDEO_ID)
+        if (url.includes("youtu.be/")) {
+          const videoId = url.split("youtu.be/")[1].split(/[?&]/)[0];
+          return `https://www.youtube.com/embed/${videoId}`;
+        }
+
+        // ✅ Handle normal YouTube links (youtube.com/watch?v=VIDEO_ID)
+        if (url.includes("youtube.com/watch")) {
+          const params = new URL(url).searchParams;
+          const videoId = params.get("v");
+          return `https://www.youtube.com/embed/${videoId}`;
+        }
+
+        // ✅ Already an embed link or some other video provider (Vimeo, etc.)
+        return url;
+      })()}
+      title="Promotion Video"
+      frameBorder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+    ></iframe>
+  </div>
+)}
         {/* Image Slideshow */}
         <div className="mb-8">
           <ImageSlideshow
