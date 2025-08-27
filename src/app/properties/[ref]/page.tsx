@@ -184,15 +184,12 @@ useEffect(() => {
   <h2 className="font-headline text-xl font-bold mb-4">Description</h2>
 <div className="prose max-w-none">
   {Array.isArray(property.description)
-    ? (
-        <div
-          dangerouslySetInnerHTML={{
-            __html:
-              property.description.find((d) => d.lang === "en")?.description ||
-              "<p>No description available.</p>",
-          }}
-        />
-      )
+    ? property.description
+        .find((d) => d.lang === "en")
+        ?.description // already an array
+        ?.map((para: string, idx: number) => (
+          <p key={idx} className="mb-4">{para}</p>
+        ))
     : "No description available."}
 </div>
 
