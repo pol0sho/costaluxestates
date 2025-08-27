@@ -183,18 +183,14 @@ useEffect(() => {
 <div className="mt-6 text-foreground/90 leading-relaxed">
   <h2 className="font-headline text-xl font-bold mb-4">Description</h2>
 <div className="prose max-w-none">
-{Array.isArray(property.description)
-  ? property.description
-      .find((d) => d.lang === "en")
-      ?.description
-      ?.split(/\n{2,}|\r\n|\n/)   // split on blank lines or newlines
-      .filter((para) => para.trim().length > 0)
-      .map((para, idx) => (
-        <p key={idx} className="mb-4">
-          {para.trim()}
-        </p>
-      ))
-  : "No description available."}
+  {Array.isArray(property.description)
+    ? property.description
+        .find((d) => d.lang === "en")
+        ?.description // already an array
+        ?.map((para: string, idx: number) => (
+          <p key={idx} className="mb-4">{para}</p>
+        ))
+    : "No description available."}
 </div>
 
 
