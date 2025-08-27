@@ -182,11 +182,15 @@ useEffect(() => {
 
 <div className="mt-6 text-foreground/90 leading-relaxed">
   <h2 className="font-headline text-xl font-bold mb-4">Description</h2>
-<p className="whitespace-pre-line">
+<div className="prose max-w-none">
   {Array.isArray(property.description)
-    ? property.description.find((d) => d.lang === "en")?.description || "No English description."
+    ? property.description
+        .find((d) => d.lang === "en")
+        ?.description.map((para, idx) => (
+          <p key={idx} className="mb-4">{para}</p>
+        ))
     : "No description available."}
-</p>
+</div>
 
 
     <div className="mt-6">
