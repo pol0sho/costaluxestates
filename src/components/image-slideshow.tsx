@@ -23,7 +23,7 @@ export function ImageSlideshow({ images, title, aiHints = [] }: ImageSlideshowPr
 
   return (
     <>
-      {/* Slideshow with fullscreen button */}
+      {/* Normal slideshow */}
       <div className="relative w-full">
         <Carousel className="w-full">
           <CarouselContent>
@@ -50,11 +50,11 @@ export function ImageSlideshow({ images, title, aiHints = [] }: ImageSlideshowPr
                 );
               })}
           </CarouselContent>
-          <CarouselPrevious className="ml-16" />
-          <CarouselNext className="mr-16" />
+          <CarouselPrevious className="left-2 md:left-16" />
+          <CarouselNext className="right-2 md:right-16" />
         </Carousel>
 
-        {/* Fullscreen toggle button */}
+        {/* Fullscreen button */}
         <button
           onClick={() => setIsFullscreen(true)}
           className="absolute top-3 right-3 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
@@ -72,7 +72,7 @@ export function ImageSlideshow({ images, title, aiHints = [] }: ImageSlideshowPr
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setIsFullscreen(false)} // ✅ close on backdrop click
+            onClick={() => setIsFullscreen(false)}
           >
             {/* Close button */}
             <button
@@ -83,10 +83,10 @@ export function ImageSlideshow({ images, title, aiHints = [] }: ImageSlideshowPr
               <X className="h-6 w-6" />
             </button>
 
-            {/* Fullscreen carousel (click stop propagation so it doesn't close when clicking image) */}
+            {/* Fullscreen carousel */}
             <div
-              className="w-full max-w-6xl"
-              onClick={(e) => e.stopPropagation()} // ✅ prevent closing when clicking on image
+              className="w-full max-w-[90vw]"  // ✅ allow more width on desktop
+              onClick={(e) => e.stopPropagation()}
             >
               <Carousel>
                 <CarouselContent>
@@ -95,12 +95,12 @@ export function ImageSlideshow({ images, title, aiHints = [] }: ImageSlideshowPr
                       const src = typeof img === 'string' ? img : img.url;
                       return (
                         <CarouselItem key={index}>
-                          <div className="flex justify-center items-center h-[80vh]">
+                          <div className="flex justify-center items-center h-[90vh]"> {/* ✅ taller fullscreen */}
                             <Image
                               src={src}
                               alt={`${title} - fullscreen image ${index + 1}`}
-                              width={1600}
-                              height={900}
+                              width={1920}
+                              height={1080}
                               unoptimized
                               className="object-contain max-h-full max-w-full"
                             />
@@ -109,8 +109,8 @@ export function ImageSlideshow({ images, title, aiHints = [] }: ImageSlideshowPr
                       );
                     })}
                 </CarouselContent>
-                <CarouselPrevious className="ml-8" />
-                <CarouselNext className="mr-8" />
+                <CarouselPrevious className="left-2 md:left-8" /> {/* ✅ arrows safe spacing */}
+                <CarouselNext className="right-2 md:right-8" />
               </Carousel>
             </div>
           </motion.div>
