@@ -50,8 +50,9 @@ export function ImageSlideshow({ images, title, aiHints = [] }: ImageSlideshowPr
                 );
               })}
           </CarouselContent>
-<CarouselPrevious className="left-0 md:left-8" />
-<CarouselNext className="right-0 md:right-8" />
+          {/* arrows flush with phone edge, spaced on desktop */}
+          <CarouselPrevious className="left-0 md:left-8" />
+          <CarouselNext className="right-0 md:right-8" />
         </Carousel>
 
         {/* Fullscreen button */}
@@ -72,26 +73,26 @@ export function ImageSlideshow({ images, title, aiHints = [] }: ImageSlideshowPr
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setIsFullscreen(false)}
+            onClick={() => setIsFullscreen(false)} // ✅ backdrop closes
           >
             {/* Close button */}
-<button
-  onClick={(e) => {
-    e.stopPropagation();
-    setIsFullscreen(false);
-  }}
-  className="absolute top-4 right-4 bg-black/60 hover:bg-black/80 text-white 
-             rounded-full flex items-center justify-center
-             min-w-[40px] min-h-[40px]"   // ✅ mobile-friendly touch target
-  aria-label="Close fullscreen"
->
-  <X className="h-7 w-7" />  {/* ✅ slightly bigger */}
-</button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation(); // ✅ prevent bubbling
+                setIsFullscreen(false);
+              }}
+              className="absolute top-4 right-4 bg-black/60 hover:bg-black/80 text-white 
+                         rounded-full flex items-center justify-center
+                         min-w-[40px] min-h-[40px]"   // ✅ mobile-friendly touch target
+              aria-label="Close fullscreen"
+            >
+              <X className="h-7 w-7" /> {/* ✅ bigger cross */}
+            </button>
 
             {/* Fullscreen carousel */}
             <div
-              className="w-full max-w-[90vw]"  // ✅ allow more width on desktop
-              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-[90vw]" // ✅ allow more width on desktop
+              onClick={(e) => e.stopPropagation()} // ✅ don’t close when clicking inside
             >
               <Carousel>
                 <CarouselContent>
@@ -100,7 +101,7 @@ export function ImageSlideshow({ images, title, aiHints = [] }: ImageSlideshowPr
                       const src = typeof img === 'string' ? img : img.url;
                       return (
                         <CarouselItem key={index}>
-                          <div className="flex justify-center items-center h-[90vh]"> {/* ✅ taller fullscreen */}
+                          <div className="flex justify-center items-center h-[90vh]">
                             <Image
                               src={src}
                               alt={`${title} - fullscreen image ${index + 1}`}
@@ -114,8 +115,8 @@ export function ImageSlideshow({ images, title, aiHints = [] }: ImageSlideshowPr
                       );
                     })}
                 </CarouselContent>
-                <CarouselPrevious className="left-2 md:left-8" /> {/* ✅ arrows safe spacing */}
-                <CarouselNext className="right-2 md:right-8" />
+                <CarouselPrevious className="left-0 md:left-8" />
+                <CarouselNext className="right-0 md:right-8" />
               </Carousel>
             </div>
           </motion.div>
