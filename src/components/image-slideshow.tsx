@@ -50,8 +50,8 @@ export function ImageSlideshow({ images, title, aiHints = [] }: ImageSlideshowPr
                 );
               })}
           </CarouselContent>
-          <CarouselPrevious className="left-2 md:left-16" />
-          <CarouselNext className="right-2 md:right-16" />
+<CarouselPrevious className="left-1 md:left-8" />
+<CarouselNext className="right-1 md:right-8" />
         </Carousel>
 
         {/* Fullscreen button */}
