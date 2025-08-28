@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Input } from "@/components/ui/input"; // ✅ add Input
 
 const formatPrice = (value: number) => {
   if (value >= 1_000_000) return `€${(value / 1_000_000).toFixed(1)}M`;
@@ -18,80 +19,79 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
   const router = useRouter();
   const searchParams = useSearchParams();
 
-const [propertyTypes, setPropertyTypes] = useState<{ resale: string[]; newbuild: string[] }>({
-  resale: [],
-  newbuild: [],
-});
+  const [propertyTypes, setPropertyTypes] = useState<{ resale: string[]; newbuild: string[] }>({
+    resale: [],
+    newbuild: [],
+  });
 
+  const [locations, setLocations] = useState<{ resale: string[]; newbuild: string[] }>({
+    resale: [],
+    newbuild: []
+  });
 
-const [locations, setLocations] = useState<{ resale: string[]; newbuild: string[] }>({
-  resale: [],
-  newbuild: []
-});
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const hostname = window.location.hostname;
+        const domainToRealestate: Record<string, string> = {
+          localhost: "costalux",
+          "www.costaluxestatesweb.onrender.com": "costalux",
+          "costaluxestatesweb.onrender.com": "costalux",
+          "www.costaluxestates.com": "costalux",
+          "costaluxestates.com": "costalux",
+        };
+        const realestate = domainToRealestate[hostname] || "costalux";
 
+        const res = await fetch(
+          `https://api.habigrid.com/api/public/locations?realestate=${realestate}`
+        );
+        if (!res.ok) throw new Error("Failed to fetch locations");
 
-useEffect(() => {
-  const fetchLocations = async () => {
-    try {
-      const hostname = window.location.hostname;
-      const domainToRealestate: Record<string, string> = {
-        localhost: "costalux",
-        "www.costaluxestatesweb.onrender.com": "costalux",
-        "costaluxestatesweb.onrender.com": "costalux",
-        "www.costaluxestates.com": "costalux",
-        "costaluxestates.com": "costalux",
-      };
-      const realestate = domainToRealestate[hostname] || "costalux";
+        const data = await res.json();
+        setLocations({
+          resale: data.resale || [],
+          newbuild: data.newbuild || []
+        });
+      } catch (err) {
+        console.error("Error loading locations:", err);
+      }
+    };
 
-      const res = await fetch(
-        `https://api.habigrid.com/api/public/locations?realestate=${realestate}`
-      );
-      if (!res.ok) throw new Error("Failed to fetch locations");
+    fetchLocations();
+  }, []);
 
-      const data = await res.json();
-      setLocations({
-        resale: data.resale || [],
-        newbuild: data.newbuild || []
-      });
-    } catch (err) {
-      console.error("Error loading locations:", err);
-    }
-  };
+  useEffect(() => {
+    const fetchPropertyTypes = async () => {
+      try {
+        const hostname = window.location.hostname;
+        const domainToRealestate: Record<string, string> = {
+          localhost: "costalux",
+          "www.costaluxestatesweb.onrender.com": "costalux",
+          "costaluxestatesweb.onrender.com": "costalux",
+          "www.costaluxestates.com": "costalux",
+          "costaluxestates.com": "costalux",
+        };
+        const realestate = domainToRealestate[hostname] || "costalux";
 
-  fetchLocations();
-}, []);
+        const res = await fetch(
+          `https://api.habigrid.com/api/public/property-types?realestate=${realestate}`
+        );
+        if (!res.ok) throw new Error("Failed to fetch property types");
+        const data = await res.json();
+        setPropertyTypes({
+          resale: data.resale || [],
+          newbuild: data.newbuild || []
+        });
+      } catch (err) {
+        console.error("Error loading property types:", err);
+      }
+    };
 
-useEffect(() => {
-  const fetchPropertyTypes = async () => {
-    try {
-      const hostname = window.location.hostname;
-      const domainToRealestate: Record<string, string> = {
-        localhost: "costalux",
-        "www.costaluxestatesweb.onrender.com": "costalux",
-        "costaluxestatesweb.onrender.com": "costalux",
-        "www.costaluxestates.com": "costalux",
-        "costaluxestates.com": "costalux",
-      };
-      const realestate = domainToRealestate[hostname] || "costalux";
+    fetchPropertyTypes();
+  }, []);
 
-      const res = await fetch(
-        `https://api.habigrid.com/api/public/property-types?realestate=${realestate}`
-      );
-      if (!res.ok) throw new Error("Failed to fetch property types");
-      const data = await res.json();
-      setPropertyTypes({
-        resale: data.resale || [],
-        newbuild: data.newbuild || []
-      });
-    } catch (err) {
-      console.error("Error loading property types:", err);
-    }
-  };
-
-  fetchPropertyTypes();
-}, []);
- 
   const [filters, setFilters] = useState({
+    reference: searchParams.get("reference") || "",   // ✅ new field
     location: searchParams.get("location") || "any",
     type: searchParams.get("type") || "any",
     bedrooms: searchParams.get("bedrooms") || "any",
@@ -116,27 +116,64 @@ useEffect(() => {
     updateFilter("priceMax", range[1] === 3000000 ? Number.MAX_SAFE_INTEGER : range[1]);
   };
 
-  const handleSearch = () => {
-    const params = new URLSearchParams();
+const handleSearch = async () => {
+  // ✅ Step 1: If reference entered, override everything else
+  if (filters.reference.trim()) {
+    try {
+      const hostname = window.location.hostname;
+      const domainToRealestate: Record<string, string> = {
+        localhost: "costalux",
+        "www.costaluxestatesweb.onrender.com": "costalux",
+        "costaluxestatesweb.onrender.com": "costalux",
+        "www.costaluxestates.com": "costalux",
+        "costaluxestates.com": "costalux",
+      };
+      const realestate = domainToRealestate[hostname] || "costalux";
 
-    if (filters.location !== "any") params.set("location", filters.location);
-    if (filters.type !== "any") params.set("type", filters.type);
-    if (filters.bedrooms !== "any") params.set("bedrooms", filters.bedrooms);
-    if (filters.bathrooms !== "any") params.set("bathrooms", filters.bathrooms);
-    if (filters.priceMin > 0) params.set("priceMin", filters.priceMin.toString());
-    if (filters.priceMax < Number.MAX_SAFE_INTEGER)
-      params.set("priceMax", filters.priceMax.toString());
+      // 🔍 Lookup by exact reference
+      const res = await fetch(
+        `https://api.habigrid.com/api/public/properties/lookup?ref=${filters.reference.trim()}&realestate=${realestate}`
+      );
 
-    // Always reset page
-    params.set("page", "1");
+      if (res.ok) {
+        const data = await res.json();
 
-    // ✅ Route depends on listingType
-    if (filters.listingType === "new-builds") {
-      router.push(`/new-builds?${params.toString()}`);
-    } else {
-      router.push(`/properties?${params.toString()}`);
+        if (data && data.ref) {
+          // ✅ Decide if it's new-build or resale
+          if (data.listingType === "new-builds") {
+            router.push(`/new-builds/${data.ref}`);
+          } else {
+            router.push(`/properties/${data.ref}`);
+          }
+          return; // 🚪 Exit early, ignore other filters
+        }
+      }
+      // If no match → fallback to normal search
+      console.warn("Reference not found, running normal search...");
+    } catch (err) {
+      console.error("Reference lookup failed:", err);
     }
-  };
+  }
+
+  // ✅ Step 2: Normal multi-filter search
+  const params = new URLSearchParams();
+
+  if (filters.location !== "any") params.set("location", filters.location);
+  if (filters.type !== "any") params.set("type", filters.type);
+  if (filters.bedrooms !== "any") params.set("bedrooms", filters.bedrooms);
+  if (filters.bathrooms !== "any") params.set("bathrooms", filters.bathrooms);
+  if (filters.priceMin > 0) params.set("priceMin", filters.priceMin.toString());
+  if (filters.priceMax < Number.MAX_SAFE_INTEGER)
+    params.set("priceMax", filters.priceMax.toString());
+
+  params.set("page", "1");
+
+  if (filters.listingType === "new-builds") {
+    router.push(`/new-builds?${params.toString()}`);
+  } else {
+    router.push(`/properties?${params.toString()}`);
+  }
+};
 
   return (
     <Card className="shadow-lg border-none bg-background/20 backdrop-blur-sm w-full max-w-7xl mx-auto">
@@ -157,37 +194,37 @@ useEffect(() => {
             </div>
           )}
 
-                    {/* Location */}
+          {/* Location */}
           <div className="lg:col-span-2">
             <label className="block text-sm font-medium mb-1">Location</label>
             <Select value={filters.location} onValueChange={(v) => updateFilter("location", v)}>
               <SelectTrigger><SelectValue /></SelectTrigger>
-<SelectContent>
-  <SelectItem value="any">Any Location</SelectItem>
-  {(filters.listingType === "new-builds" ? locations.newbuild : locations.resale).map((loc) => (
-    <SelectItem key={loc} value={loc}>{loc}</SelectItem>
-  ))}
-</SelectContent>
+              <SelectContent>
+                <SelectItem value="any">Any Location</SelectItem>
+                {(filters.listingType === "new-builds" ? locations.newbuild : locations.resale).map((loc) => (
+                  <SelectItem key={loc} value={loc}>{loc}</SelectItem>
+                ))}
+              </SelectContent>
             </Select>
           </div>
 
           {/* Property Type */}
           <div className="lg:col-span-2">
             <label className="block text-sm font-medium mb-1">Property Type</label>
-<Select value={filters.type} onValueChange={(v) => updateFilter("type", v)}>
-  <SelectTrigger><SelectValue /></SelectTrigger>
-  <SelectContent>
-    <SelectItem value="any">Any</SelectItem>
-    {(filters.listingType === "new-builds"
-      ? propertyTypes.newbuild
-      : propertyTypes.resale
-    ).map((type) => (
-      <SelectItem key={type} value={type}>
-        {type}
-      </SelectItem>
-    ))}
-  </SelectContent>
-</Select>
+            <Select value={filters.type} onValueChange={(v) => updateFilter("type", v)}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="any">Any</SelectItem>
+                {(filters.listingType === "new-builds"
+                  ? propertyTypes.newbuild
+                  : propertyTypes.resale
+                ).map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {type}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Bedrooms */}
@@ -214,6 +251,17 @@ useEffect(() => {
             </Select>
           </div>
 
+          {/* ✅ Reference Field */}
+          <div className="sm:col-span-2 lg:col-span-2">
+            <label className="block text-sm font-medium mb-1">Reference</label>
+            <Input
+              type="text"
+              placeholder="Enter Reference Number"
+              value={filters.reference}
+              onChange={(e) => updateFilter("reference", e.target.value)}
+            />
+          </div>
+
           {/* Price */}
           <div className="sm:col-span-2 lg:col-span-2 space-y-2">
             <label className="block text-sm font-medium">Price Range</label>
@@ -224,7 +272,7 @@ useEffect(() => {
             <Slider
               value={priceRange}
               onValueChange={handlePriceChange}
-                min={300000} 
+              min={300000} 
               max={3000000}
               step={50000}
             />
