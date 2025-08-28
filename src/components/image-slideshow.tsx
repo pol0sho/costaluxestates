@@ -50,8 +50,8 @@ export function ImageSlideshow({ images, title, aiHints = [] }: ImageSlideshowPr
                 );
               })}
           </CarouselContent>
-<CarouselPrevious className="left-1 md:left-8" />
-<CarouselNext className="right-1 md:right-8" />
+<CarouselPrevious className="left-0 md:left-8" />
+<CarouselNext className="right-0 md:right-8" />
         </Carousel>
 
         {/* Fullscreen button */}
@@ -75,13 +75,16 @@ export function ImageSlideshow({ images, title, aiHints = [] }: ImageSlideshowPr
             onClick={() => setIsFullscreen(false)}
           >
             {/* Close button */}
-            <button
-              onClick={() => setIsFullscreen(false)}
-              className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
-              aria-label="Close fullscreen"
-            >
-              <X className="h-6 w-6" />
-            </button>
+<button
+  onClick={(e) => {
+    e.stopPropagation();
+    setIsFullscreen(false);
+  }}
+  className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
+  aria-label="Close fullscreen"
+>
+  <X className="h-6 w-6" />
+</button>
 
             {/* Fullscreen carousel */}
             <div
