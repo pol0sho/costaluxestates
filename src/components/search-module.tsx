@@ -181,7 +181,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
           {/* Listing Type */}
           {showListingType && (
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-2">
               <label className="block text-sm font-medium mb-1">Listing Type</label>
               <Select value={filters.listingType} onValueChange={(v) => updateFilter("listingType", v)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
@@ -279,7 +279,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
           </div>
 
           {/* Search Button */}
-          <div className="sm:col-span-2 lg:col-span-2">
+          <div className="sm:col-span-1 lg:col-span-1">
             <Button onClick={handleSearch} className="w-full">
               <Search className="mr-2 h-5 w-5" /> Search
             </Button>
