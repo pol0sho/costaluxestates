@@ -80,10 +80,12 @@ export function ImageSlideshow({ images, title, aiHints = [] }: ImageSlideshowPr
     e.stopPropagation();
     setIsFullscreen(false);
   }}
-  className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full"
+  className="absolute top-4 right-4 bg-black/60 hover:bg-black/80 text-white 
+             rounded-full flex items-center justify-center
+             min-w-[40px] min-h-[40px]"   // ✅ mobile-friendly touch target
   aria-label="Close fullscreen"
 >
-  <X className="h-6 w-6" />
+  <X className="h-7 w-7" />  {/* ✅ slightly bigger */}
 </button>
 
             {/* Fullscreen carousel */}
