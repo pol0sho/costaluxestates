@@ -116,46 +116,14 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
     updateFilter("priceMax", range[1] === 3000000 ? Number.MAX_SAFE_INTEGER : range[1]);
   };
 
-  const handleSearch = async () => {
-    // ✅ Step 1: If reference entered, ignore all other filters
+  const handleSearch = () => {
+    // ✅ If reference entered → always go straight to property page
     if (filters.reference.trim()) {
-      try {
-        const hostname = window.location.hostname;
-        const domainToRealestate: Record<string, string> = {
-          localhost: "costalux",
-          "www.costaluxestatesweb.onrender.com": "costalux",
-          "costaluxestatesweb.onrender.com": "costalux",
-          "www.costaluxestates.com": "costalux",
-          "costaluxestates.com": "costalux",
-        };
-        const realestate = domainToRealestate[hostname] || "costalux";
-
-        // 🔍 Fetch the property by reference
-        const res = await fetch(
-          `https://api.habigrid.com/api/public/properties/${filters.reference.trim()}?realestate=${realestate}`
-        );
-
-        if (res.ok) {
-          const data = await res.json();
-
-          if (data && data.ref) {
-            // ✅ Choose route based on listingtype
-            if (data.listingtype === "newbuild") {
-              router.push(`/new-builds/${data.ref}`);
-            } else {
-              router.push(`/properties/${data.ref}`);
-            }
-            return;
-          }
-        }
-
-        console.warn("Reference not found, falling back to normal search...");
-      } catch (err) {
-        console.error("Reference lookup failed:", err);
-      }
+      router.push(`/properties/${filters.reference.trim()}`);
+      return;
     }
 
-    // ✅ Step 2: Normal search
+    // ✅ Otherwise do normal search
     const params = new URLSearchParams();
 
     if (filters.location !== "any") params.set("location", filters.location);
@@ -253,13 +221,14 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
           {/* Reference */}
           <div className="sm:col-span-1 lg:col-span-1">
             <label className="block text-sm font-medium mb-1">Reference</label>
-            <Input
-              type="text"
-              placeholder="Enter Ref."
-              value={filters.reference}
-              onChange={(e) => updateFilter("reference", e.target.value)}
-              onKeyDown={(e) => { if (e.key === "Enter") handleSearch(); }}
-            />
+<Input
+  type="text"
+  placeholder="Enter Ref."
+  value={filters.reference}
+  onChange={(e) => updateFilter("reference", e.target.value)}
+  onKeyDown={(e) => { if (e.key === "Enter") handleSearch(); }}
+  className="placeholder-black"   // ✅ force placeholder to be black
+/>
           </div>
 
           {/* Price */}
