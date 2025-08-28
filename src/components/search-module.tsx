@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Input } from "@/components/ui/input"; // ✅ add Input
+import { Input } from "@/components/ui/input";
 
 const formatPrice = (value: number) => {
   if (value >= 1_000_000) return `€${(value / 1_000_000).toFixed(1)}M`;
@@ -91,7 +91,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
   }, []);
 
   const [filters, setFilters] = useState({
-    reference: searchParams.get("reference") || "",   // ✅ new field
+    reference: searchParams.get("reference") || "",
     location: searchParams.get("location") || "any",
     type: searchParams.get("type") || "any",
     bedrooms: searchParams.get("bedrooms") || "any",
@@ -116,70 +116,68 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
     updateFilter("priceMax", range[1] === 3000000 ? Number.MAX_SAFE_INTEGER : range[1]);
   };
 
-const handleSearch = async () => {
-  // ✅ Step 1: If reference entered, override everything else
-  if (filters.reference.trim()) {
-    try {
-      const hostname = window.location.hostname;
-      const domainToRealestate: Record<string, string> = {
-        localhost: "costalux",
-        "www.costaluxestatesweb.onrender.com": "costalux",
-        "costaluxestatesweb.onrender.com": "costalux",
-        "www.costaluxestates.com": "costalux",
-        "costaluxestates.com": "costalux",
-      };
-      const realestate = domainToRealestate[hostname] || "costalux";
+  const handleSearch = async () => {
+    // ✅ Step 1: Reference overrides everything
+    if (filters.reference.trim()) {
+      try {
+        const hostname = window.location.hostname;
+        const domainToRealestate: Record<string, string> = {
+          localhost: "costalux",
+          "www.costaluxestatesweb.onrender.com": "costalux",
+          "costaluxestatesweb.onrender.com": "costalux",
+          "www.costaluxestates.com": "costalux",
+          "costaluxestates.com": "costalux",
+        };
+        const realestate = domainToRealestate[hostname] || "costalux";
 
-      // 🔍 Lookup by exact reference
-      const res = await fetch(
-        `https://api.habigrid.com/api/public/properties/lookup?ref=${filters.reference.trim()}&realestate=${realestate}`
-      );
+        // ✅ Correct endpoint: /properties/:ref?realestate=...
+        const res = await fetch(
+          `https://api.habigrid.com/api/public/properties/${filters.reference.trim()}?realestate=${realestate}`
+        );
 
-      if (res.ok) {
-        const data = await res.json();
+        if (res.ok) {
+          const data = await res.json();
 
-        if (data && data.ref) {
-          // ✅ Decide if it's new-build or resale
-          if (data.listingType === "new-builds") {
-            router.push(`/new-builds/${data.ref}`);
-          } else {
-            router.push(`/properties/${data.ref}`);
+          if (data && data.ref) {
+            // ✅ Decide based on backend's listingtype (resale/newbuild)
+            if (data.listingtype === "newbuild") {
+              router.push(`/new-builds/${data.ref}`);
+            } else {
+              router.push(`/properties/${data.ref}`);
+            }
+            return; // 🚪 Stop here
           }
-          return; // 🚪 Exit early, ignore other filters
         }
+        console.warn("Reference not found, fallback to normal search");
+      } catch (err) {
+        console.error("Reference lookup failed:", err);
       }
-      // If no match → fallback to normal search
-      console.warn("Reference not found, running normal search...");
-    } catch (err) {
-      console.error("Reference lookup failed:", err);
     }
-  }
 
-  // ✅ Step 2: Normal multi-filter search
-  const params = new URLSearchParams();
+    // ✅ Step 2: Normal search
+    const params = new URLSearchParams();
 
-  if (filters.location !== "any") params.set("location", filters.location);
-  if (filters.type !== "any") params.set("type", filters.type);
-  if (filters.bedrooms !== "any") params.set("bedrooms", filters.bedrooms);
-  if (filters.bathrooms !== "any") params.set("bathrooms", filters.bathrooms);
-  if (filters.priceMin > 0) params.set("priceMin", filters.priceMin.toString());
-  if (filters.priceMax < Number.MAX_SAFE_INTEGER)
-    params.set("priceMax", filters.priceMax.toString());
+    if (filters.location !== "any") params.set("location", filters.location);
+    if (filters.type !== "any") params.set("type", filters.type);
+    if (filters.bedrooms !== "any") params.set("bedrooms", filters.bedrooms);
+    if (filters.bathrooms !== "any") params.set("bathrooms", filters.bathrooms);
+    if (filters.priceMin > 0) params.set("priceMin", filters.priceMin.toString());
+    if (filters.priceMax < Number.MAX_SAFE_INTEGER)
+      params.set("priceMax", filters.priceMax.toString());
 
-  params.set("page", "1");
+    params.set("page", "1");
 
-  if (filters.listingType === "new-builds") {
-    router.push(`/new-builds?${params.toString()}`);
-  } else {
-    router.push(`/properties?${params.toString()}`);
-  }
-};
+    if (filters.listingType === "new-builds") {
+      router.push(`/new-builds?${params.toString()}`);
+    } else {
+      router.push(`/properties?${params.toString()}`);
+    }
+  };
 
   return (
     <Card className="shadow-lg border-none bg-background/20 backdrop-blur-sm w-full mx-auto">
       <CardContent className="p-4 sm:p-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
-
           {/* Listing Type */}
           {showListingType && (
             <div className="lg:col-span-1">
@@ -251,12 +249,12 @@ const handleSearch = async () => {
             </Select>
           </div>
 
-          {/* ✅ Reference Field */}
+          {/* Reference */}
           <div className="sm:col-span-1 lg:col-span-1">
             <label className="block text-sm font-medium mb-1">Reference</label>
             <Input
               type="text"
-              placeholder="Enter Reference Number"
+              placeholder="Enter Ref."
               value={filters.reference}
               onChange={(e) => updateFilter("reference", e.target.value)}
             />
@@ -272,7 +270,7 @@ const handleSearch = async () => {
             <Slider
               value={priceRange}
               onValueChange={handlePriceChange}
-              min={300000} 
+              min={300000}
               max={3000000}
               step={50000}
             />
