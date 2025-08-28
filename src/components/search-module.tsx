@@ -178,7 +178,7 @@ const handleSearch = async () => {
   return (
     <Card className="shadow-lg border-none bg-background/20 backdrop-blur-sm w-full mx-auto">
       <CardContent className="p-4 sm:p-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-13 gap-4 items-end">
 
           {/* Listing Type */}
           {showListingType && (
@@ -252,7 +252,7 @@ const handleSearch = async () => {
           </div>
 
           {/* ✅ Reference Field */}
-          <div className="sm:col-span-2 lg:col-span-2">
+          <div className="sm:col-span-1 lg:col-span-1">
             <label className="block text-sm font-medium mb-1">Reference</label>
             <Input
               type="text"
