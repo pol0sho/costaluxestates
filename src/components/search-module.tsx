@@ -117,7 +117,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
   };
 
   const handleSearch = async () => {
-    // ✅ Step 1: Reference overrides everything
+    // ✅ Step 1: If reference entered, ignore all other filters
     if (filters.reference.trim()) {
       try {
         const hostname = window.location.hostname;
@@ -130,7 +130,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
         };
         const realestate = domainToRealestate[hostname] || "costalux";
 
-        // ✅ Correct endpoint: /properties/:ref?realestate=...
+        // 🔍 Fetch the property by reference
         const res = await fetch(
           `https://api.habigrid.com/api/public/properties/${filters.reference.trim()}?realestate=${realestate}`
         );
@@ -139,16 +139,17 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
           const data = await res.json();
 
           if (data && data.ref) {
-            // ✅ Decide based on backend's listingtype (resale/newbuild)
+            // ✅ Choose route based on listingtype
             if (data.listingtype === "newbuild") {
               router.push(`/new-builds/${data.ref}`);
             } else {
               router.push(`/properties/${data.ref}`);
             }
-            return; // 🚪 Stop here
+            return;
           }
         }
-        console.warn("Reference not found, fallback to normal search");
+
+        console.warn("Reference not found, falling back to normal search...");
       } catch (err) {
         console.error("Reference lookup failed:", err);
       }
@@ -257,6 +258,7 @@ export function SearchModule({ showListingType = true }: { showListingType?: boo
               placeholder="Enter Ref."
               value={filters.reference}
               onChange={(e) => updateFilter("reference", e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") handleSearch(); }}
             />
           </div>
 
